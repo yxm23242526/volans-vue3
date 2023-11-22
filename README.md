@@ -1,29 +1,25 @@
 # volans
 
-This template should help get you started developing with Vue 3 in Vite.
+🔥 🔥 致力于完成一个完整的OA工作系统，基于Vue3、js、vite、ElementPlus等
 
-## Recommended IDE Setup
+#### 💒 代码仓库
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+-  [yxm的Gitee版本](https://gitee.com/yxmloveslife/volans.git) 
+- bitbucket
 
-## Customize configuration
+#### 📚 开发文档
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- [查看开发文档](https://yxm980918@bitbucket.org/yozofather/volans-doc.git)
 
-## Project Setup
+```bash
+# 进入项目
 
-```sh
-npm install
-```
+# 安装依赖
+cnpm install
 
-### Compile and Hot-Reload for Development
+# 运行项目
+cnpm run dev
 
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
+# 打包发布
+cnpm run build
 ```
