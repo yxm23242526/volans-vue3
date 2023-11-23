@@ -3,14 +3,20 @@
  * @Author: yxm
  * @Date: 2023-11-22
  */
-
 import {createRouter, createWebHistory} from "vue-router";
-
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
+
     routes: [
         {
-        
+            path: '/',
+            name: 'home',
+            component: () => import('@/views/layout/index.vue')
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: () => import('@/views/login/index.vue')
         },
     ],
     // 路由滚动行为配置项   切换路由的时候回到顶部

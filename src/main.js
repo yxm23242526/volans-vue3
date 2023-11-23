@@ -10,6 +10,5 @@ const pinia = createPinia()
 //注册持久化插件 自动存入localstorage
 pinia.use(piniaPluginPersistedstate)
 
-
 const app = createApp(App)
-app.use(pinia).use(componentPlugin).use.use(router).use(ElementPlus).mount('#app')
+app.use(pinia).use(componentPlugin).use(router).use(ElementPlus).mount('#app')
