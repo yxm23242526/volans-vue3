@@ -11,18 +11,33 @@ const router = createRouter({
         {
             path: '/',
             component: () => import('@/layout/index.vue'),
-            // children:[
-            //     {
-            //         path: '',
-            //         name: 'main',
-            //         component: () => import('@/layout/components/main.vue')
-            //     }
-            // ]
+            redirect: '/main',
+            children:[
+                {
+                    path: 'main',
+                    name: 'main',
+                    component: () => import('@/views/main/MainVue.vue')
+                }
+            ]
+        },
+        {
+            path: '/weekreport',
+            component: () => import('@/layout/index.vue'),
+            redirect: '/weekreport/edit',
+            children:[
+                {
+                    path: 'edit',
+                    name: 'edit',
+                    component: () => import('@/views/main/WeekReportEdit.vue')
+                }
+
+            ]
         },
         {
             path: '/login',
             name: 'login',
-            component: () => import('@/views/login/index.vue')
+            component: () => import('@/views/login/index.vue'),
+            hide:true
         },
     ],
     // 路由滚动行为配置项   切换路由的时候回到顶部
