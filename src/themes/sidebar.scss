@@ -47,11 +47,28 @@
       display: none;
     }
 
-    a {
+
+    a:focus,
+    a:active {
+      outline: none;
+    }
+
+    a,
+    a:focus,
+    a:hover {
+      cursor: pointer;
+      color: inherit;
+      text-decoration: none;
       display: inline-block;
       width: 100%;
       overflow: hidden;
     }
+
+    // a {
+    //   display: inline-block;
+    //   width: 100%;
+    //   overflow: hidden;
+    // }
 
     .svg-icon {
       margin-right: 16px;
@@ -191,6 +208,7 @@
     .svg-icon {
       margin-right: 16px;
     }
+
     .sub-el-icon {
       margin-right: 12px;
       margin-left: -2px;

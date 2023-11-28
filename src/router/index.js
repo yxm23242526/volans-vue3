@@ -12,23 +12,48 @@ const router = createRouter({
             path: '/',
             component: () => import('@/layout/index.vue'),
             redirect: '/main',
+            meta:{
+                name:"主页",
+                icon:"House"
+            },
             children:[
                 {
-                    path: 'main',
+                    path: '/main',
                     name: 'main',
-                    component: () => import('@/views/main/MainVue.vue')
+                    component: () => import('@/views/main/MainVue.vue'),
+                    meta:{
+                        name:"主页",
+                        icon:"House"
+                    }
                 }
             ]
         },
         {
             path: '/weekreport',
             component: () => import('@/layout/index.vue'),
-            redirect: '/weekreport/edit',
+            redirect: '/edit',
+            meta:{
+                name:"周报管理",
+                icon:"Notification"
+            },
             children:[
                 {
-                    path: 'edit',
+                    path: '/edit',
                     name: 'edit',
-                    component: () => import('@/views/main/WeekReportEdit.vue')
+                    component: () => import('@/views/main/WeekReportEdit.vue'),
+                    meta:{
+                        name:"编辑周报",
+                        icon:"Edit"
+                    },
+                },
+                {
+                    path: '/example',
+                    name: 'example',
+                    component: () => import('@/views/main/MainVue.vue'),
+                    meta:{
+                        name:"统计周报",
+                        icon:"Histogram"
+                    },
                 }
 
             ]

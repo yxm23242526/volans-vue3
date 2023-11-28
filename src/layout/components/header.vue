@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <breadcrumb class="breadcrumb-container" />
+    <BreadCrupb class="breadcrumb-container"></BreadCrupb>
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-
+import BreadCrupb from '@/components/BreadCrump/index.vue'
 
 </script>
 
@@ -49,7 +49,6 @@
     cursor: pointer;
     transition: background .3s;
     -webkit-tap-highlight-color:transparent;
-
     &:hover {
       background: rgba(0, 0, 0, .025)
     }
@@ -63,7 +62,6 @@
     float: right;
     height: 100%;
     line-height: 50px;
-
     &:focus {
       outline: none;
     }
