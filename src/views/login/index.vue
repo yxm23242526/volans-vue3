@@ -29,12 +29,12 @@ const validate_password_rules = (rule, value, callback) => {
 
 //表单对象
 const form = reactive({
-    account: 'admin',
-    password: '123456',
+    userId: '',
+    password: '',
 })
 
 const formRules = {
-    account: [
+    userId: [
         { required: true, validator: validate_account_rules, trigger: 'blur' }
     ],
     password: [
@@ -47,10 +47,10 @@ const formRef = ref(null)
 const userStore = useUserStore()
 
 const doLogin = () => {
-    const { account, password } = form;
+    const { userId, password } = form;
     formRef.value.validate(async (valid) => {
         if (valid) {
-            await userStore.getUserInfo({ account, password })
+            await userStore.getUserInfo({ userId, password })
             // 1. 提示用户
             ElMessage({ type: 'success', message: '登录成功' })
             // 2. 跳转首页
@@ -61,32 +61,43 @@ const doLogin = () => {
     })
 }
 
+const passwordType = ref('password')
+const switchflag = ref(true);
+const switchType = () => {
+    switchflag.value = !switchflag.value;
+    passwordType.value = switchflag.value ? 'password' : 'text';
+}
 </script>
 
 <template>
     <div>
         <!-- 语义标签 -->
-        <header class="login-header">
+        <!-- <header class="login-header">
             <div class="container"> 
+                <h1>Volans</h1>
                 <div class="logo">这是一个logo</div>
-                <h1>OA工作系统</h1>
-                <div class="logo">这也是一个logo</div>
             </div>
-        </header>
+        </header> -->
         <section class="login-section">
             <div class="wrapper">
-                <nav>
+                <div class="logo"></div>
+                <!-- <nav>
                     <a>账户登录</a>
-                </nav>
+                </nav> -->
                 <!-- 账户登录主体box -->
                 <div class="account-box">
                     <div class="form">
                         <el-form :model="form" :rules="formRules" ref="formRef">
-                            <el-form-item label="账户" prop="account">
-                                <el-input v-model="form.account" />
+                            <el-form-item prop="userId">
+                                <el-input prefix-icon="User" placeholder="请输入用户名" v-model="form.userId"/>
                             </el-form-item>
-                            <el-form-item label="密码" prop="password">
-                                <el-input v-model="form.password" />
+                            <el-form-item prop="password">
+                                <el-input prefix-icon="Lock" class="form-input" placeholder="请输入密码" :type="passwordType" autocomplete="off" v-model="form.password">
+                                    <template #suffix >
+                                        <el-icon v-if="switchflag" class="el-input__icon" @click="switchType"><Hide /></el-icon>
+                                        <el-icon v-else class="el-input__icon" @click="switchType"><View /></el-icon>
+                                    </template>
+                                </el-input>
                             </el-form-item>
                             <el-form-item>
                                 <el-button class="subBtn" type="primary" @click="doLogin"> 登录 </el-button>
@@ -109,86 +120,73 @@ const doLogin = () => {
 </template>
 
 <style scoped lang="scss">
+
 .login-header {
     background: #fff;
     border-bottom: 1px solid #e4e4e4;
-
+    border: 1px solid red;
     .container {
         display: flex;
         align-items: flex-end; //对齐方式 Y轴
         justify-content: space-between; //对齐方式 X轴
     }
 
-    .logo {
-        width: 200px;
-        height: 132px;
-        border: 1px solid red;
-    }
     h1 {
-        text-align: center;
-        font-size: 60px;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 100px; 
+        &::first-letter{
+            margin-left: 50px;
+            color: #de123b;
+            font-size: 130%;
+        }
     }
+    
 }
-
 .login-section {
-    // background: url('@/assets/images/bg.jpg') no-repeat center / cover;
-    height: 488px;
+    background: url('@/assets/images/bg.jpg') no-repeat center / cover;
+    height: 80vh;
     position: relative;
 
     .wrapper {
         width: 380px;
         background: #fff;
         position: absolute;
-        left: 50%;
-        top: 104px;
+        left: 60%;
+        top: 154px;
         transform: translate3d(100px, 0, 0);
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 
-        nav {
-            font-size: 14px;
-            height: 55px;
+        .logo {
+            background: url('@/assets/images/LOGO.jpg') no-repeat center / cover;
+            height: 132px;
             margin-bottom: 20px;
-            border-bottom: 1px solid #f5f5f5;
-            display: flex;
-            padding: 0 40px;
-            text-align: right;
-            align-items: center;
-
-            a {
-                flex: 1;
-                line-height: 1;
-                display: inline-block;
-                font-size: 18px;
-                position: relative;
-                text-align: center;
-            }
         }
 
+        // 原本的<a>账号密码</a> 加了其他登录条件再补
+        nav {
+            // font-size: 18px;
+            // height: 55px;
+            // margin-bottom: 20px;
+            // border-bottom: 1px solid #f5f5f5;
+            // display: flex;
+        }
         .account-box {
             .form {
                 padding: 0 30px 30px 30px;
-
-                &-item {
-                    margin-bottom: 28px;
-                }
-
-                input {
-                    padding-left: 44px;
-                    border: 1px solid #cfcdcd;
-                    height: 36px;
-                    line-height: 36px;
-                    width: 100%;
+                .el-input__icon{
+                    &:hover{
+                        cursor: pointer;
+                    }
                 }
             }
-
             .subBtn {
+                margin-top: 30px;
                 width: 100%;
                 color: #fff;
             }
         }
     }
-    
-    
 }
 
 .login-footer {

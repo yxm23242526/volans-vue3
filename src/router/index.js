@@ -6,27 +6,27 @@
 import {createRouter, createWebHistory} from "vue-router";
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-
     routes: [
         {
             path: '/',
             component: () => import('@/layout/index.vue'),
-            redirect: '/main',
             meta:{
-                name:"主页",
-                icon:"House"
+                name:"首页",
+                icon:"Notification"
             },
             children:[
                 {
-                    path: '/main',
-                    name: 'main',
-                    component: () => import('@/views/main/MainVue.vue'),
-                    meta:{
-                        name:"主页",
-                        icon:"House"
-                    }
+                    path: '/',
+                    name: 'home',
+                    component: () => import('@/layout/home/index.vue')
                 }
             ]
+        },
+        {
+            path: '/login',
+            name: 'login',
+            hide: true,
+            component: () => import('@/views/login/index.vue')
         },
         {
             path: '/weekreport',
@@ -40,30 +40,23 @@ const router = createRouter({
                 {
                     path: '/edit',
                     name: 'edit',
-                    component: () => import('@/views/main/WeekReportEdit.vue'),
+                    component: () => import('@/views/weekreport/components/edit.vue'),
                     meta:{
                         name:"编辑周报",
                         icon:"Edit"
                     },
                 },
                 {
-                    path: '/example',
-                    name: 'example',
-                    component: () => import('@/views/main/MainVue.vue'),
+                    path: '/calculate',
+                    name: 'calculate',
+                    component: () => import('@/views/weekreport/components/calculate.vue'),
                     meta:{
                         name:"统计周报",
                         icon:"Histogram"
                     },
                 }
-
             ]
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: () => import('@/views/login/index.vue'),
-            hide:true
-        },
+        }
     ],
     // 路由滚动行为配置项   切换路由的时候回到顶部
     scrollBehavior(){

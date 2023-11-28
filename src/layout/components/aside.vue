@@ -1,15 +1,24 @@
+<script setup>
+import { reactive } from "vue";
+import router from "@/router";
+import { RouterLink } from "vue-router";
+const routers = reactive(router.options.routes);
+console.log(routers)
+function resolveIndex(index, childindex) {
+  return index + "-" + childindex;
+}
+
+</script>
+
+
 <template>
   <div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu :background-color="variables.menuBg" :text-color="variables.menuText" :unique-opened="false"
-        :active-text-color="variables.menuActiveText" mode="vertical">
-
+      <el-menu :unique-opened="false" mode="vertical">
         <template v-for="(item, index) in routers">
           <template v-if="!item.hide">
-
-            <template v-if="item.children === undefined || item.children.length == 1">
+            <template v-if="item.children === undefined || item.children.length === 1">
               <el-menu-item index="index" class="nest-menu">
-
                 <RouterLink :to="item.path">
                   <el-icon>
                     <component :is="item.meta.icon"/>
@@ -29,7 +38,7 @@
                 </template>
                 <el-menu-item-group>
                   <el-menu-item v-for="(childitem, childindex) in item.children" :index="resolveIndex(index, childindex)"
-                    class="nest-menu">
+                                class="nest-menu">
 
                     <RouterLink :to="childitem.path">
                       <span slot='title'>
@@ -51,23 +60,5 @@
   </div>
 </template>
 
-<script lange = "ts" setup>
-// import { useRouter } from "vue-router";
-import variables from "@/themes/variables.module.scss"
-import { reactive } from "vue";
-import router from "@/router";
-import { RouterLink } from "vue-router";
-
-const routers = reactive(router.options.routes);
-
-reactive(variables);
-
-function resolveIndex(index, childindex) {
-  return index + "-" + childindex;
-}
-
-
-
-</script>
 
 <style></style>

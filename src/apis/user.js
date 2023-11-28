@@ -7,16 +7,16 @@ import request from '@/utils/request'
 
 /**
  * 获取用户登录数据
- * @param account 账号
+ * @param userId 账号
  * @param password 密码
  * @returns 
  */
-export const loginAPI = ({account, password}) => {
+export const loginAPI = ({userId, password}) => {
     return request({
-        url: '/login',
+        url: '/user/login',
         method: 'POST',
         data: {
-            account,
+            userId,
             password
         }
     })

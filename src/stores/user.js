@@ -14,9 +14,9 @@ export const useUserStore = defineStore('user', () => {
     const userInfo = ref({})
     //2. 定义user的action
     // 获得用户数据
-    const getUserInfo = async ({account, password}) => {
-        const res = await loginAPI({account, password})
-        userInfo.value = res.result
+    const getUserInfo = async ({userId, password}) => {
+        const res = await loginAPI({userId, password})
+        userInfo.value = res.data.user
     }
     // 清除用户数据
     const clearUserInfo = () => {

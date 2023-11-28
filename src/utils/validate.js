@@ -12,11 +12,3 @@ export function validateAccount(value) {
 export function validatePassword(value) {
     return true
 }
-
-/**
- * @param {string} path
- * @returns {Boolean}
- */
-export function isExternal(path) {
-    return /^(https?:|mailto:|tel:)/.test(path)
-  }
