@@ -13,7 +13,7 @@ const router = createRouter({
             redirect: '/home',
             meta: {
                 name: "首页",
-                icon: "Notification"
+                icon: "House"
             },
             children: [
                 {
@@ -22,7 +22,7 @@ const router = createRouter({
                     component: () => import('@/layout/home/index.vue'),
                     meta: {
                         name: "首页",
-                        icon: "Notification"
+                        icon: "House"
                     }
                 }, 
                 {

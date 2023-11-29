@@ -2,7 +2,6 @@
 import { ref, reactive } from 'vue'
 import { validateAccount, validatePassword } from '@/utils/validate'
 import { useUserStore } from '@/stores/user'
-import 'element-plus/theme-chalk/el-message.css'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 

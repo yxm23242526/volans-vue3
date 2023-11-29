@@ -9,9 +9,9 @@ import LayoutMain from '@/layout/components/main.vue'
   <!-- 二级路由的入口一般定义在这里-->
   <!-- 且跳转至首页-->
   <el-container class="layout-container">
-    <LayoutAside class="sidebar-container" />
-    <div class="main-container">
-      <div class="fixed-header">
+    <LayoutAside class="layout-sidebar" />
+    <div class="layout-main">
+      <div>
         <LayoutHeader />
       </div>
       <LayoutMain />
@@ -22,19 +22,4 @@ import LayoutMain from '@/layout/components/main.vue'
 
 <style lang="scss" scoped>
 
-.fixed-header {
-  top: 0;
-  right: 0;
-  z-index: 9;
-  width: calc(100% - 210px);
-  transition: width 0.28s;
-}
-
-.hideSidebar .fixed-header {
-  width: calc(100% - 54px)
-}
-
-.mobile .fixed-header {
-  width: 100%;
-}
 </style>
