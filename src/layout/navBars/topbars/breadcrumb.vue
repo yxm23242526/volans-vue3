@@ -25,12 +25,12 @@ watch(() => router.currentRoute.value.path, () => {
         {{ item.meta.name }}
       </el-breadcrumb-item>
     </el-breadcrumb>
-  </template>
+</template>
   
 
   
-  <style lang="scss" scoped>
-  .app-breadcrumb.el-breadcrumb {
+<style lang="scss" scoped>
+.app-breadcrumb.el-breadcrumb {
     display: inline-block;
     font-size: 14px;
     line-height: 50px;
@@ -41,5 +41,5 @@ watch(() => router.currentRoute.value.path, () => {
       cursor: text;
     }
   }
-  </style>
+</style>
   

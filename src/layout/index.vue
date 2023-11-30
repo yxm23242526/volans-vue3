@@ -21,5 +21,7 @@ import LayoutMain from '@/layout/components/main.vue'
 
 
 <style lang="scss" scoped>
-
+.layout-main{
+  width: 100%;
+}
 </style>
