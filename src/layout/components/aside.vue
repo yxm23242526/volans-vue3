@@ -1,3 +1,10 @@
+<!--
+ * @Author: zzh
+ * @Date: 2023-11-29
+ * @Description: 侧边栏导航
+-->
+
+
 <script setup>
 import { reactive } from "vue";
 import router from "@/router";
@@ -31,9 +38,10 @@ resolveArr();
 
           <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path" >
             <template #title>
-              <el-icon>
+              <Icon :name="item.meta.icon"/>
+              <!-- <el-icon>
                 <component :is="item.meta.icon" />
-              </el-icon>
+              </el-icon> -->
               {{ item.meta.name }}
             </template>
             <Asideitem :chil="item.children"  />
@@ -42,9 +50,7 @@ resolveArr();
           <template v-else>
             <el-menu-item :index="item.path">
               <RouterLink :to="item.path">
-                <el-icon>
-                  <component :is="item.meta.icon" />
-                </el-icon>
+                <Icon :name="item.meta.icon"/>
                 {{ item.meta.name }}
               </RouterLink>
             </el-menu-item>

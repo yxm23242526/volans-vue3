@@ -1,3 +1,8 @@
+<!--
+ * @Author: yxm
+ * @Date: 2023-11-30 15:51:07
+ * @Description: 
+-->
 <script setup>
 import { useThemeConfigStore } from '@/stores/themeConfig';
 import { onMounted } from 'vue' 
@@ -27,9 +32,7 @@ const initSettings = () => {
 
 <template>
     <div>
-        <el-icon :size="size" :color="color">
-            <Setting />
-        </el-icon>
+        <Icon :name="'Setting'"/>
     </div>
 </template>
 

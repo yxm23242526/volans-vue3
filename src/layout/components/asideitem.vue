@@ -1,10 +1,13 @@
+<!--
+ * @Author: zzh
+ * @Date: 2023-11-29
+ * @Description: 
+-->
 <template>
     <template v-for="item in chil">
         <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path">
             <template #title>
-                <el-icon>
-                    <component :is="item.meta.icon" />
-                </el-icon>
+                <Icon :name="item.meta.icon"/>
                 {{ item.meta.name }}
             </template>
             <asideitem :chil="item.children" />
@@ -12,9 +15,7 @@
         <template v-else>
             <el-menu-item :index="item.path">
                 <RouterLink :to="item.path">
-                    <el-icon>
-                        <component :is="item.meta.icon" />
-                    </el-icon>
+                    <Icon :name="item.meta.icon"/>
                     {{ item.meta.name }}
                 </RouterLink>
             </el-menu-item>

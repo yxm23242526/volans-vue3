@@ -4,10 +4,10 @@
  * @Author: yxm
  * @Date: 2023-11-22
  */
-
+import Icon from './Icon/icon.vue'
 
 export const componentPlugin = {
     install(app) {
-        //app.component('组件名字'，组件配置对象)
+        app.component('Icon', Icon);
     }
 }
