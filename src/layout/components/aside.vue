@@ -29,18 +29,18 @@ resolveArr();
       <el-menu  :unique-opened="false" mode="vertical">
         <template v-for="item in arrlist">
 
-          <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path">
+          <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path" >
             <template #title>
               <el-icon>
                 <component :is="item.meta.icon" />
               </el-icon>
               {{ item.meta.name }}
             </template>
-            <Asideitem :chil="item.children" />
+            <Asideitem :chil="item.children"  />
           </el-sub-menu>
 
           <template v-else>
-            <el-menu-item :index="item.path" class="nest-menu">
+            <el-menu-item :index="item.path">
               <RouterLink :to="item.path">
                 <el-icon>
                   <component :is="item.meta.icon" />
@@ -56,4 +56,5 @@ resolveArr();
 </template>
 
 
-<style></style>
+<style>
+</style>

@@ -26,8 +26,6 @@ export const useThemeConfigStore = defineStore('themeConfig', () => {
 			menuBarTextColor: '#eaeaea',
 			// 默认菜单高亮背景色
 			menuBarActiveColor: 'rgba(0, 0, 0, 0.2)',
-			// 默认菜单hover颜色
-			menuBarHoverColor: '#263445',
     })
 
     //2. 定义action

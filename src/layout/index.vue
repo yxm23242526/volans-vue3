@@ -10,18 +10,14 @@ import LayoutMain from '@/layout/components/main.vue'
   <!-- 且跳转至首页-->
   <el-container class="layout-container">
     <LayoutAside class="layout-sidebar" />
-    <div class="layout-main">
-      <div>
-        <LayoutHeader />
-      </div>
-      <LayoutMain />
-    </div>
+      <el-container class="layout-main">
+        <LayoutHeader/>
+        <LayoutMain />
+      </el-container>
   </el-container>
 </template>
 
 
 <style lang="scss" scoped>
-.layout-main{
-  width: 100%;
-}
+
 </style>

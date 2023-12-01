@@ -135,8 +135,8 @@ setInterval(() => {
 <style scoped lang="scss">
 .boxbody {
     position: absolute;
-    left: 20%;
-    top: 20%;
+    left: 25%;
+    top: 35%;
 }
 
 .box {
@@ -154,8 +154,8 @@ setInterval(() => {
 .box::before {
     content: '';
     position: absolute;
-    top: 266px;
-    left: -24px;
+    top: 125px;
+    left: -50px;
     width: 80px;
     height: 40px;
     background: #fff;
@@ -166,8 +166,8 @@ setInterval(() => {
 .box::after {
     content: '';
     position: absolute;
-    bottom: 266px;
-    right: -24px;
+    bottom: 125px;
+    right: -50px;
     width: 80px;
     height: 40px;
     background: #fff;
@@ -177,14 +177,14 @@ setInterval(() => {
 
 .circle {
     position: absolute;
-    top: 90px;
+    top: 22px;
     left: -100px;
     width: 70px;
     height: 70px;
     background: #fff;
     border-radius: 50%;
     z-index: 10000;
-    transform-origin: 230px;
+    transform-origin: 150px;
     animation: animateBall 2s linear infinite;
 }
 

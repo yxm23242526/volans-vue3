@@ -10,7 +10,7 @@
             <asideitem :chil="item.children" />
         </el-sub-menu>
         <template v-else>
-            <el-menu-item :index="item.path" class="nest-menu">
+            <el-menu-item :index="item.path">
                 <RouterLink :to="item.path">
                     <el-icon>
                         <component :is="item.meta.icon" />
