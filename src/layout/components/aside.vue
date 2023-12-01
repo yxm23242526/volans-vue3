@@ -33,15 +33,12 @@ resolveArr();
 <template>
  <div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu  :unique-opened="false" mode="vertical">
+      <el-menu  :unique-opened="false" mode="vertical" router>
         <template v-for="item in arrlist">
 
-          <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path" >
+          <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path">
             <template #title>
               <Icon :name="item.meta.icon"/>
-              <!-- <el-icon>
-                <component :is="item.meta.icon" />
-              </el-icon> -->
               {{ item.meta.name }}
             </template>
             <Asideitem :chil="item.children"  />
@@ -49,10 +46,8 @@ resolveArr();
 
           <template v-else>
             <el-menu-item :index="item.path">
-              <RouterLink :to="item.path">
                 <Icon :name="item.meta.icon"/>
                 {{ item.meta.name }}
-              </RouterLink>
             </el-menu-item>
           </template>
         </template>

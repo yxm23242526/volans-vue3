@@ -14,10 +14,8 @@
         </el-sub-menu>
         <template v-else>
             <el-menu-item :index="item.path">
-                <RouterLink :to="item.path">
                     <Icon :name="item.meta.icon"/>
                     {{ item.meta.name }}
-                </RouterLink>
             </el-menu-item>
         </template>
     </template>
