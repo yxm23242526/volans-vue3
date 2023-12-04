@@ -4,7 +4,6 @@ import { validateAccount, validatePassword } from '@/utils/validate'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-
 const router = useRouter()
 //自定义校验账户规则
 const validate_account_rules = (rule, value, callback) => {
