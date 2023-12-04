@@ -3,12 +3,19 @@
 </script>
 
 <template>
-<!--首页-->
-    <div class>
-       这是真正的首页
-    </div>
-<!--最主要展示的页面-->
-</template>
+    <el-row :gutter="12">
+      <el-col :span="8">
+        <el-card shadow="always"> Always </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card shadow="hover"> Hover </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card shadow="never"> Never </el-card>
+      </el-col>
+    </el-row>
+  </template>
+  
 
 <style scoped>
 /* 假样式 为了查看效果 */

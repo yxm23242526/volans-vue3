@@ -50,7 +50,16 @@ const router = createRouter({
                                 name: "统计周报",
                                 icon: "Histogram"
                             },
-                        }
+                        },
+                        {
+                            path: '/myWeekreport',
+                            name: 'myWeekreport',
+                            component: () => import('@/views/weekreport/components/myweekreport.vue'),
+                            meta: {
+                                name: "我的周报",
+                                icon: "Avatar"
+                            }
+                        },
                     ]
                 }
             ]

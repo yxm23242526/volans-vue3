@@ -9,7 +9,7 @@ import { ElMessage } from "element-plus";
 import router from '@/router' // vue3中 useRouter不允许在setup之外使用
 
 const request = axios.create({
-    baseURL: 'http://2ssev6.natappfree.cc',
+    baseURL: 'http://rtvv8w.natappfree.cc',
     timeout: 5000
 })
 // axios拦截器
@@ -22,7 +22,7 @@ request.interceptors.response.use( res => res.data, e => {
     console.log(e)
     //统一错误提示
     ElMessage({
-        type: 'warning', message: e.response.data.message
+        type: 'warning', message: 'ERROR'//e.response.data.message
     })
     return Promise.reject(e)
 })
