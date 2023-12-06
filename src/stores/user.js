@@ -22,8 +22,9 @@ export const useUserStore = defineStore('user', () => {
     // 获得用户数据
     const getUserInfo = async ({userId, password}) => {
         const res = await loginAPI({userId, password})
+        console.log(res)
         userInfo.value = res.data.user
-        Local.set('user', res.data.user)
+        Local.set('user', res.data)
     }
     // 清除用户数据
     const clearUserInfo = () => {

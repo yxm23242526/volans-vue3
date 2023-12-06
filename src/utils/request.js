@@ -9,7 +9,7 @@ import { ElMessage } from "element-plus";
 import router from '@/router' // vue3中 useRouter不允许在setup之外使用
 
 const request = axios.create({
-    baseURL: 'http://rtvv8w.natappfree.cc',
+    baseURL: 'http://cgq2ys.natappfree.cc',
     timeout: 5000
 })
 // axios拦截器

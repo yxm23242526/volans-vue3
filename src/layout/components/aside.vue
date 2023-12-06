@@ -7,10 +7,11 @@
 
 <script setup>
 import { reactive } from "vue";
-import router from "@/router";
 import { RouterLink } from "vue-router";
 import Asideitem from "./asideitem.vue";
-
+import { useRouter, useRoute} from "vue-router";
+const router = useRouter();
+const route = useRoute();
 const routers = reactive(router.options.routes);
 
 let arrlist = reactive([]);
@@ -33,9 +34,9 @@ resolveArr();
 <template>
  <div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu  :unique-opened="false" mode="vertical" router>
+      <el-menu  :unique-opened="false" mode="vertical" router 
+        :default-active="route.path">
         <template v-for="item in arrlist">
-
           <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path">
             <template #title>
               <Icon :name="item.meta.icon"/>
