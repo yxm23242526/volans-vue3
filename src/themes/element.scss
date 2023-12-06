@@ -30,6 +30,13 @@
 	text-decoration: none;
 }
 
+/* Table 表格 element plus 2.2.0 版本
+------------------------------- */
+.el-table {
+	.el-button.is-text {
+		padding: 0;
+	}
+}
 
 /* input
 ------------------------------- */
