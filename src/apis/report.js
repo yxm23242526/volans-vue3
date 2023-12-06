@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export const getWeekreportList = (params) => {
     return request({
-        url: '/weekreport/getWeekreport/3587',
+        url: '/weekreport/getWeekreport',
         // params
     })
 }
