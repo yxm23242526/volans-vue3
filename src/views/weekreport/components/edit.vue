@@ -108,17 +108,11 @@ const handleadd = (index, row) => {
 
 //删除行
 const handledelete = (index, row) => {
-<<<<<<< HEAD
-  if (spanarr[index] == 1) {
-    for (let i = 0; i < dataarrary.length; i++) {
-      if (dataarrary[i].value === tableData[index].index) {
-=======
   if(spanarr[index] == 1)
   {
     for (let i = 0; i < dataarrary.length; i++) {
       if (dataarrary[i].value === tableData[index].index) 
       {
->>>>>>> bfa2db61b8f5d43f94c65d77d7ed8e2e68e39c61
         dataarrary[i].disabled = false;
         break;
       }
@@ -133,17 +127,11 @@ const addrow = () => {
     alert('请选择日期');
   }
   else {
-<<<<<<< HEAD
-    if (tableData.length > 0) {
-      for (let i = 0; i < tableData.length; i++) {
-        if ((Number)(tableData[i].index) > (Number)(selectvalue.value)) {
-=======
     if (tableData.length > 0) 
     {
       for (let i = 0; i < tableData.length; i++) {
         if ((Number)(tableData[i].index) > (Number)(selectvalue.value)) 
         {
->>>>>>> bfa2db61b8f5d43f94c65d77d7ed8e2e68e39c61
           tableData.splice(i, 0, {
             index: selectvalue.value,
             date: dataarrary[(Number)(selectvalue.value)].label,
@@ -154,12 +142,8 @@ const addrow = () => {
           });
           break;
         }
-<<<<<<< HEAD
-        else if (i === tableData.length - 1) {
-=======
         else if (i === tableData.length - 1)
         {
->>>>>>> bfa2db61b8f5d43f94c65d77d7ed8e2e68e39c61
           tableData.splice(i + 1, 0, {
             index: selectvalue.value,
             date: dataarrary[(Number)(selectvalue.value)].label,
@@ -202,67 +186,9 @@ watch(tableData, () => {
 </script>
 
 <template>
-  <div class="layout-padding">
-    <div class="layout-padding-view">
-      <h2> 周报填写</h2>
-      <el-form :inline="true" :model="formdata" class="demo-form-inline">
-        <el-form-item label="姓名：">
-          <el-input v-model="formdata.username" disabled="true" clearable />
-        </el-form-item>
-        <el-form-item label="工号:" width="100">
-          <el-input v-model="formdata.number" disabled="true" clearable />
-        </el-form-item>
-        <el-form-item label="起始日期">
-          <el-time-select v-model="formdata.starttime" disabled="true" class="mr-4" placeholder="Start time"
-            format="MM/DD/YYYY" />
-          <el-time-select v-model="formdata.endtime" disabled="true" placeholder="End time" format="MM/DD/YYYY" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary">保存</el-button>
-          <el-button type="primary">提交</el-button>
-        </el-form-item>
-      </el-form>
-      <el-table :data="tableData" :span-method="objectSpanMethod">
-        <el-table-column prop="date" label="日期" width="160" />
-        <el-table-column label="项目 " width="160">
-          <template #default="scope">
-            <el-input v-model="scope.row.name" autosize type="textarea" placeholder="项目" resize="none" />
-          </template>
-        </el-table-column>
+  <div>
+    <h2> 周报填写</h2>
 
-<<<<<<< HEAD
-        <el-table-column label="工作内容" width="320">
-          <template #default="scope">
-            <el-input v-model="scope.row.content" autosize type="textarea" placeholder="工作内容" resize="none" />
-          </template>
-        </el-table-column>
-        <el-table-column label="工时" width="80">
-          <template #default="scope">
-            <el-input-number v-model="scope.row.worktime" :controls="false" style="width: 50px" />
-          </template>
-        </el-table-column>
-        <el-table-column label="完成情况" width="150">
-          <template #default="scope">
-            <el-input v-model="scope.row.content" autosize type="textarea" placeholder="完成情况" resize="none" />
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="250">
-          <template #default="scope">
-            <el-button type="primary" @click="handleadd(scope.$index, scope.row)">添加项目</el-button>
-            <el-button type="primary" @click="handledelete(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-
-      <el-select v-model="selectvalue" placeholder="Select">
-        <el-option v-for="item in dataarrary" :key="item.value" :label="item.label" :value="item.value"
-          :disabled="item.disabled" />
-      </el-select>
-      <el-button type="primary" @click="addrow">插入行</el-button>
-    </div>
-
-=======
     <el-form :inline="true" :model="formdata" class="demo-form-inline">
       <el-form-item label="姓名：">
         <el-input v-model="formdata.username" disabled="true" clearable />
@@ -317,7 +243,6 @@ watch(tableData, () => {
         :disabled="item.disabled" />
     </el-select>
     <el-button type="primary" @click="addrow">插入行</el-button>
->>>>>>> bfa2db61b8f5d43f94c65d77d7ed8e2e68e39c61
   </div>
 </template>
 
