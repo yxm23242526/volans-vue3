@@ -1,16 +1,17 @@
 <script lang="ts" setup>
 import type { TableColumnCtx } from 'element-plus'
-import { onMounted, reactive, watch } from 'vue';
-import Weekselection from './weekselection.vue';
+import { onMounted, reactive, watch, ref } from 'vue';
 
+//表格对象
 interface User {
   date: String,
   name: String,
-  content: String, 
+  content: String,
   worktime: String,
   result: String,
 }
 
+//合并单元格方法
 interface SpanMethodProps {
   row: User
   column: TableColumnCtx<User>
@@ -18,18 +19,25 @@ interface SpanMethodProps {
   columnIndex: number
 }
 
-
+//用户数据，后期从用户信息拿
 var formdata = reactive(
   {
     username: '张三',
     number: '1234',
-    starttime: '2023/11/26',
+    starttime: '2023/12/1',
     endtime: '2023/12/5'
   })
 
 
-const spanarr = reactive([]);
+const spanarr = reactive([]);//合并单元格数据
 
+const dataarrary = reactive([]);//选择框候选值
+
+const selectvalue = ref('');//选择框值
+
+const tableData = reactive([]);//表格数据
+
+//更新合并单元格数组
 const getspanarr = () => {
   spanarr.splice(0, spanarr.length);
   let temp = 0;
@@ -52,30 +60,26 @@ const getspanarr = () => {
 }
 
 onMounted(() => {
-  var today = new Date() ;
-  // today.setDate(1);
-  console.log(today)
-  inittabledata(formdata.starttime, formdata.endtime);
+  initdatearrary(formdata.starttime, formdata.endtime);
 });
 
-const inittabledata = (starttime: string, endtime: string) => {
-  var end = new Date(Date.parse(endtime));
+//初始化选择框数据
+const initdatearrary = (starttime: string, endtime: string) => {
   var st = new Date(Date.parse(starttime));
-  var days = (Date.parse(endtime) - Date.parse(starttime))/(1 * 24 * 60 * 60 * 1000);
+  var days = (Date.parse(endtime) - Date.parse(starttime)) / (1 * 24 * 60 * 60 * 1000);
   if (days > 0) {
     for (let i = 0; i <= days; i++) {
-      tableData.push({
-        date: st.getFullYear() + "/" + (st.getMonth() + 1) + "/" + st.getDate(),
-        name: '',
-        content: '',
-        worktime: '',
-        result: "",
+      dataarrary.push({
+        value: i,
+        label: st.getFullYear() + "/" + (st.getMonth() + 1) + "/" + st.getDate(),
+        disabled: false,
       })
       st.setDate(st.getDate() + 1)
     }
   }
 }
 
+//合并单元格数据
 const objectSpanMethod = ({
   row,
   column,
@@ -90,10 +94,10 @@ const objectSpanMethod = ({
   }
 }
 
-
-
+//插入行
 const handleadd = (index, row) => {
   tableData.splice(index + 1, 0, {
+    index: row.index,
     date: row.date,
     name: '',
     content: '',
@@ -102,15 +106,80 @@ const handleadd = (index, row) => {
   });
 }
 
+//删除行
 const handledelete = (index, row) => {
-  // if(spanarr[index] != 1)
+  if(spanarr[index] == 1)
   {
-    tableData.splice(index, 1)
+    for (let i = 0; i < dataarrary.length; i++) {
+      if (dataarrary[i].value === tableData[index].index) 
+      {
+        dataarrary[i].disabled = false;
+        break;
+      }
+    }
+  }
+  tableData.splice(index, 1)
+}
+
+//插入新的日期
+const addrow = () => {
+  if (selectvalue.value === '') {
+    alert('请选择日期');
+  }
+  else {
+    if (tableData.length > 0) 
+    {
+      for (let i = 0; i < tableData.length; i++) {
+        if ((Number)(tableData[i].index) > (Number)(selectvalue.value)) 
+        {
+          tableData.splice(i, 0, {
+            index: selectvalue.value,
+            date: dataarrary[(Number)(selectvalue.value)].label,
+            name: '',
+            content: '',
+            worktime: '0',
+            result: "",
+          });
+          break;
+        }
+        else if (i === tableData.length - 1)
+        {
+          tableData.splice(i + 1, 0, {
+            index: selectvalue.value,
+            date: dataarrary[(Number)(selectvalue.value)].label,
+            name: '',
+            content: '',
+            worktime: '0',
+            result: "",
+          });
+          break;
+        }
+      }
+    }
+    else {
+      tableData.push(
+        {
+          index: selectvalue.value,
+          date: dataarrary[(Number)(selectvalue.value)].label,
+          name: '',
+          content: '',
+          worktime: '0',
+          result: "",
+        }
+      )
+    }
+    for (let i = 0; i < dataarrary.length; i++) {
+      if (dataarrary[i].value === selectvalue.value) {
+        selectvalue.value = '';
+        dataarrary[i].disabled = true;
+        break;
+      }
+    }
   }
 }
 
-const tableData = reactive([]);
 
+//检测表格数据更新合并单元格数组
 watch(tableData, () => {
   getspanarr();
 })
@@ -120,7 +189,7 @@ watch(tableData, () => {
   <div>
     <h2> 周报填写</h2>
 
-    <!-- <el-form :inline="true" :model="formdata" class="demo-form-inline">
+    <el-form :inline="true" :model="formdata" class="demo-form-inline">
       <el-form-item label="姓名：">
         <el-input v-model="formdata.username" disabled="true" clearable />
       </el-form-item>
@@ -128,18 +197,16 @@ watch(tableData, () => {
         <el-input v-model="formdata.number" disabled="true" clearable />
       </el-form-item>
       <el-form-item label="起始日期">
-        <el-time-select v-model="formdata.starttime" class="mr-4" placeholder="Start time"
+        <el-time-select v-model="formdata.starttime" disabled="true" class="mr-4" placeholder="Start time"
           format="MM/DD/YYYY" />
-        <el-time-select v-model="formdata.endtime" placeholder="End time"
-          format="MM/DD/YYYY" />
+        <el-time-select v-model="formdata.endtime" disabled="true" placeholder="End time" format="MM/DD/YYYY" />
       </el-form-item>
       <el-form-item>
+        <el-button type="primary">保存</el-button>
         <el-button type="primary">提交</el-button>
       </el-form-item>
-    </el-form> -->
-    
-    <Weekselection></Weekselection>
-    <el-table :data="tableData" :span-method="objectSpanMethod" >
+    </el-form>
+    <el-table :data="tableData" :span-method="objectSpanMethod">
       <el-table-column prop="date" label="日期" width="160" />
       <el-table-column label="项目 " width="160">
         <template #default="scope">
@@ -171,8 +238,11 @@ watch(tableData, () => {
     </el-table>
 
 
-
-    <el-button type="primary">插入行</el-button>
+    <el-select v-model="selectvalue" placeholder="Select">
+      <el-option v-for="item in dataarrary" :key="item.value" :label="item.label" :value="item.value"
+        :disabled="item.disabled" />
+    </el-select>
+    <el-button type="primary" @click="addrow">插入行</el-button>
   </div>
 </template>
 
