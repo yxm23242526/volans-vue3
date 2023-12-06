@@ -13,7 +13,8 @@ const router = createRouter({
             redirect: '/home',
             meta: {
                 name: "首页",
-                icon: "House"
+                icon: "House",
+                roles: ['admin', 'common'],
             },
             children: [
                 {
@@ -22,7 +23,8 @@ const router = createRouter({
                     component: () => import('@/layout/home/index.vue'),
                     meta: {
                         name: "首页",
-                        icon: "House"
+                        icon: "House",
+                        roles: ['admin', 'common'],
                     }
                 }, 
                 {
@@ -30,7 +32,8 @@ const router = createRouter({
                     redirect: '/edit',
                     meta: {
                         name: "周报管理",
-                        icon: "Notification"
+                        icon: "Notification",
+                        roles: ['admin', 'common'],
                     },
                     children: [
                         {
@@ -39,7 +42,8 @@ const router = createRouter({
                             component: () => import('@/views/weekreport/components/edit.vue'),
                             meta: {
                                 name: "编辑周报",
-                                icon: "Edit"
+                                icon: "Edit",
+                                roles: ['admin', 'common'],
                             },
                         },
                         {
@@ -48,7 +52,8 @@ const router = createRouter({
                             component: () => import('@/views/weekreport/components/calculate.vue'),
                             meta: {
                                 name: "统计周报",
-                                icon: "Histogram"
+                                icon: "Histogram",
+                                roles: ['admin'],
                             },
                         },
                         {
@@ -57,7 +62,8 @@ const router = createRouter({
                             component: () => import('@/views/weekreport/components/myweekreport.vue'),
                             meta: {
                                 name: "我的周报",
-                                icon: "Avatar"
+                                icon: "Avatar",
+                                roles: ['admin', 'common'],
                             }
                         },
                     ]
@@ -68,7 +74,10 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             hide: true,
-            component: () => import('@/views/login/index.vue')
+            component: () => import('@/views/login/index.vue'),
+            meta: {
+                roles: ['admin', 'common']
+            }
         },
 
     ],
@@ -77,6 +86,17 @@ const router = createRouter({
         return {
             top: 0
         }
-    }
+    },
 })
 export default router
+
+//假设通过接口从后台获取的用户角色，可以存储在token中
+const role = 'admin';
+
+router.beforeEach((to,from,next)=>{
+	if(to.meta.roles.includes(role)){
+		next()	//放行
+	}else{
+		next({path:"/404"})	//跳到404页面
+	}
+})

@@ -224,11 +224,6 @@ watch(tableData, () => {
           <el-input-number v-model="scope.row.worktime" :controls="false" style="width: 50px" />
         </template>
       </el-table-column>
-      <el-table-column label="完成情况" width="150">
-        <template #default="scope">
-          <el-input v-model="scope.row.content" autosize type="textarea" placeholder="完成情况" resize="none" />
-        </template>
-      </el-table-column>
       <el-table-column label="操作" width="250">
         <template #default="scope">
           <el-button type="primary" @click="handleadd(scope.$index, scope.row)">添加项目</el-button>
