@@ -62,7 +62,17 @@ const router = createRouter({
                             component: () => import('@/views/weekreport/components/myweekreport.vue'),
                             meta: {
                                 name: "我的周报",
-                                icon: "Avatar",
+                                icon: "UserFilled",
+                                roles: ['admin', 'common'],
+                            }
+                        },
+                        {
+                            path: '/TESTDEMO',
+                            name: 'TESTDEMO',
+                            component: () => import('@/views/TESTDEMO/index.vue'),
+                            meta: {
+                                name: "测试专用",
+                                icon: "SwitchFilled",
                                 roles: ['admin', 'common'],
                             }
                         },

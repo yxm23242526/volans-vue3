@@ -44,7 +44,7 @@ const onTabChange = (state) => {
                 <span>
                     {{ state.title }}
                 </span>
-                <Icon name="Close" class="layout-navbars-tagsview-ul-li-icon layout-icon-active" @click="onTagClose(state)"/> 
+                <Icon name="Close" class="layout-navbars-tagsview-ul-li-icon layout-icon-active" @click.stop="onTagClose(state)"/> 
             </li>
         </ul>
     </div>

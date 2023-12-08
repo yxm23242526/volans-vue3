@@ -24,7 +24,6 @@ export const useTagsViewStore = defineStore('tagsView', () => {
 
     //删除状态
     const removeState = (removedPath, activePath) => {
-        console.log(removedPath, activePath)
         //至少保留一个
         if (tagsviewState.value.length <= 1) {
             return;
@@ -37,10 +36,6 @@ export const useTagsViewStore = defineStore('tagsView', () => {
                 {
                     const newPath = index > 0 ? tagsviewState.value[index - 1].path : '';
                     gotoPage(newPath)
-                }
-                else
-                {
-                    gotoPage(activePath)
                 }
             }
         }, 0)

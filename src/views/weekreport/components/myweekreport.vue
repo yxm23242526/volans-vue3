@@ -9,7 +9,7 @@
           </template>
         </el-button>
       </div>
-      <el-table :data="weekReportData" style="width: 100%">
+      <el-table :data="weekReportData" style="width: 100%" >
         <el-table-column prop="year" label="年份" width="150" />
         <el-table-column prop="name" label="期间" />
         <el-table-column prop="status" label="提交状态">
@@ -24,12 +24,12 @@
         <el-table-column prop="action" label="操作" width="180">
           <template #default="scope">
             <div v-if="scope.row.status === 2">
-              <el-button text type="primary" size="small" @click="openEdit(scope.$index)">查看</el-button>
-              <el-button text type="primary" size="small" @click="openMessage">撤回</el-button>
+              <el-button text type="primary" size="small" @click="onEdit(scope.$index)">查看</el-button>
+              <el-button text type="primary" size="small" @click="onPopMessage">撤回</el-button>
             </div>
             <div v-else>
-              <el-button text type="primary" size="small" @click="openEdit(scope.$index)">查看</el-button>
-              <el-button text type="primary" size="small" @click="openEdit(scope.$index)">编辑</el-button>
+              <el-button text type="primary" size="small" @click="onPreview(scope.$index)">查看</el-button>
+              <el-button text type="primary" size="small" @click="onEdit(scope.$index)">编辑</el-button>
             </div>
           </template>
         </el-table-column>
@@ -52,6 +52,8 @@
 </template>
 
 <script setup>
+
+
 import { ref, onMounted, computed } from 'vue';
 import { getWeekreportList } from '@/apis/report';
 import { Local } from '@/utils/storage';
@@ -99,7 +101,7 @@ const changePage = (newPage) => {
 
 
 //操作栏弹框
-const openMessage = () => {
+const onPopMessage = () => {
   ElMessageBox.confirm(
     '撤回已提交周报， 是否继续？',
     '提示',
@@ -119,8 +121,14 @@ const openMessage = () => {
     })
 }
 
+//打开查看窗口
+const onPreview = (rowIndex) => {
+  alert(weekReportData.value[rowIndex])
+}
+
+
 //打开编辑窗口
-const openEdit = (rowIndex) => {
+const onEdit = (rowIndex) => {
   alert(weekReportData.value[rowIndex])
 }
 </script>
