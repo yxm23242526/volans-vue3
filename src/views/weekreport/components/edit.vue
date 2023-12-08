@@ -1,31 +1,18 @@
-<script lang="ts" setup>
-import type { TableColumnCtx } from 'element-plus'
+<script setup>
+// import type { TableColumnCtx } from 'element-plus'
 import { onMounted, reactive, watch, ref } from 'vue';
+import { getWeekreport } from '@/apis/edit';
+import { comparedate, calcuatedate, mult, formatdate } from '@/utils/datetimeUtils';
 
-//表格对象
-interface User {
-  date: String,
-  name: String,
-  content: String,
-  worktime: String,
-  result: String,
-}
-
-//合并单元格方法
-interface SpanMethodProps {
-  row: User
-  column: TableColumnCtx<User>
-  rowIndex: number
-  columnIndex: number
-}
 
 //用户数据，后期从用户信息拿
 var formdata = reactive(
   {
     username: '张三',
-    number: '1234',
+    number: '3587',
+    taskid: 1,
     starttime: '2023/12/1',
-    endtime: '2023/12/5'
+    endtime: '2023/12/7'
   })
 
 
@@ -33,7 +20,7 @@ const spanarr = reactive([]);//合并单元格数据
 
 const dataarrary = reactive([]);//选择框候选值
 
-const selectvalue = ref('');//选择框值
+const selectvalue = ref();//选择框值
 
 const tableData = reactive([]);//表格数据
 
@@ -59,22 +46,38 @@ const getspanarr = () => {
   }
 }
 
+//获取周报数据
+const getList = async () => {
+  const data = await getWeekreport([formdata.number, 1]);
+  if (data.data.length == 0) {
+
+  }
+  else {
+    if (data.data.length > 0) {
+      data.data.forEach(element => {
+        element.date = formatdate(element.date);
+        tableData.push(element);
+      });
+    }
+  }
+}
+
 onMounted(() => {
   initdatearrary(formdata.starttime, formdata.endtime);
+  getList();
 });
 
 //初始化选择框数据
-const initdatearrary = (starttime: string, endtime: string) => {
-  var st = new Date(Date.parse(starttime));
-  var days = (Date.parse(endtime) - Date.parse(starttime)) / (1 * 24 * 60 * 60 * 1000);
+const initdatearrary = (starttime, endtime) => {
+  var days = mult(starttime, endtime);
   if (days > 0) {
     for (let i = 0; i <= days; i++) {
+      var str = calcuatedate(starttime, i)
       dataarrary.push({
-        value: i,
-        label: st.getFullYear() + "/" + (st.getMonth() + 1) + "/" + st.getDate(),
+        value: str,
+        label: str,
         disabled: false,
       })
-      st.setDate(st.getDate() + 1)
     }
   }
 }
@@ -85,7 +88,7 @@ const objectSpanMethod = ({
   column,
   rowIndex,
   columnIndex,
-}: SpanMethodProps) => {
+}) => {
   if (columnIndex == 0) {
     return {
       rowspan: spanarr[rowIndex],
@@ -97,27 +100,12 @@ const objectSpanMethod = ({
 //插入行
 const handleadd = (index, row) => {
   tableData.splice(index + 1, 0, {
-    index: row.index,
     date: row.date,
-    name: '',
-    content: '',
-    worktime: '0',
-    result: "",
   });
 }
 
 //删除行
 const handledelete = (index, row) => {
-  if(spanarr[index] == 1)
-  {
-    for (let i = 0; i < dataarrary.length; i++) {
-      if (dataarrary[i].value === tableData[index].index) 
-      {
-        dataarrary[i].disabled = false;
-        break;
-      }
-    }
-  }
   tableData.splice(index, 1)
 }
 
@@ -127,30 +115,17 @@ const addrow = () => {
     alert('请选择日期');
   }
   else {
-    if (tableData.length > 0) 
-    {
+    if (tableData.length > 0) {
       for (let i = 0; i < tableData.length; i++) {
-        if ((Number)(tableData[i].index) > (Number)(selectvalue.value)) 
-        {
+        if (comparedate(selectvalue.value, tableData[i].date) < 0) {
           tableData.splice(i, 0, {
-            index: selectvalue.value,
-            date: dataarrary[(Number)(selectvalue.value)].label,
-            name: '',
-            content: '',
-            worktime: '0',
-            result: "",
+            date: selectvalue.value,
           });
           break;
         }
-        else if (i === tableData.length - 1)
-        {
+        else if (i === tableData.length - 1) {
           tableData.splice(i + 1, 0, {
-            index: selectvalue.value,
-            date: dataarrary[(Number)(selectvalue.value)].label,
-            name: '',
-            content: '',
-            worktime: '0',
-            result: "",
+            date: selectvalue.value,
           });
           break;
         }
@@ -159,21 +134,28 @@ const addrow = () => {
     else {
       tableData.push(
         {
-          index: selectvalue.value,
-          date: dataarrary[(Number)(selectvalue.value)].label,
-          name: '',
-          content: '',
-          worktime: '0',
-          result: "",
+          date: selectvalue.value,
         }
       )
     }
-    for (let i = 0; i < dataarrary.length; i++) {
-      if (dataarrary[i].value === selectvalue.value) {
+  }
+}
+
+
+const checkdataarrary = () => {
+  for (let i = 0; i < dataarrary.length; i++) {
+    var temp = false;
+    for (let j = 0; j < tableData.length; j++) {
+      if (comparedate(dataarrary[i].value, tableData[j].date) === 0) {
         selectvalue.value = '';
         dataarrary[i].disabled = true;
+        temp = true;
         break;
       }
+    }
+    if (!temp) {
+      selectvalue.value = '';
+      dataarrary[i].disabled = false;
     }
   }
 }
@@ -182,13 +164,12 @@ const addrow = () => {
 //检测表格数据更新合并单元格数组
 watch(tableData, () => {
   getspanarr();
+  checkdataarrary();
 })
 </script>
 
 <template>
   <div>
-    <h2> 周报填写</h2>
-
     <el-form :inline="true" :model="formdata" class="demo-form-inline">
       <el-form-item label="姓名：">
         <el-input v-model="formdata.username" disabled="true" clearable />
@@ -210,24 +191,24 @@ watch(tableData, () => {
       <el-table-column prop="date" label="日期" width="160" />
       <el-table-column label="项目 " width="160">
         <template #default="scope">
-          <el-input v-model="scope.row.name" autosize type="textarea" placeholder="项目" resize="none" />
+          <el-input v-model="scope.row.projectId" autosize type="textarea" placeholder="项目" resize="none" />
         </template>
       </el-table-column>
 
       <el-table-column label="工作内容" width="320">
         <template #default="scope">
-          <el-input v-model="scope.row.content" autosize type="textarea" placeholder="工作内容" resize="none" />
+          <el-input v-model="scope.row.workContent" autosize type="textarea" placeholder="工作内容" resize="none" />
         </template>
       </el-table-column>
       <el-table-column label="工时" width="80">
         <template #default="scope">
-          <el-input-number v-model="scope.row.worktime" :controls="false" style="width: 50px" />
+          <el-input-number v-model="scope.row.workTime" :controls="false" style="width: 50px" />
         </template>
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template #default="scope">
-          <el-button type="primary" @click="handleadd(scope.$index, scope.row)">添加项目</el-button>
-          <el-button type="primary" @click="handledelete(scope.$index, scope.row)">删除</el-button>
+          <el-button text type="primary" @click="handleadd(scope.$index, scope.row)">添加项目</el-button>
+          <el-button text type="danger" @click="handledelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

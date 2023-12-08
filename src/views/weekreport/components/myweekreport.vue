@@ -63,7 +63,7 @@ const userInfo = Local.get('user')
 //true：全部展示  false：按月展示
 const isExpand = ref(true)
 const pageParams = ref({
-  userId: userInfo.user?.userId,
+  // userId: userInfo.user?.userId,
   page: 1, //第几页
   pagesize: 8, // 每页多少条
   total: 0
