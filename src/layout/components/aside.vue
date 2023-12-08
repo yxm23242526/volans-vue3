@@ -6,13 +6,17 @@
 
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, onMounted, watch} from "vue";
 import { RouterLink } from "vue-router";
 import Asideitem from "./asideitem.vue";
 import { useRouter, useRoute} from "vue-router";
+import { useTagsViewStore } from "@/stores/tags";
+const tagsviewStore = useTagsViewStore()
 const router = useRouter();
 const route = useRoute();
 const routers = reactive(router.options.routes);
+
+
 
 let arrlist = reactive([]);
 
@@ -27,6 +31,17 @@ const resolveArr = () => {
   });
 }
 resolveArr();
+
+onMounted(() => {
+  tagsviewStore.addState(router.currentRoute.value)
+})
+
+//监听路由变化
+watch( () => route, ()=>{
+  tagsviewStore.addState(router.currentRoute.value)
+},{
+    deep: true
+})
 
 </script>
 
@@ -46,7 +61,7 @@ resolveArr();
           </el-sub-menu>
 
           <template v-else>
-            <el-menu-item :index="item.path">
+            <el-menu-item :index="item.path" >
                 <Icon :name="item.meta.icon"/>
                 {{ item.meta.name }}
             </el-menu-item>

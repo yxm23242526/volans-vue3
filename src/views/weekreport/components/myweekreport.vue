@@ -9,8 +9,8 @@
           </template>
         </el-button>
       </div>
-      <el-table :data="weekReportData" style="width: 100%" @row-click="rowClick">
-        <el-table-column prop="year" label="年份" width="150"/>
+      <el-table :data="weekReportData" style="width: 100%" >
+        <el-table-column prop="year" label="年份" width="150" />
         <el-table-column prop="name" label="期间" />
         <el-table-column prop="status" label="提交状态">
           <template #default="scope">
@@ -21,13 +21,15 @@
           </template>
         </el-table-column>
         <el-table-column prop="observer" label="最近查看人" />
-        <el-table-column prop="action" label="操作" width="120">
+        <el-table-column prop="action" label="操作" width="180">
           <template #default="scope">
-            <div v-if="scope.row.status === 1">
-              <el-button text type="primary" size="small" @click="openMessage">撤回</el-button>
+            <div v-if="scope.row.status === 2">
+              <el-button text type="primary" size="small" @click="onEdit(scope.$index)">查看</el-button>
+              <el-button text type="primary" size="small" @click="onPopMessage">撤回</el-button>
             </div>
             <div v-else>
-              <el-button text type="primary" size="small" @click="openEdit(scope.$index)">编辑</el-button>
+              <el-button text type="primary" size="small" @click="onPreview(scope.$index)">查看</el-button>
+              <el-button text type="primary" size="small" @click="onEdit(scope.$index)">编辑</el-button>
             </div>
           </template>
         </el-table-column>
@@ -35,17 +37,14 @@
 
       <!-- 分页组件 -->
       <el-row class="mt15" v-if="isExpand">
-        <el-pagination :page-size="pageParams.pagesize" 
-        :current-page="pageParams.page"
-        :total="pageParams.total"
-        @current-change="changePage"
-        layout="total, prev, pager, next">
-      </el-pagination>
+        <el-pagination :page-size="pageParams.pagesize" :current-page="pageParams.page" :total="pageParams.total"
+          @current-change="changePage" layout="total, prev, pager, next">
+        </el-pagination>
       </el-row>
       <el-row class="mt15" v-else>
         <div class="weekreport-date">
           <!-- 这个以后再做 没想好怎么展示-->
-          <p> {{weekReportData[0]?.year}} 年 12 月</p>  
+          <p> {{ weekReportData[0]?.year }} 年 12 月</p>
         </div>
       </el-row>
     </div>
@@ -53,10 +52,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed} from 'vue';
+
+
+import { ref, onMounted, computed } from 'vue';
 import { getWeekreportList } from '@/apis/report';
 import { Local } from '@/utils/storage';
-import { ElMessage, ElMessageBox} from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { getMonthandDay } from '@/utils/datetimeUtils'
 const userInfo = Local.get('user')
 
@@ -65,7 +66,7 @@ const isExpand = ref(true)
 const pageParams = ref({
   // userId: userInfo.user?.userId,
   page: 1, //第几页
-  pagesize: 8, // 每页多少条
+  pagesize: 12, // 每页多少条
   total: 0
 })
 
@@ -74,17 +75,15 @@ const weekReportData = ref([])
 //获取周报数据
 const getList = async () => {
   const { data } = await getWeekreportList(pageParams);
-  console.log(data)
   //这里之后要变成total
   pageParams.value.total = data.length
   weekReportData.value = data;
-  for (var i = 0; i < data.length; i++)
-  {
-     var stDate = new Date(weekReportData.value[i].startDate)
-     var edDate = new Date(weekReportData.value[i].endDate)
-     weekReportData.value[i].year = stDate.getFullYear();
-     weekReportData.value[i].name = getMonthandDay(stDate) + '~' + getMonthandDay(edDate);
-     weekReportData.value[i].observer = "-";
+  for (var i = 0; i < data.length; i++) {
+    var stDate = new Date(weekReportData.value[i].startDate)
+    var edDate = new Date(weekReportData.value[i].endDate)
+    weekReportData.value[i].year = stDate.getFullYear();
+    weekReportData.value[i].name = getMonthandDay(stDate) + '~' + getMonthandDay(edDate);
+    weekReportData.value[i].observer = "-";
   }
   //修改数据格式
 }
@@ -100,18 +99,9 @@ const changePage = (newPage) => {
   getList();
 }
 
-//行点击事件
-const rowClick = (row, column, event) => {
-  if (column && column.label=='操作')
-  {
-      return;
-  }
-  alert('标签卡预览')
-}
-
 
 //操作栏弹框
-const openMessage = () => {
+const onPopMessage = () => {
   ElMessageBox.confirm(
     '撤回已提交周报， 是否继续？',
     '提示',
@@ -127,12 +117,18 @@ const openMessage = () => {
         message: '撤回成功',
       })
     }).catch(() => {
-        //什么都不做
+      //什么都不做
     })
 }
 
+//打开查看窗口
+const onPreview = (rowIndex) => {
+  alert(weekReportData.value[rowIndex])
+}
+
+
 //打开编辑窗口
-const openEdit = (rowIndex) => {
+const onEdit = (rowIndex) => {
   alert(weekReportData.value[rowIndex])
 }
 </script>
@@ -156,6 +152,11 @@ const openEdit = (rowIndex) => {
   &-wrapper {
     display: flex;
     justify-content: end;
+  }
+
+  &-option {
+    display: flex;
+    flex-direction: row;
   }
 }
 </style>

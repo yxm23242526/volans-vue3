@@ -20,7 +20,7 @@ watch(() => router.currentRoute.value.path, () => {
 </script>
 
 <template>
-    <el-breadcrumb class="app-breadcrumb" separator="/">
+    <el-breadcrumb class="app-breadcrumb ml15" separator="/">
       <el-breadcrumb-item v-for="item in levelList" :key="item.path" :to = "item.path">
         {{ item.meta.name }}
       </el-breadcrumb-item>
@@ -34,7 +34,6 @@ watch(() => router.currentRoute.value.path, () => {
     display: inline-block;
     font-size: 14px;
     line-height: 50px;
-    margin-left: 8px;
   
     .no-redirect {
       color: #97a8be;

@@ -1,8 +1,3 @@
-/*
- * @Author: yxm
- * @Date: 2023-11-29 09:57:35
- * @Description: 
- */
 /**
  * @Description: user相关的pinia管理
  * 一般约定的以use开头
