@@ -73,7 +73,6 @@ const weekReportData = ref([])
 //获取周报数据
 const getList = async () => {
   const { data } = await getWeekreportList(pageParams);
-  console.log(data)
   //这里之后要变成total
   pageParams.value.total = data.length
   weekReportData.value = data;

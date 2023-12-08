@@ -13,30 +13,49 @@ export const useTagsViewStore = defineStore('tagsView', () => {
     //添加状态
     const addState = (item) => {
         //  代表有这个路由就不添加了
-        const index = tagsviewState.value.findIndex( (state) => item.path == state.key)
-        if (index == -1)
-        {
+        const index = tagsviewState.value.findIndex((state) => item.path == state.path)
+        if (index == -1) {
             tagsviewState.value.push({
-                key: item.path,
+                path: item.path,
                 title: item.meta.name,
             })
         }
     }
 
     //删除状态
-    const removeState = (removedPath) => {
-        const index = tagsviewState.value.findIndex( (state) => removedPath == state.key)
-        if (index != -1)
-        {
-            tagsviewState.value.splice(index, 1)
-            console.log(tagsviewState.value[0])
-            const newPath = index > 0  ?  tagsviewState.value[index - 1].key : '';
-            router.push({path: newPath})
-        }   
+    const removeState = (removedPath, activePath) => {
+        console.log(removedPath, activePath)
+        //至少保留一个
+        if (tagsviewState.value.length <= 1) {
+            return;
+        }
+        setTimeout(() => {
+            const index = tagsviewState.value.findIndex((state) => removedPath == state.path)
+            if (index != -1) {
+                tagsviewState.value.splice(index, 1)
+                if (removedPath == activePath)
+                {
+                    const newPath = index > 0 ? tagsviewState.value[index - 1].path : '';
+                    gotoPage(newPath)
+                }
+                else
+                {
+                    gotoPage(activePath)
+                }
+            }
+        }, 0)
+
     }
+
+    //切换页面跳转
+    const gotoPage = (newPath) => {
+        router.push({ path: newPath })
+    }
+
     return {
         tagsviewState,
         addState,
-        removeState
+        removeState,
+        gotoPage
     }
 })
