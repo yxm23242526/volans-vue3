@@ -4,6 +4,9 @@
  * @Date: 2023-11-22
  */
 import { createRouter, createWebHistory } from "vue-router";
+import { useTagsViewStore } from "@/stores/tags";
+import pinia from '@/stores/index';
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -67,7 +70,7 @@ const router = createRouter({
                             }
                         },
                         {
-                            path: '/TESTDEMO',
+                            path: '/TESTDEMO/:id',
                             name: 'TESTDEMO',
                             component: () => import('@/views/TESTDEMO/index.vue'),
                             meta: {
@@ -98,15 +101,18 @@ const router = createRouter({
         }
     },
 })
-export default router
 
 //假设通过接口从后台获取的用户角色，可以存储在token中
 const role = 'admin';
-
+const tagsviewStore = useTagsViewStore(pinia)
 router.beforeEach((to,from,next)=>{
 	if(to.meta.roles.includes(role)){
 		next()	//放行
+        //监听路由变化
+        tagsviewStore.addState(to)
 	}else{
 		next({path:"/404"})	//跳到404页面
 	}
 })
+
+export default router

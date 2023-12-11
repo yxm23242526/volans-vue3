@@ -1,10 +1,13 @@
 <!-- 测试专用组件 -->
 <template>
-    <WeekreportPreview/>
+  <div>
+  </div>
 </template>
 
 <script setup>
-import WeekreportPreview from "@/views/weekreport/common/reportpreview.vue"
+import { useRoute} from "vue-router";
+const route = useRoute()
+const index = route.params.id
 </script>
 
 <style>

@@ -137,11 +137,12 @@ const onPreview = (rowIndex) => {
   previewObj.value.openDialog(previewData)
 }
 
-
+import { useRouter } from "vue-router";
+const router = useRouter()
 //打开编辑窗口
 const onEdit = (rowIndex) => {
-  alert(weekReportData.value[rowIndex])
-
+  const id = weekReportData.value[rowIndex].userId
+  router.push({path: `/TESTDEMO/${id}`})
 }
 </script>
 

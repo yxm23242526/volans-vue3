@@ -28,8 +28,6 @@
 <script setup name="makeNoticeBar">
 import { reactive } from 'vue';
 // 引入组件
-import NoticeBar from "@/components/noticeBar/index.vue"
-
 // 定义变量内容
 const state = reactive({
 	noticeList: [

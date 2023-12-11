@@ -1,29 +1,30 @@
 <template>
-  <el-dialog v-model="isVisible" @close="onClose">
+  <el-dialog v-model="isVisible" @close="onClose" title="周报预览">
     <el-scrollbar max-height="600px">
-      <el-descriptions title="周报预览" :column="2" direction="vertical" border>
-        <el-descriptions-item>
+      <el-descriptions :column="2" direction="vertical" border onselectstart="return false">
+        <el-descriptions-item width="50%">
           <template #label>
             <div>
+<!--              还是有点BUG的，这里图标的基准比字高一点-->
               <Icon name="user"/>
               用户名
             </div>
           </template>
-          {{ reportData.userId }}
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ reportData.userId }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div>
-              <Icon name="PieChart"/>
+              <Icon name="Clock"/>
               周报时间
             </div>
           </template>
-          {{ reportData.startDate }}&nbsp;~&nbsp;{{ reportData.endDate }}
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ reportData.startDate }}&nbsp;~&nbsp;{{ reportData.endDate }}
         </el-descriptions-item>
         <el-descriptions-item span="2" v-for="(row,index) in reportData.rows" :key="index">
           <template #label>
-            <div>
-              <Icon :size="10" class="descripition-icon" :name="getIconName(index)" @click.stop="changeArrow(index)"/>
+            <div @click.stop="changeArrow(index)" class="descripition-header">
+              <Icon :size="10" :name="getIconName(index)" />
               {{row.curdate}}
             </div>
           </template>
@@ -31,11 +32,10 @@
             <el-table class="descripition-table" :data="row.content" style="width: 100%"
                       :header-cell-style="{padding: '0'}"
             >
-              <el-table-column prop="projectId" label="项目" width="180" />
-              <el-table-column prop="worktime" label="时长" width="100" />
-              <el-table-column prop="workContent" label="内容" />
+              <el-table-column prop="projectId" label="项目" width="180"  align="center"/>
+              <el-table-column prop="worktime" label="时长" width="100"  align="center"/>
+              <el-table-column prop="workContent" label="内容"   align="center"/>
             </el-table>
-            <div class="descripition-totaltime"> 总时长:{{totalworktime(row.content)}}</div>
           </div>
         </el-descriptions-item>
       </el-descriptions>
@@ -106,23 +106,23 @@ const getIconName = (row) => {
 }
 
 const changeArrow = (row) => {
-    expandArray.value[row] = !expandArray.value[row];
+  expandArray.value[row] = !expandArray.value[row];
 }
 
 </script>
 
 <style scoped>
-.descripition-icon:hover{
+.descripition-main{
+  display: flex;
+  flex-direction: column;
+}
+.descripition-header:hover{
     cursor: pointer;
     overflow: hidden;
 }
-.descripition{
-  &-totaltime{
-
-  }
-  &-table{
-
-  }
+.descripition-table::v-deep .el-table__body tr:hover > td {
+  background-color: #f0f9eb !important;
 }
+
 </style>
   

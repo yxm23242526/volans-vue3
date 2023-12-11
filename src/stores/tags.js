@@ -14,6 +14,7 @@ export const useTagsViewStore = defineStore('tagsView', () => {
     const addState = (item) => {
         //  代表有这个路由就不添加了
         const index = tagsviewState.value.findIndex((state) => item.path == state.path)
+        console.log(tagsviewState)
         if (index == -1) {
             tagsviewState.value.push({
                 path: item.path,

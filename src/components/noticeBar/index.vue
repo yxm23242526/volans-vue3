@@ -109,7 +109,7 @@ const computeAnimationTime = () => {
 // 改变 animation 动画调用
 const changeAnimation = () => {
 	if (state.order === 1) {
-		noticeBarTextRef.value.style.cssText = `animation: oneAnimation ${state.oneTime}s linear; opactity: 1;}`;
+		noticeBarTextRef.value.style.cssText = `animation: oneAnimation ${state.oneTime}s linear; opactity: 1;`;
 		state.order = 2;
 	} else {
 		noticeBarTextRef.value.style.cssText = `animation: twoAnimation ${state.twoTime}s linear infinite; opacity: 1;`;
