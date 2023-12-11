@@ -75,6 +75,11 @@ const openDialog = (previewData) => {
   reportData.value.reportName = previewData.reportName;
   reportData.value.rows = previewData.rows;
   isVisible.value = true;
+  //每次打开要初始化一下
+  for (let i = 0; i < reportData.value.rows.length; i++)
+  {
+    expandArray.value[i] = false;
+  }
 }
 
 defineExpose({
@@ -86,7 +91,7 @@ const onClose = () => {
 
 const totalworktime = (content) => {
     let total = 0;
-    for (let i=0; i < content.length; i++)
+    for (let i = 0; i < content.length; i++)
     {
       total += content[i].worktime
     }
