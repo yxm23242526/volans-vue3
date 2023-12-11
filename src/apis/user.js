@@ -15,7 +15,7 @@ export const loginAPI = ({userId, password}) => {
     return request({
         url: '/user/login',
         method: 'POST',
-        data: {
+        data: { //请求体参数
             userId,
             password
         }

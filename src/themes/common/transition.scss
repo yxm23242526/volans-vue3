@@ -1,0 +1,32 @@
+/* 页面切换动画
+------------------------------- */
+
+
+
+
+/* 登录页弹球动画
+------------------------------- */
+
+@keyframes animateBox
+{
+    0%, 100%
+    {
+        transform: rotate(0deg);
+    }
+    50%
+    {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes animateBall 
+{
+    0%,100%
+    {
+        transform: rotate(135deg);
+    }
+    50%
+    {
+        transform: rotate(-45deg);
+    }
+}

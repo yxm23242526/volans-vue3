@@ -2,10 +2,8 @@
 import { ref, reactive } from 'vue'
 import { validateAccount, validatePassword } from '@/utils/validate'
 import { useUserStore } from '@/stores/user'
-import 'element-plus/theme-chalk/el-message.css'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-
 const router = useRouter()
 //自定义校验账户规则
 const validate_account_rules = (rule, value, callback) => {
@@ -67,10 +65,18 @@ const switchType = () => {
     switchflag.value = !switchflag.value;
     passwordType.value = switchflag.value ? 'password' : 'text';
 }
+
+let sectionbg = ref("rgba(0,0,0)")
+setInterval(() => {
+    let r = Math.floor(Math.random() * 100);
+    let g = Math.floor(Math.random() * 100);
+    let b = Math.floor(Math.random() * 100);
+    sectionbg.value = "rgba(" + r + "," + g + "," + b + ")";
+}, 2000);
 </script>
 
 <template>
-    <div>
+    <div :style="{ background: sectionbg }">
         <!-- 语义标签 -->
         <!-- <header class="login-header">
             <div class="container"> 
@@ -79,23 +85,29 @@ const switchType = () => {
             </div>
         </header> -->
         <section class="login-section">
+            <div class="boxbody">
+                <div class="box">
+                    <div class="circle"></div>
+                </div>
+            </div>
             <div class="wrapper">
                 <div class="logo"></div>
-                <!-- <nav>
-                    <a>账户登录</a>
-                </nav> -->
-                <!-- 账户登录主体box -->
                 <div class="account-box">
                     <div class="form">
                         <el-form :model="form" :rules="formRules" ref="formRef">
                             <el-form-item prop="userId">
-                                <el-input prefix-icon="User" placeholder="请输入用户名" v-model="form.userId"/>
+                                <el-input prefix-icon="User" placeholder="请输入用户名" v-model="form.userId" />
                             </el-form-item>
                             <el-form-item prop="password">
-                                <el-input prefix-icon="Lock" class="form-input" placeholder="请输入密码" :type="passwordType" autocomplete="off" v-model="form.password">
-                                    <template #suffix >
-                                        <el-icon v-if="switchflag" class="el-input__icon" @click="switchType"><Hide /></el-icon>
-                                        <el-icon v-else class="el-input__icon" @click="switchType"><View /></el-icon>
+                                <el-input prefix-icon="Lock" class="form-input" placeholder="请输入密码" :type="passwordType"
+                                    autocomplete="off" v-model="form.password">
+                                    <template #suffix>
+                                        <el-icon v-if="switchflag" class="el-input__icon" @click="switchType">
+                                            <Hide />
+                                        </el-icon>
+                                        <el-icon v-else class="el-input__icon" @click="switchType">
+                                            <View />
+                                        </el-icon>
                                     </template>
                                 </el-input>
                             </el-form-item>
@@ -109,22 +121,77 @@ const switchType = () => {
 
         </section>
         <footer class="login-footer">
-           <div class="container">
-            <p>
-                <a href="">加入我们！</a>
-                <a href="">帮帮我们！</a>
-            </p>
-           </div>
+            <div class="container">
+                <p>
+                    <a href="">加入我们！</a>
+                    <a href="">帮帮我们！</a>
+                </p>
+            </div>
         </footer>
     </div>
 </template>
 
 <style scoped lang="scss">
+.boxbody {
+    position: absolute;
+    left: 25%;
+    top: 35%;
+}
+
+.box {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border: 80px solid transparent;
+    border-right: 80px solid #fff5;
+    border-bottom: 80px solid #fff5;
+    border-radius: 50%;
+    transform: rotate(45deg);
+    animation: animateBox 2s linear infinite;
+}
+
+.box::before {
+    content: '';
+    position: absolute;
+    top: 125px;
+    left: -50px;
+    width: 80px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    transform: rotate(-45deg);
+}
+
+.box::after {
+    content: '';
+    position: absolute;
+    bottom: 125px;
+    right: -50px;
+    width: 80px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    transform: rotate(-45deg);
+}
+
+.circle {
+    position: absolute;
+    top: 22px;
+    left: -100px;
+    width: 70px;
+    height: 70px;
+    background: #fff;
+    border-radius: 50%;
+    z-index: 10000;
+    transform-origin: 150px;
+    animation: animateBall 2s linear infinite;
+}
 
 .login-header {
     background: #fff;
     border-bottom: 1px solid #e4e4e4;
     border: 1px solid red;
+
     .container {
         display: flex;
         align-items: flex-end; //对齐方式 Y轴
@@ -134,52 +201,58 @@ const switchType = () => {
     h1 {
         margin-top: 0;
         margin-bottom: 0;
-        font-size: 100px; 
-        &::first-letter{
+        font-size: 100px;
+
+        &::first-letter {
             margin-left: 50px;
             color: #de123b;
             font-size: 130%;
         }
     }
-    
+
 }
+
 .login-section {
-    background: url('@/assets/images/bg.jpg') no-repeat center / cover;
+    // background: url('@/assets/images/bg.jpg') no-repeat center / cover;
     height: 80vh;
     position: relative;
 
     .wrapper {
+        border-radius: 25px;
         width: 380px;
         background: #fff;
         position: absolute;
         left: 60%;
-        top: 154px;
+        top: 30%;
         transform: translate3d(100px, 0, 0);
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 
         .logo {
             background: url('@/assets/images/LOGO.jpg') no-repeat center / cover;
             height: 132px;
+            margin-top: 30px;
             margin-bottom: 20px;
         }
 
         // 原本的<a>账号密码</a> 加了其他登录条件再补
-        nav {
-            // font-size: 18px;
-            // height: 55px;
-            // margin-bottom: 20px;
-            // border-bottom: 1px solid #f5f5f5;
-            // display: flex;
-        }
+        // nav {
+        //     font-size: 18px;
+        //     height: 55px;
+        //     margin-bottom: 20px;
+        //     border-bottom: 1px solid #f5f5f5;
+        //     display: flex;
+        // }
         .account-box {
             .form {
                 padding: 0 30px 30px 30px;
-                .el-input__icon{
-                    &:hover{
+
+                .el-input__icon {
+                    &:hover {
                         cursor: pointer;
                     }
                 }
             }
+
             .subBtn {
                 margin-top: 30px;
                 width: 100%;
@@ -190,23 +263,24 @@ const switchType = () => {
 }
 
 .login-footer {
-        padding: 30px 0 50px;
-        background: #fff;
-        p {
-            text-align: center;
-            color: #999;
-            padding-top: 20px;
+    padding: 30px 0 50px;
 
-            a {
-                line-height: 1;
-                padding: 0 10px;
-                color: #999;
-                display: inline-block;
-                text-decoration: none;
-                ~a {
-                    border-left: 1px solid #ccc;
-                }
+    // background: #fff;
+    p {
+        text-align: center;
+        color: #999;
+        padding-top: 20px;
+
+        a {
+            line-height: 1;
+            padding: 0 10px;
+            color: #999;
+            display: inline-block;
+            text-decoration: none;
+
+            ~a {
+                border-left: 1px solid #ccc;
             }
         }
     }
-</style>
+}</style>

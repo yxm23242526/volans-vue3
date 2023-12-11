@@ -1,17 +1,44 @@
+@import 'mixins/index.scss';
 /* NavMenu 导航菜单
 ------------------------------- */
-.el-menu {
-	background-color: #304156;
-	--el-menu-text-color: #bfcbd9;
-	--el-menu-active-color: #409EFF;
-	--el-menu-hover-bg-color: #263445;
+
+// hover颜色
+.el-menu{
+	--el-menu-hover-bg-color: var(--vl-menu-active-color);
+	--el-menu-bg-color: var(--vl-menu-bg-color);
+    --el-menu-text-color: var(--vl-menu-text-color);
 }
-.el-sub-menu {
-	--el-menu-text-color: #f4f4f5;
+
+.el-menu-item.is-active{
+	background-color: var(--vl-menu-active-color) !important;
+}
+// 默认样式修改
+.el-menu {
+	border-right: none !important;
+	width: 220px;
+}
+.el-menu-item {
+	height: 56px !important;
+	line-height: 56px !important;
+}
+
+// 外部链接时
+.el-menu-item a,
+.el-menu-item a:hover,
+.el-menu-item i,
+.el-sub-menu__title i {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* Table 表格 element plus 2.2.0 版本
+------------------------------- */
+.el-table {
+	.el-button.is-text {
+		padding: 0;
+	}
 }
 
 /* input
 ------------------------------- */
-.el-input {
-	--el-input-hover-border-color: #fb9337;
-}
+

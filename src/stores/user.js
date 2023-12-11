@@ -9,6 +9,7 @@
 import { defineStore } from "pinia";
 import { ref } from 'vue';
 import { loginAPI } from '@/apis/user'
+import { Local } from "@/utils/storage";
 export const useUserStore = defineStore('user', () => {
     //1. 定义user的state管理
     const userInfo = ref({})
@@ -16,7 +17,9 @@ export const useUserStore = defineStore('user', () => {
     // 获得用户数据
     const getUserInfo = async ({userId, password}) => {
         const res = await loginAPI({userId, password})
+        console.log(res)
         userInfo.value = res.data.user
+        Local.set('user', res.data)
     }
     // 清除用户数据
     const clearUserInfo = () => {
@@ -27,4 +30,4 @@ export const useUserStore = defineStore('user', () => {
         userInfo,
         getUserInfo,
     }
-}, {persist: true}) //持久化， 自动存入localstorage
+})

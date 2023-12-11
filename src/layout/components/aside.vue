@@ -1,58 +1,70 @@
+<!--
+ * @Author: zzh
+ * @Date: 2023-11-29
+ * @Description: 侧边栏导航
+-->
+
+
 <script setup>
-import { reactive } from "vue";
-import router from "@/router";
+import { reactive, onMounted, watch} from "vue";
 import { RouterLink } from "vue-router";
+import Asideitem from "./asideitem.vue";
+import { useRouter, useRoute} from "vue-router";
+import { useTagsViewStore } from "@/stores/tags";
+const tagsviewStore = useTagsViewStore()
+const router = useRouter();
+const route = useRoute();
 const routers = reactive(router.options.routes);
-console.log(routers)
-function resolveIndex(index, childindex) {
-  return index + "-" + childindex;
+
+
+
+let arrlist = reactive([]);
+
+const resolveArr = () => {
+  routers.forEach(routeritem => {
+    if (!routeritem.ishide) {
+      if (routeritem.path === "/") 
+      {
+        arrlist = routeritem.children;
+      }
+    }
+  });
 }
+resolveArr();
+
+onMounted(() => {
+  tagsviewStore.addState(router.currentRoute.value)
+})
+
+//监听路由变化
+watch( () => route, ()=>{
+  tagsviewStore.addState(router.currentRoute.value)
+},{
+    deep: true
+})
 
 </script>
 
 
 <template>
-  <div>
+ <div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu :unique-opened="false" mode="vertical">
-        <template v-for="(item, index) in routers">
-          <template v-if="!item.hide">
-            <template v-if="item.children === undefined || item.children.length === 1">
-              <el-menu-item index="index" class="nest-menu">
-                <RouterLink :to="item.path">
-                  <el-icon>
-                    <component :is="item.meta.icon"/>
-                  </el-icon>
-                  {{ item.meta.name }}
-                </RouterLink>
-              </el-menu-item>
+      <el-menu  :unique-opened="false" mode="vertical" router 
+        :default-active="route.path">
+        <template v-for="item in arrlist">
+          <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path">
+            <template #title>
+              <Icon :name="item.meta.icon"/>
+              {{ item.meta.name }}
             </template>
+            <Asideitem :chil="item.children"  />
+          </el-sub-menu>
 
-            <template v-else>
-              <el-sub-menu :index="index">
-                <template #title>
-                  <el-icon>
-                    <component :is="item.meta.icon"/>
-                  </el-icon>
-                  {{ item.meta.name }}
-                </template>
-                <el-menu-item-group>
-                  <el-menu-item v-for="(childitem, childindex) in item.children" :index="resolveIndex(index, childindex)"
-                                class="nest-menu">
-
-                    <RouterLink :to="childitem.path">
-                      <span slot='title'>
-                        <el-icon>
-                          <component :is="childitem.meta.icon"/>
-                        </el-icon>
-                        {{ childitem.meta.name }}
-                      </span>
-
-                    </RouterLink>
-                  </el-menu-item>
-                </el-menu-item-group>
-              </el-sub-menu>
-            </template>
+          <template v-else>
+            <el-menu-item :index="item.path" >
+                <Icon :name="item.meta.icon"/>
+                {{ item.meta.name }}
+            </el-menu-item>
           </template>
         </template>
       </el-menu>
@@ -61,4 +73,5 @@ function resolveIndex(index, childindex) {
 </template>
 
 
-<style></style>
+<style>
+</style>
