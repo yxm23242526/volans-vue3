@@ -6,6 +6,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useTagsViewStore } from "@/stores/tags";
 import pinia from '@/stores/index';
+import { Local } from '@/utils/storage';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -105,14 +106,34 @@ const router = createRouter({
 //假设通过接口从后台获取的用户角色，可以存储在token中
 const role = 'admin';
 const tagsviewStore = useTagsViewStore(pinia)
+const userInfo = Local.get('user')
 router.beforeEach((to,from,next)=>{
-	if(to.meta.roles.includes(role)){
-		next()	//放行
-        //监听路由变化
-        tagsviewStore.addState(to)
-	}else{
-		next({path:"/404"})	//跳到404页面
-	}
+    // //验证token，只有存在token的时候，才能跳转到内容页
+    let token = true;//userInfo?.token;
+    // 这里逻辑不知道对不对
+    if (to.path === '/login')
+    {
+        next()
+    }
+    else
+    {
+        if (token)
+        {
+            if (to.meta.roles.includes(role))
+            {
+                next()	//放行
+                //监听路由变化
+                tagsviewStore.addState(to)
+            }
+            else{
+                next({path:"/404"})	//跳到404页面
+            }
+        }
+        else
+        {
+            next('/login');
+        }
+    }
 })
 
 export default router

@@ -3,9 +3,7 @@
 </script>
 
 <template>
-  <div>
-    <Icon name="Warning" :size="16"/>
-  </div>
+<!--未来会做的搜索组件-->
 </template>
 
 <style scoped>

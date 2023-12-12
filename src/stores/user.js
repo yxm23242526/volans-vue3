@@ -10,9 +10,12 @@ import { defineStore } from "pinia";
 import { ref } from 'vue';
 import { loginAPI } from '@/apis/user'
 import { Local } from "@/utils/storage";
+import pic from '@/assets/images/touxiang.jpg'
 export const useUserStore = defineStore('user', () => {
     //1. 定义user的state管理
-    const userInfo = ref({})
+    const userInfo = ref({
+        photo: pic
+    })
     //2. 定义user的action
     // 获得用户数据
     const getUserInfo = async ({userId, password}) => {
@@ -24,10 +27,12 @@ export const useUserStore = defineStore('user', () => {
     // 清除用户数据
     const clearUserInfo = () => {
         userInfo.value = {}
+        Local.remove('user')
     }
     //3. 返回action
     return {
         userInfo,
         getUserInfo,
+        clearUserInfo,
     }
 })

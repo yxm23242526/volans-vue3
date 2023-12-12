@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    <Icon name="Warning" :size="16"/>
+    <Icon name="Warning" :size="15"/>
   </div>
 </template>
 
