@@ -6,25 +6,35 @@
 
 
 <script setup>
-import { reactive, onMounted, watch} from "vue";
-import { RouterLink } from "vue-router";
+import {reactive, ref, watch, computed} from "vue";
 import Asideitem from "./asideitem.vue";
-import { useRouter, useRoute} from "vue-router";
-import { useTagsViewStore } from "@/stores/tags";
-const tagsviewStore = useTagsViewStore()
+import {useRouter, useRoute} from "vue-router";
+import {useThemeConfigStore} from "@/stores/themeConfig";
+
+const themeConfigStore = useThemeConfigStore()
+const themeConfig = computed(() => {
+  return themeConfigStore.themeConfig
+})
 const router = useRouter();
 const route = useRoute();
 const routers = reactive(router.options.routes);
 
+const asideState = ref({
+  isCollapse: false,
+})
 
+//监听左侧是否折叠
+watch(() => themeConfig.value?.isCollapse,
+    (isCollapse) => {
+      asideState.value.isCollapse = isCollapse
+    })
 
 let arrlist = reactive([]);
 
 const resolveArr = () => {
   routers.forEach(routeritem => {
     if (!routeritem.ishide) {
-      if (routeritem.path === "/") 
-      {
+      if (routeritem.path === "/") {
         arrlist = routeritem.children;
       }
     }
@@ -32,35 +42,49 @@ const resolveArr = () => {
 }
 resolveArr();
 
+
+const setCollapseStyle = computed( () => {
+  if (asideState.value.isCollapse)
+  {
+    return 'layout-aside-pc-64';
+  }
+  return 'layout-aside-pc-220';
+})
 </script>
 
 
 <template>
- <div>
-    <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu  :unique-opened="false" mode="vertical" router 
-        :default-active="route.path">
+  <el-aside class="layout-sidebar" :class="setCollapseStyle">
+    <el-scrollbar class="aside-scrollbar">
+      <el-menu :unique-opened="false" mode="vertical" router
+               :default-active="route.path"
+               :collapse="asideState.isCollapse">
         <template v-for="item in arrlist">
           <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path">
             <template #title>
               <Icon :name="item.meta.icon"/>
-              {{ item.meta.name }}
+              <span> {{ item.meta.name }} </span>
+
             </template>
-            <Asideitem :chil="item.children"  />
+            <Asideitem :chil="item.children"/>
           </el-sub-menu>
 
           <template v-else>
-            <el-menu-item :index="item.path" >
-                <Icon :name="item.meta.icon"/>
-                {{ item.meta.name }}
+            <el-menu-item :index="item.path">
+              <Icon :name="item.meta.icon"/>
+              <span> {{ item.meta.name }} </span>
             </el-menu-item>
           </template>
         </template>
       </el-menu>
     </el-scrollbar>
-  </div>
+  </el-aside>
 </template>
 
 
 <style>
+.aside-scrollbar{
+  flex: 1;
+  overflow-x: hidden;
+}
 </style>

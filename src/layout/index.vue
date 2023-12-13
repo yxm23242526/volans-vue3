@@ -9,11 +9,11 @@ import LayoutMain from '@/layout/components/main.vue'
   <!-- 二级路由的入口一般定义在这里-->
   <!-- 且跳转至首页-->
   <el-container class="layout-container">
-    <LayoutAside class="layout-sidebar" />
-      <el-container class="layout-main">
-        <LayoutHeader/>
-        <LayoutMain />
-      </el-container>
+    <LayoutAside />
+    <el-container class="layout-main">
+      <LayoutHeader/>
+      <LayoutMain/>
+    </el-container>
   </el-container>
 </template>
 
