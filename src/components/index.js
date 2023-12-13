@@ -5,9 +5,10 @@
  * @Date: 2023-11-22
  */
 import Icon from './Icon/icon.vue'
-
+import NoticeBar from './noticeBar/index.vue'
 export const componentPlugin = {
     install(app) {
         app.component('Icon', Icon);
+        app.component('NoticeBar', NoticeBar)
     }
 }

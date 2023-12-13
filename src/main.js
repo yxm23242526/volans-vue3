@@ -3,11 +3,10 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from "@/router";
-import { createPinia } from "pinia";
 import { componentPlugin } from "@/components";
 import '@/themes/index.scss';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-const pinia = createPinia()
+import pinia from '@/stores/index';
 
 /** 应该使用utils/storage.js/Local
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'

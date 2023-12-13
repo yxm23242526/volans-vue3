@@ -27,12 +27,11 @@ const initSettings = () => {
     document.documentElement.style.setProperty('--vl-menu-active-color', themeConfig.menuBarActiveColor);   
 }
 
-
 </script>
 
 <template>
     <div>
-        <Icon :name="'Setting'"/>
+        <Icon name="Setting" :size="15"/>
     </div>
 </template>
 

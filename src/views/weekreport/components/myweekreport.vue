@@ -24,7 +24,7 @@
         <el-table-column prop="action" label="操作" width="180">
           <template #default="scope">
             <div v-if="scope.row.status === 2">
-              <el-button text type="primary" size="small" @click="onEdit(scope.$index)">查看</el-button>
+              <el-button text type="primary" size="small" @click="onPreview(scope.$index)">查看</el-button>
               <el-button text type="primary" size="small" @click="onPopMessage">撤回</el-button>
             </div>
             <div v-else>
@@ -34,7 +34,7 @@
           </template>
         </el-table-column>
       </el-table>
-
+      <WeekReportPrview ref="previewObj" :reportName="previewData.reportName" :isshow="previewData.isshow"/>
       <!-- 分页组件 -->
       <el-row class="mt15" v-if="isExpand">
         <el-pagination :page-size="pageParams.pagesize" :current-page="pageParams.page" :total="pageParams.total"
@@ -59,6 +59,7 @@ import { getWeekreportList } from '@/apis/report';
 import { Local } from '@/utils/storage';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { getMonthandDay } from '@/utils/datetimeUtils'
+import WeekReportPrview from '@/views/weekreport/common/reportpreview.vue'
 const userInfo = Local.get('user')
 
 //true：全部展示  false：按月展示
@@ -69,7 +70,7 @@ const pageParams = ref({
   pagesize: 12, // 每页多少条
   total: 0
 })
-
+const previewData = {}
 const weekReportData = ref([])
 
 //获取周报数据
@@ -78,9 +79,11 @@ const getList = async () => {
   //这里之后要变成total
   pageParams.value.total = data.length
   weekReportData.value = data;
-  for (var i = 0; i < data.length; i++) {
-    var stDate = new Date(weekReportData.value[i].startDate)
-    var edDate = new Date(weekReportData.value[i].endDate)
+  for (let i = 0; i < data.length; i++) {
+    let stDate = new Date(weekReportData.value[i].startDate)
+    weekReportData.value[i].stDate = stDate
+    let edDate = new Date(weekReportData.value[i].endDate)
+    weekReportData.value[i].edDate = edDate
     weekReportData.value[i].year = stDate.getFullYear();
     weekReportData.value[i].name = getMonthandDay(stDate) + '~' + getMonthandDay(edDate);
     weekReportData.value[i].observer = "-";
@@ -121,15 +124,25 @@ const onPopMessage = () => {
     })
 }
 
+
+//预览对话盒对象
+const previewObj = ref(null)
 //打开查看窗口
 const onPreview = (rowIndex) => {
-  alert(weekReportData.value[rowIndex])
+  previewData.startDate = weekReportData.value[rowIndex].startDate
+  previewData.endDate = weekReportData.value[rowIndex].endDate
+  previewData.reportName = weekReportData.value[rowIndex].name;
+  previewData.userId = pageParams.value.userId;
+  previewData.rows = weekReportData.value[rowIndex].rows;
+  previewObj.value.openDialog(previewData)
 }
 
-
+import { useRouter } from "vue-router";
+const router = useRouter()
 //打开编辑窗口
 const onEdit = (rowIndex) => {
-  alert(weekReportData.value[rowIndex])
+  const id = weekReportData.value[rowIndex].userId
+  router.push({path: `/TESTDEMO/${id}`})
 }
 </script>
 

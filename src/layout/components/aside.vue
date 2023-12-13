@@ -32,17 +32,6 @@ const resolveArr = () => {
 }
 resolveArr();
 
-onMounted(() => {
-  tagsviewStore.addState(router.currentRoute.value)
-})
-
-//监听路由变化
-watch( () => route, ()=>{
-  tagsviewStore.addState(router.currentRoute.value)
-},{
-    deep: true
-})
-
 </script>
 
 

@@ -20,7 +20,7 @@ watch(() => router.currentRoute.value.path, () => {
 </script>
 
 <template>
-    <el-breadcrumb class="app-breadcrumb ml15" separator="/">
+    <el-breadcrumb class="layout-navbars-breadcrumb ml15" separator="/">
       <el-breadcrumb-item v-for="item in levelList" :key="item.path" :to = "item.path">
         {{ item.meta.name }}
       </el-breadcrumb-item>
@@ -30,11 +30,11 @@ watch(() => router.currentRoute.value.path, () => {
 
   
 <style lang="scss" scoped>
-.app-breadcrumb.el-breadcrumb {
+.layout-navbars-breadcrumb {
     display: inline-block;
     font-size: 14px;
     line-height: 50px;
-  
+    opacity: 0.8;
     .no-redirect {
       color: #97a8be;
       cursor: text;
