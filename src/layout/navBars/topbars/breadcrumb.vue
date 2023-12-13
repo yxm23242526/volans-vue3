@@ -71,6 +71,9 @@ const setLocalThemeConfig = () => {
 
 .layout-navbars-icon {
   width: 50px;
+  &:hover{
+    cursor: pointer;
+  }
 }
 </style>
   

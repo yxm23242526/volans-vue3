@@ -21,6 +21,10 @@
 	height: 56px !important;
 	line-height: 56px !important;
 }
+// 修复点击左侧菜单折叠再展开时，宽度不跟随问题
+.el-menu--collapse {
+	width: 64px !important;
+}
 
 // 外部链接时
 .el-menu-item a,
