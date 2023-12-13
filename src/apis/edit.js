@@ -20,17 +20,30 @@ export const getWeekreport = (datearr) => {
     })
 }
 
+/**获取项目列表
+ * @description 
+ * @returns 
+ */
+export const getProject = () => {
+    return request({
+        url: '/project/list',
+        method: 'GET',
+    })
+}
+
+
 
 /**
  * 提交周报
  * @returns 
  */
-export const submit = (tabledata) => {
+export const submit = (tabledata, state) => {
     return request({
         url: '/weekreport/submit',
         method: 'POST',
         data: { //请求体参数
-            tabledata
+            tabledata,
+            state
         }
     })
 }
