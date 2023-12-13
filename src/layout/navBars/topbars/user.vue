@@ -1,11 +1,14 @@
 <script setup>
-import {useUserStore} from "@/stores/user";
-import {useRouter} from "vue-router";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
 const router = useRouter()
 const userStore = useUserStore()
 const userInfo = userStore.userInfo
 const logout = () => {
   userStore.clearUserInfo()
+  // 1. 提示用户
+  ElMessage({ type: 'success', message: '退出成功' })
   router.push('/login')
 }
 </script>

@@ -7,20 +7,31 @@
 import { defineStore } from "pinia";
 import { ref } from 'vue'
 import router from '@/router'
+import { Session } from "@/utils/storage";
 export const useTagsViewStore = defineStore('tagsView', () => {
     const tagsviewState = ref([])
 
+    
+    const initState = (route) => {
+        const tagslist = Session.get('tagsView')
+        if (!tagslist) {
+            addState(route)
+        } else {
+            tagsviewState.value.push(...tagslist)
+        }
+    }
+    
     //添加状态
     const addState = (item) => {
         //  代表有这个路由就不添加了
-        const index = tagsviewState.value.findIndex((state) => item.path == state.path)
-        console.log(tagsviewState)
-        if (index == -1) {
+        const index = tagsviewState.value.findIndex((state) => item.path === state.path)
+        if (index === -1) {
             tagsviewState.value.push({
                 path: item.path,
                 title: item.meta.name,
             })
         }
+        Session.set('tagsView', tagsviewState.value)
     }
 
     //删除状态
@@ -30,17 +41,17 @@ export const useTagsViewStore = defineStore('tagsView', () => {
             return;
         }
         setTimeout(() => {
-            const index = tagsviewState.value.findIndex((state) => removedPath == state.path)
+            const index = tagsviewState.value.findIndex((state) => removedPath === state.path)
             if (index != -1) {
                 tagsviewState.value.splice(index, 1)
-                if (removedPath == activePath)
+                if (removedPath === activePath)
                 {
                     const newPath = index > 0 ? tagsviewState.value[index - 1].path : '';
                     gotoPage(newPath)
                 }
             }
         }, 0)
-
+        Session.set('tagsView', tagsviewState.value)
     }
 
     //切换页面跳转
@@ -50,6 +61,7 @@ export const useTagsViewStore = defineStore('tagsView', () => {
 
     return {
         tagsviewState,
+        initState,
         addState,
         removeState,
         gotoPage

@@ -9,7 +9,7 @@
 import { defineStore } from "pinia";
 import { ref } from 'vue';
 import { loginAPI } from '@/apis/user'
-import { Local } from "@/utils/storage";
+import { Session } from "@/utils/storage";
 import pic from '@/assets/images/touxiang.jpg'
 export const useUserStore = defineStore('user', () => {
     //1. 定义user的state管理
@@ -20,14 +20,17 @@ export const useUserStore = defineStore('user', () => {
     // 获得用户数据
     const getUserInfo = async ({userId, password}) => {
         const res = await loginAPI({userId, password})
-        console.log(res)
         userInfo.value = res.data.user
-        Local.set('user', res.data)
+        let token = res.data.token
+        Session.set('token', token)
+        Session.set('userInfo', userInfo)
+        
     }
     // 清除用户数据
     const clearUserInfo = () => {
         userInfo.value = {}
-        Local.remove('user')
+        Session.remove('token')
+        Session.remove('userInfo')
     }
     //3. 返回action
     return {

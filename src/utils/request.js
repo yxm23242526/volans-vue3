@@ -7,8 +7,7 @@
 import axios from 'axios'
 import { ElMessage } from "element-plus";
 import router from '@/router' // vue3中 useRouter不允许在setup之外使用
-import { Local } from '@/utils/storage';
-const userInfo = Local.get('user')
+import { Session } from '@/utils/storage';
 
 const request = axios.create({
     baseURL: 'http://127.0.0.1:4523/m1/3562468-0-default',
@@ -17,7 +16,7 @@ const request = axios.create({
 // axios拦截器
 request.interceptors.request.use( config => {
     //1. 获取token数据
-    const token = userInfo?.token //弹幕大哥说这里要加个？
+    const token = Session.get('token') //弹幕大哥说这里要加个？
     if (token){
         config.headers.Authorization = `Bearer ${token}`  //格式固定
     }

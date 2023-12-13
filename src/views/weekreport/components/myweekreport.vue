@@ -56,16 +56,16 @@
 
 import { ref, onMounted, computed } from 'vue';
 import { getWeekreportList } from '@/apis/report';
-import { Local } from '@/utils/storage';
+import { Session } from '@/utils/storage';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { getMonthandDay } from '@/utils/datetimeUtils'
 import WeekReportPrview from '@/views/weekreport/common/reportpreview.vue'
-const userInfo = Local.get('user')
+const userId = Session.get('userInfo').userId
 
 //true：全部展示  false：按月展示
 const isExpand = ref(true)
 const pageParams = ref({
-  userId: userInfo.user?.userId,
+  userId: userId,
   page: 1, //第几页
   pagesize: 12, // 每页多少条
   total: 0
@@ -142,6 +142,7 @@ const router = useRouter()
 //打开编辑窗口
 const onEdit = (rowIndex) => {
   const id = weekReportData.value[rowIndex].userId
+  Session.set(`weekreport${id}`,weekReportData.value[rowIndex])
   router.push({path: `/TESTDEMO/${id}`})
 }
 </script>

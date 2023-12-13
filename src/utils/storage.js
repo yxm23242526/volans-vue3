@@ -6,6 +6,7 @@
  * @method clear 移除全部永久缓存
 */
 import Cookies from 'js-cookie';
+
 export const Local = {
 	setKey(key) {
 		return `volans:${key}`;
