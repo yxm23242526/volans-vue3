@@ -6,7 +6,7 @@
 
 
 <script setup>
-import {reactive, ref, watch, computed} from "vue";
+import {reactive, ref, watch, computed, onMounted} from "vue";
 import Asideitem from "./asideitem.vue";
 import {useRouter, useRoute} from "vue-router";
 import {useThemeConfigStore} from "@/stores/themeConfig";
@@ -23,10 +23,16 @@ const asideState = ref({
   isCollapse: false,
 })
 
+onMounted( () => {
+  console.log(asideState.value)
+})
+
 //监听左侧是否折叠
 watch(() => themeConfig.value?.isCollapse,
     (isCollapse) => {
       asideState.value.isCollapse = isCollapse
+},{
+  immediate: true,
     })
 
 let arrlist = reactive([]);
@@ -50,6 +56,7 @@ const setCollapseStyle = computed( () => {
   }
   return 'layout-aside-pc-220';
 })
+
 </script>
 
 

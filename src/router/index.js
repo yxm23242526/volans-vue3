@@ -81,7 +81,27 @@ const router = createRouter({
                             }
                         },
                     ]
-                }
+                },
+                {
+                    path: '/chat',
+                    name: 'chat',
+                    component: () => import('@/views/chat/index.vue'),
+                    meta: {
+                        name: "素质广场",
+                        icon: "ChatLineRound",
+                        roles: ['admin', 'common'],
+                    }
+                },
+                {
+                    path: '/personal',
+                    name: 'personal',
+                    component: () => import('@/views/personal/index.vue'),
+                    meta: {
+                        name: "奇迹暖暖",
+                        icon: "User",
+                        roles: ['admin', 'common'],
+                    }
+                },
             ]
         },
         {

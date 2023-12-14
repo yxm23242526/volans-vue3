@@ -55,9 +55,9 @@ const drawer = ref(false)
         </div>
       </div>
       <div class="drawer-footer">
-        <div class="drawer-item">
+        <div class="drawer-item" @click="logout"  >
           <Icon name="Switch"/>
-          <span @click="logout">退出</span>
+          <span >退出</span>
         </div>
       </div>
     </el-drawer>
