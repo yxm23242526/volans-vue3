@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', () => {
         userInfo.value = res.data.user
         let token = res.data.token
         Session.set('token', token)
-        Session.set('userInfo', userInfo)
+        Session.set('userInfo', userInfo.value)
         
     }
     // 清除用户数据
