@@ -56,8 +56,10 @@ const setLocalThemeConfig = () => {
 
 <style lang="scss" scoped>
 .layout-navbars-breadcrumb-container {
+  flex: 1;
   display: flex;
   height: inherit;
+  align-items: center;
 }
 
 .layout-navbars-breadcrumb {

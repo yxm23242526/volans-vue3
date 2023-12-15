@@ -32,7 +32,7 @@ const initSettings = () => {
 </script>
 
 <template>
-  <div>
+  <div class="layout-topbar-item-icon">
     <Icon name="Setting" :size="15"/>
   </div>
 </template>

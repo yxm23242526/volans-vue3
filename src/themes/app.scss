@@ -59,23 +59,14 @@ body,
 		padding: 0 !important;
 		height: auto !important;
 		background-color: var(--el-color-white);
-		&-topbars
-		{
-			border-bottom:  1px solid var(--vl-border-color-light);
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			//background: red;
-			&-items{
-				//background: red;
-				margin-right: 20px;
-				height: 50px;
-				display: flex;
-				justify-content: flex-end;
-				align-items: center;
-			}
-		}
 	}
+	.layout-header-topbars{
+		height: 50px;
+		border-bottom:  1px solid var(--vl-border-color-light);
+		display: flex;
+		align-items: center;
+	}
+
 	.layout-main{
 		padding: 0 !important;
 		overflow: hidden;
@@ -84,6 +75,20 @@ body,
 		background-color: var(--vl-bg-main-color);
 	}
 
+	.layout-topbar-item-icon{
+		height: 50px;
+		padding: 0 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		&:hover {
+			background: var(--vl-border-sidebar-color);
+			i {
+				display: inline-block;
+				animation: logoAnimation 0.3s ease-in-out;
+			}
+		}
+	}
 
 	// 用于界面高度自适应
 	.layout-padding {

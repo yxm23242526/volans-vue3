@@ -27,41 +27,44 @@ const drawer = ref(false)
 </script>
 
 <template>
-      <span class="topbars-avator">
+  <div class="mr15">
+        <span class="topbars-avator">
          <el-avatar :size="30" @click="drawer = true"/>
-      </span>
-  <div>
-    <el-drawer v-model="drawer"
-               size="250px">
-      <template #title>
-        <div class="drawer-header-container">
-          <div class="drawer-header-photo">
-            <el-avatar :size="50"/>
+        </span>
+    <div>
+      <el-drawer v-model="drawer"
+                 size="250px">
+        <template #title>
+          <div class="drawer-header-container">
+            <div class="drawer-header-photo">
+              <el-avatar :size="50"/>
+            </div>
+            <div class="drawer-header-info ml10">
+              <span class="font18 mt3 mb3">{{ userInfo.userName }}</span>
+              <span style="color:var(--vl-color-drawer-color);"> {{ userInfo.userId }}</span>
+            </div>
           </div>
-          <div class="drawer-header-info ml10">
-            <span class="font18 mt3 mb3">{{ userInfo.userName }}</span>
-            <span style="color:var(--vl-color-drawer-color);"> {{ userInfo.userId }}</span>
+        </template>
+        <div class="drawer-body">
+          <div class="drawer-item">
+            <Icon name="User"/>
+            <span>个人中心</span>
+          </div>
+          <div class="drawer-item">
+            <Icon name="Setting"/>
+            <span>设置</span>
           </div>
         </div>
-      </template>
-      <div class="drawer-body">
-        <div class="drawer-item">
-          <Icon name="User"/>
-          <span>个人中心</span>
+        <div class="drawer-footer">
+          <div class="drawer-item" @click="logout">
+            <Icon name="Switch"/>
+            <span>退出</span>
+          </div>
         </div>
-        <div class="drawer-item">
-          <Icon name="Setting"/>
-          <span>设置</span>
-        </div>
-      </div>
-      <div class="drawer-footer">
-        <div class="drawer-item" @click="logout"  >
-          <Icon name="Switch"/>
-          <span >退出</span>
-        </div>
-      </div>
-    </el-drawer>
+      </el-drawer>
+    </div>
   </div>
+
 
 </template>
 
@@ -87,20 +90,10 @@ const drawer = ref(false)
 .drawer {
   &-body {
     height: 200px;
-
-    :hover {
-      cursor: pointer;
-      background-color: var(--vl-color-drawer-hover);
-    }
   }
 
   &-footer {
     border-top: 1px solid var(--vl-border-color-light);
-
-    :hover {
-      cursor: pointer;
-      background-color: var(--vl-color-drawer-hover);
-    }
   }
 
   &-item {
@@ -108,6 +101,11 @@ const drawer = ref(false)
     padding: 10px 25px;
     height: 40px;
     color: var(--vl-color-drawer-color);
+
+    &:hover {
+      cursor: pointer;
+      background-color: var(--vl-color-drawer-hover);
+    }
 
     span {
       padding-left: 5px;
