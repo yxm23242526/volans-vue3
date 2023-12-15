@@ -16,6 +16,7 @@
 .el-menu {
 	border-right: none !important;
 	width: 220px;
+
 }
 .el-menu-item {
 	height: 56px !important;
@@ -43,6 +44,22 @@
 	}
 }
 
-/* input
+/* Drawer 抽屉
 ------------------------------- */
-
+.el-drawer {
+	--el-drawer-padding-primary: unset !important;
+	.el-drawer__header {
+		padding: 0 15px !important;
+		height: 70px;
+		display: flex;
+		align-items: center;
+		margin-bottom: 0 !important;
+		border-bottom: 1px solid var(--vl-border-color-light);
+		color: var(--el-text-color-primary);
+	}
+	.el-drawer__body {
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+	}
+}
