@@ -12,7 +12,7 @@ import request from '@/utils/request'
 export const getWeekreportList = (params) => {
     return request({
         url: '/weekreport/getWeekreport',
-        // params
+        params
     })
 }
 

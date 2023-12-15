@@ -75,7 +75,7 @@ const weekReportData = ref([])
 
 //获取周报数据
 const getList = async () => {
-  const { data } = await getWeekreportList(pageParams);
+  const { data } = await getWeekreportList({userId});
   //这里之后要变成total
   pageParams.value.total = data.length
   weekReportData.value = data;
@@ -141,9 +141,9 @@ import { useRouter } from "vue-router";
 const router = useRouter()
 //打开编辑窗口
 const onEdit = (rowIndex) => {
-  const id = weekReportData.value[rowIndex].userId
+  const id = weekReportData.value[rowIndex].taskId
   Session.set(`weekreport${id}`,weekReportData.value[rowIndex])
-  router.push({path: `/TESTDEMO/${id}`})
+  router.push({path: `/${id}`})
 }
 </script>
 

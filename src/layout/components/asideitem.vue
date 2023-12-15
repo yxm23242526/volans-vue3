@@ -13,10 +13,12 @@
             <asideitem :chil="item.children" />
         </el-sub-menu>
         <template v-else>
-            <el-menu-item :index="item.path">
-                    <Icon :name="item.meta.icon"/>
-                    {{ item.meta.name }}
-            </el-menu-item>
+            <template v-if="!item.ishide">
+                <el-menu-item :index="item.path">
+                        <Icon :name="item.meta.icon"/>
+                        {{ item.meta.name }}
+                </el-menu-item>
+            </template>
         </template>
     </template>
 </template>
