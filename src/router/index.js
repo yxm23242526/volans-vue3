@@ -41,8 +41,9 @@ const router = createRouter({
                     },
                     children: [
                         {
-                            path: '/edit',
+                            path: '/:id',
                             name: 'edit',
+                            ishide: true,
                             component: () => import('@/views/weekreport/components/edit.vue'),
                             meta: {
                                 name: "编辑周报",

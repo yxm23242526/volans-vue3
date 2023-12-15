@@ -1,20 +1,19 @@
 <script setup>
 // import type { TableColumnCtx } from 'element-plus'
-import { onMounted, reactive, watch, ref } from 'vue';
+import { onMounted, reactive, watch, ref} from 'vue';
 import { getWeekreport, submit, getProject } from '@/apis/edit';
 import { comparedate, calcuatedate, mult, formatdate } from '@/utils/datetimeUtils';
 import { ElScrollbar } from 'element-plus';
-
+import { useRoute, onBeforeRouteUpdate} from "vue-router";
+import { Session } from '@/utils/storage';
+import { useTagsViewStore } from '@/stores/tags'
+const tagsViewStore = useTagsViewStore()
+const route = useRoute();
 
 //用户数据，后期从用户信息拿
-var formdata = reactive(
-  {
-    username: '张三',
-    number: '3587',
-    taskid: 1,
-    starttime: '2023/12/1',
-    endtime: '2023/12/7'
-  })
+var formdata = reactive({
+
+})
 
 
 const spanarr = reactive([]);//合并单元格数据
@@ -50,44 +49,67 @@ const getspanarr = () => {
 }
 
 //获取周报数据
-const getList = async () => {
-  const data = await getWeekreport([formdata.number, 1]);
-  if (data.data.length == 0) {
-    var days = mult(starttime, endtime);
-    if (days > 0) {
-      for (let i = 0; i <= days; i++) {
-        var str = calcuatedate(starttime, i)
-        tableData.push({
-          date: str
-        })
-      }
-    }
+// const getList = async () => {
+//   const data = await getWeekreport([formdata.number, 1]);
+//   if (data.data.length == 0) {
+//     var days = mult(starttime, endtime);
+//     if (days > 0) {
+//       for (let i = 0; i <= days; i++) {
+//         var str = calcuatedate(starttime, i)
+//         tableData.push({
+//           date: str
+//         })
+//       }
+//     }
 
-  }
-  else {
-    if (data.data.length > 0) {
-      data.data.forEach(element => {
-        element.date = formatdate(element.date);
-        tableData.push(element);
-      });
-    }
-  }
-}
+//   }
+//   else {
+//     if (data.data.length > 0) {
+//       data.data.forEach(element => {
+//         element.date = formatdate(element.date);
+//         tableData.push(element);
+//       });
+//     }
+//   }
+// }
 
 onMounted(() => {
-  initprojectarrary();
-  initdatearrary(formdata.starttime, formdata.endtime);
-  getList();
+  // inituserinfo();
+  // initprojectarrary();
+  // initdatearrary(formdata.starttime, formdata.endtime);
+  // getList();
 });
 
+const inituserinfo = (route) => {
+  const taskId = route.params.id;
+  const tempdata = Session.get('weekreport'+taskId);
+  formdata.userId = tempdata.userId;
+  formdata.taskid = taskId;
+  formdata.starttime = formatdate(tempdata.startDate);
+  formdata.endtime = formatdate(tempdata.endDate);
+  tableData.splice(0, tableData.length)
+  for (let i = 0; i < tempdata.rows.length; i++) 
+  {
+    for (let j = 0; j < tempdata.rows[i].content.length; j++) 
+    {
+      tempdata.rows[i].content[j].date = formatdate(tempdata.rows[i].content[j].date);
+      tableData.push(tempdata.rows[i].content[j]);
+    }
+  }
+
+
+  
+}
+
 const initprojectarrary = async () => {
+  projectarrary.splice(0, projectarrary.length)
   const data = await getProject();
-  console.log (data);
   projectarrary.push(...data.data);
 }
 
 //初始化选择框数据
 const initdatearrary = (starttime, endtime) => {
+  dataarrary.splice(0, projectarrary.length)
   var days = mult(starttime, endtime);
   if (days > 0) {
     for (let i = 0; i <= days; i++) {
@@ -246,6 +268,10 @@ watch(tableData, () => {
   getspanarr();
   checkdataarrary();
 })
+
+onBeforeRouteUpdate( () => {
+  console.log(tagsViewStore.activeIndex.value)
+})
 </script>
 
 <template>
@@ -257,14 +283,15 @@ watch(tableData, () => {
           <el-button @click="save">保存</el-button>
           <el-button type="primary" @click="onsubmit">提交</el-button>
         </div>
-        <ElScrollbar height="500px">
+        <ElScrollbar height="450px">
           <el-table :data="tableData" :span-method="objectSpanMethod" style="width: 100%"
             :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }">
             <el-table-column prop="date" label="日期" width="100px" />
             <el-table-column label="项目 " width="200px">
               <template #default="scope">
                 <el-select v-model="scope.row.projectId" placeholder="Select">
-                  <el-option v-for="item in projectarrary" :key="item.projectId" :label="item.projectName" :value="item.projectId" />
+                  <el-option v-for="item in projectarrary" :key="item.projectId" :label="item.projectName"
+                    :value="item.projectId" />
                 </el-select>
               </template>
             </el-table-column>
