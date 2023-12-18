@@ -83,6 +83,7 @@ body,
 		justify-content: center;
 		&:hover {
 			background: var(--vl-border-sidebar-color);
+			cursor: pointer;
 			i {
 				display: inline-block;
 				animation: logoAnimation 0.3s ease-in-out;

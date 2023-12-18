@@ -17,7 +17,7 @@ const request = axios.create({
 // axios拦截器
 request.interceptors.request.use( config => {
     //1. 获取token数据
-    const token = Session.get('token') //弹幕大哥说这里要加个？
+    const token = Session.get('token')
     if (token){
         config.headers.Authorization = `Bearer ${token}`  //格式固定
     }

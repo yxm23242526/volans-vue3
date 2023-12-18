@@ -9,7 +9,7 @@
       </div>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>volans.版本:1.0</el-dropdown-item>
+          <el-dropdown-item>版本:volans.1.0</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>

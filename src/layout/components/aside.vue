@@ -24,7 +24,6 @@ const asideState = ref({
 })
 
 onMounted( () => {
-  console.log(asideState.value)
 })
 
 //监听左侧是否折叠

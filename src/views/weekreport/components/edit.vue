@@ -270,7 +270,6 @@ watch(tableData, () => {
 })
 
 onBeforeRouteUpdate( () => {
-  console.log(tagsViewStore.activeIndex.value)
 })
 </script>
 

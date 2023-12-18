@@ -8,7 +8,7 @@
 
 import { defineStore } from "pinia";
 import { ref } from 'vue';
-import { loginAPI } from '@/apis/user'
+import { loginAPI, updateInfo } from '@/apis/user'
 import { Session } from "@/utils/storage";
 import pic from '@/assets/images/touxiang.jpg'
 export const useUserStore = defineStore('user', () => {
@@ -32,10 +32,23 @@ export const useUserStore = defineStore('user', () => {
         Session.remove('token')
         Session.remove('userInfo')
     }
+    
+    //修改用户数据
+    const updateUserInfo = async(data) => {
+        const res = await updateInfo(data)
+        userInfo.value = res.data.user
+        let token = res.data.token
+        Session.remove('token')
+        Session.remove('userInfo')
+        Session.set('token', token)
+        Session.set('userInfo', userInfo.value)
+    }
+    
     //3. 返回action
     return {
         userInfo,
         getUserInfo,
+        updateUserInfo,
         clearUserInfo,
     }
 })
