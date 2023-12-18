@@ -1,13 +1,10 @@
 <script setup>
-// import type { TableColumnCtx } from 'element-plus'
-import { onMounted, reactive, watch, ref} from 'vue';
-import { getWeekreport, submit, getProject } from '@/apis/edit';
+import { reactive, watch, ref} from 'vue';
+import { submit, getProject } from '@/apis/edit';
 import { comparedate, calcuatedate, mult, formatdate } from '@/utils/datetimeUtils';
 import { ElScrollbar } from 'element-plus';
-import { useRoute, onBeforeRouteUpdate} from "vue-router";
+import { useRoute} from "vue-router";
 import { Session } from '@/utils/storage';
-import { useTagsViewStore } from '@/stores/tags'
-const tagsViewStore = useTagsViewStore()
 const route = useRoute();
 
 //用户数据，后期从用户信息拿
@@ -48,40 +45,7 @@ const getspanarr = () => {
   }
 }
 
-//获取周报数据
-// const getList = async () => {
-//   const data = await getWeekreport([formdata.number, 1]);
-//   if (data.data.length == 0) {
-//     var days = mult(starttime, endtime);
-//     if (days > 0) {
-//       for (let i = 0; i <= days; i++) {
-//         var str = calcuatedate(starttime, i)
-//         tableData.push({
-//           date: str
-//         })
-//       }
-//     }
-
-//   }
-//   else {
-//     if (data.data.length > 0) {
-//       data.data.forEach(element => {
-//         element.date = formatdate(element.date);
-//         tableData.push(element);
-//       });
-//     }
-//   }
-// }
-
-onMounted(() => {
-  // inituserinfo();
-  // initprojectarrary();
-  // initdatearrary(formdata.starttime, formdata.endtime);
-  // getList();
-});
-
-const inituserinfo = (route) => {
-  const taskId = route.params.id;
+const inituserinfo = (taskId) => {
   const tempdata = Session.get('weekreport'+taskId);
   formdata.userId = tempdata.userId;
   formdata.taskid = taskId;
@@ -96,9 +60,6 @@ const inituserinfo = (route) => {
       tableData.push(tempdata.rows[i].content[j]);
     }
   }
-
-
-  
 }
 
 const initprojectarrary = async () => {
@@ -253,10 +214,11 @@ const checktabel = () => {
 
 const save = async () => {
   checktabel();
-  // const data = await submit(tableData, 0);
+  const data = await submit(tableData, 0);
 }
 
 const onsubmit = async () => {
+  checktabel();
   const data = await submit(tableData, 1);
 
 }
@@ -269,7 +231,17 @@ watch(tableData, () => {
   checkdataarrary();
 })
 
-onBeforeRouteUpdate( () => {
+watch(() => route, ()=>{
+    const taskId = route.params?.id;
+    if (taskId)
+    {
+      inituserinfo(taskId);
+      initprojectarrary();
+      initdatearrary();
+    }
+},{
+    deep: true,
+    immediate: true
 })
 </script>
 
