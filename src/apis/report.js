@@ -12,7 +12,52 @@ import request from '@/utils/request'
 export const getWeekreportList = (params) => {
     return request({
         url: '/weekreport/getWeekreport',
-        // params
     })
 }
 
+export const getUserList = () => {
+    return request({
+        url: '/user/getUserList',
+
+    })
+}
+
+export const getProjectList = () => {
+    return request({
+        url: '/project/list',
+
+    })
+}
+
+export const getFieldList = () => {
+    return request({
+        url: '/weekreport/fieldList',
+
+    })
+}
+
+export const exportResult = (params) => {
+    return request({
+        url: '/weekreport/export',
+        params: {
+            model: params.model,
+            projectId: params.projectId,
+            userId: params.userId,
+            startDate: params.date[0],
+            endDate: params.date[1]
+        }
+    })
+}
+
+export const query = (params) => {
+    return request({
+        url: '/weekreport/export/query',
+        params: {
+            model: params.model,
+            projectId: params.projectId,
+            userId: params.userId,
+            startDate: params.date[0],
+            endDate: params.date[1]
+        }
+    })
+}
