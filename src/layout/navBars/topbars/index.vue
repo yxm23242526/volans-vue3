@@ -11,30 +11,20 @@ import User from "./user.vue"
     <Breadcrumb />
     <div class="layout-header-topbars-items">
       <!-- 右上角其他组件 -->
-      <div>
-        <Helps />
-      </div>
-      <div>
-        <Settings/>
-      </div>
-      <div>
-        <User />
-      </div>
+          <Helps />
+          <Settings />
     </div>
+    <User />
   </div>
 </template>
 
 <style scoped>
 .layout-header-topbars-items{
-  >div{
-    padding: 12px;
-    &:hover:not(:last-child) {
-      cursor: pointer;
-      background: var(--vl-color-bars-hover);
-      :deep(i){
-        animation: logoAnimation 0.3s ease-in-out;
-      }
-    }
-  }
+  flex:1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 10px;
+  height: inherit;
 }
 </style>
