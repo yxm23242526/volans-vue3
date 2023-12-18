@@ -123,7 +123,7 @@ const state = reactive({
               </div>
               <div> 部门：</div>
             </el-col>
-            <el-col class="personal-user-item-content" :span="8"> Office产品研发</el-col>
+            <el-col class="personal-user-item-content" :span="8"> Office产品研发部</el-col>
           </el-row>
           <el-row>
             <el-col class="personal-user-item" :span="8">
@@ -156,38 +156,46 @@ const state = reactive({
       </el-col>
 
       <el-col :span="16">
-        <el-card shadow="hover" header="信息更新" style="height: 500px">
-          <el-form
-              label-position="left"
-              label-width="100px"
-              style="max-width: 460px"
-              :model="form.personalstate"
-              :rules="formRules"
-              ref="formRef"
-          >
-            <el-form-item label="个性签名">
-              <el-input :placeholder="userInfo.signature" v-model="form.personalstate.signature"></el-input>
-            </el-form-item>
-            <el-form-item label="昵称">
-              <el-input :placeholder="userInfo.nickName" v-model="form.personalstate.nickName"></el-input>
-            </el-form-item>
-            <el-form-item label="小组">
-              <el-select :placeholder="userInfo.groupId" v-model="form.personalstate.groupId">
-                <el-option label="model" value="1"/>
-                <el-option label="控制" value="2"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="密码">
-              <el-input  style="width: 250px" type="password" :placeholder="userInfo.password"  v-model="form.personalstate.password" show-password></el-input>
-<!--              <span class="form-item-tipbox ml5" v-show="userInfo.password === form.personalstate.password"> * </span>-->
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onUpdate">
-                更新个人信息
-              </el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
+          <el-card shadow="hover" style="height: 500px">
+            <template #default>
+              <el-tabs>
+                <el-tab-pane label="基础信息" name="first">
+                  <el-form
+                      label-position="left"
+                      label-width="100px"
+                      style="max-width: 460px"
+                      :model="form.personalstate"
+                      :rules="formRules"
+                      ref="formRef"
+                  >
+                    <el-form-item label="个性签名">
+                      <el-input :placeholder="userInfo.signature" v-model="form.personalstate.signature"></el-input>
+                    </el-form-item>
+                    <el-form-item label="昵称">
+                      <el-input :placeholder="userInfo.nickName" v-model="form.personalstate.nickName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="小组">
+                      <el-select :placeholder="userInfo.groupId" v-model="form.personalstate.groupId">
+                        <el-option label="model" value="1"/>
+                        <el-option label="控制" value="2"/>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="密码">
+                      <el-input  style="width: 250px" type="password" :placeholder="userInfo.password"  v-model="form.personalstate.password" show-password></el-input>
+                      <!--              <span class="form-item-tipbox ml5" v-show="userInfo.password === form.personalstate.password"> * </span>-->
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="primary" @click="onUpdate">
+                        更新个人信息
+                      </el-button>
+                    </el-form-item>
+                  </el-form>
+
+                </el-tab-pane>
+                <el-tab-pane label="头像" name="second">这里修改头像</el-tab-pane>
+              </el-tabs>
+            </template>
+          </el-card>
       </el-col>
 
       <el-col>
