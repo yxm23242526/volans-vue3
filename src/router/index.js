@@ -88,7 +88,7 @@ const router = createRouter({
                     name: 'chat',
                     component: () => import('@/views/chat/index.vue'),
                     meta: {
-                        name: "素质广场",
+                        name: "意见板",
                         icon: "ChatLineRound",
                         roles: ['admin', 'common'],
                     }
@@ -98,8 +98,18 @@ const router = createRouter({
                     name: 'personal',
                     component: () => import('@/views/personal/index.vue'),
                     meta: {
-                        name: "奇迹暖暖",
+                        name: "个人中心",
                         icon: "User",
+                        roles: ['admin', 'common'],
+                    }
+                },
+                {
+                    path: '/domain',
+                    name: 'domain',
+                    component: () => import('@/views/domain/index.vue'),
+                    meta: {
+                        name: "功能域",
+                        icon: "MagicStick",
                         roles: ['admin', 'common'],
                     }
                 },

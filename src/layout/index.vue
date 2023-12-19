@@ -11,8 +11,10 @@ import LayoutMain from '@/layout/components/main.vue'
   <el-container class="layout-container">
     <LayoutAside />
     <el-container class="layout-main">
-      <LayoutHeader/>
-      <LayoutMain/>
+      <el-scrollbar>
+        <LayoutHeader/>
+        <LayoutMain/>
+      </el-scrollbar>
     </el-container>
   </el-container>
 </template>

@@ -10,12 +10,9 @@ import { defineStore } from "pinia";
 import { ref } from 'vue';
 import { loginAPI, updateInfo } from '@/apis/user'
 import { Session } from "@/utils/storage";
-import pic from '@/assets/images/touxiang.jpg'
 export const useUserStore = defineStore('user', () => {
     //1. 定义user的state管理
-    const userInfo = ref({
-        photo: pic
-    })
+    const userInfo = ref({})
     //2. 定义user的action
     // 获得用户数据
     const getUserInfo = async ({userId, password}) => {

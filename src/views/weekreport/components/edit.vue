@@ -254,7 +254,7 @@ watch(() => route, ()=>{
           <el-button @click="save">保存</el-button>
           <el-button type="primary" @click="onsubmit">提交</el-button>
         </div>
-        <ElScrollbar height="450px">
+        <el-scrollbar >
           <el-table :data="tableData" :span-method="objectSpanMethod" style="width: 100%"
             :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }">
             <el-table-column prop="date" label="日期" width="100px" />
@@ -292,7 +292,7 @@ watch(() => route, ()=>{
             </el-select>
             <el-button @click="addrow">插入行</el-button>
           </div>
-        </ElScrollbar>
+        </el-scrollbar>
 
 
 

@@ -9,6 +9,11 @@ import {useUserStore} from "@/stores/user";
 const userInfo = computed(() => {
   return Session.get('userInfo');
 })
+
+const getPhotoUrl = computed(() => {
+  return userInfo.value.image
+})
+
 const form = reactive({
   personalstate: {
     userId: userInfo.value.userId,
@@ -71,7 +76,18 @@ const formRules = {
   ]
 }
 
-// 引入组件
+//默认激活的tabpane
+const activeTabpane = ref('board')
+
+const headers = ref({
+    Authorization: `Bearer ${Session.get('token')}`,
+    token: `Bearer ${Session.get('token')}`,
+})
+
+const onSuccess = () => {
+  console.log('success')
+}
+
 // 定义变量内容
 const state = reactive({
   noticeList: [
@@ -89,7 +105,7 @@ const state = reactive({
         <el-card shadow="hover" class="personal-user">
           <el-row>
             <el-col class="personal-user-avator">
-              <el-avatar :size="90"/>
+              <el-avatar :size="90" :src="getPhotoUrl"/>
             </el-col>
           </el-row>
           <el-row>
@@ -158,8 +174,9 @@ const state = reactive({
       <el-col :span="16">
           <el-card shadow="hover" style="height: 500px">
             <template #default>
-              <el-tabs>
-                <el-tab-pane label="基础信息" name="first">
+              <el-tabs v-model="activeTabpane">
+                <el-tab-pane label="看板" name="board"></el-tab-pane>
+                <el-tab-pane label="基础信息" name="basicInfo">
                   <el-form
                       label-position="left"
                       label-width="100px"
@@ -192,7 +209,18 @@ const state = reactive({
                   </el-form>
 
                 </el-tab-pane>
-                <el-tab-pane label="头像" name="second">这里修改头像</el-tab-pane>
+                <el-tab-pane label="头像" name="photo">
+                  <div style="text-align: center;">
+                    <el-upload
+                        action="/user/image"
+                        :headers="headers"
+                        :show-file-list="false"
+                        :on-success="onSuccess"
+                    >
+                      <img title="点击修改用户头像" :src="userInfo.image" style="height: 200px; width: 200px; border-radius: 50px;">
+                    </el-upload>
+                  </div>
+                </el-tab-pane>
               </el-tabs>
             </template>
           </el-card>

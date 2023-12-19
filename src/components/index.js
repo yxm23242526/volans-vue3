@@ -6,9 +6,11 @@
  */
 import Icon from './Icon/icon.vue'
 import NoticeBar from './noticeBar/index.vue'
+import Comment from './comment/index.vue'
 export const componentPlugin = {
     install(app) {
         app.component('Icon', Icon);
-        app.component('NoticeBar', NoticeBar)
+        app.component('NoticeBar', NoticeBar);
+        app.component('Comment', Comment)
     }
 }
