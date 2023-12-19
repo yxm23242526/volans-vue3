@@ -19,7 +19,8 @@ request.interceptors.request.use( config => {
     //1. 获取token数据
     const token = Session.get('token')
     if (token){
-        config.headers.Authorization = `Bearer ${token}`  //格式固定
+        config.headers.Authorization = `Bearer ${token}`
+        config.headers.token = `Bearer ${token}`  //格式固定
     }
     //2. 安装后端要求拼接token数据
     return config

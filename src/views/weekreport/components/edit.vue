@@ -1,9 +1,8 @@
 <script setup>
-import { reactive, watch, ref} from 'vue';
+import { reactive, watch, ref, computed } from 'vue';
 import { submit, getProject } from '@/apis/edit';
 import { comparedate, calcuatedate, mult, formatdate } from '@/utils/datetimeUtils';
-import { ElScrollbar } from 'element-plus';
-import { useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import { Session } from '@/utils/storage';
 const route = useRoute();
 
@@ -22,6 +21,10 @@ const selectvalue = ref();//选择框值
 const projectarrary = reactive([]);
 
 const tableData = reactive([]);//表格数据
+
+const tableHeight = computed (()=>{
+  return document.body.clientHeight / 5 * 4;
+})
 
 //更新合并单元格数组
 const getspanarr = () => {
@@ -46,16 +49,14 @@ const getspanarr = () => {
 }
 
 const inituserinfo = (taskId) => {
-  const tempdata = Session.get('weekreport'+taskId);
+  const tempdata = Session.get('weekreport' + taskId);
   formdata.userId = tempdata.userId;
   formdata.taskid = taskId;
   formdata.starttime = formatdate(tempdata.startDate);
   formdata.endtime = formatdate(tempdata.endDate);
   tableData.splice(0, tableData.length)
-  for (let i = 0; i < tempdata.rows.length; i++) 
-  {
-    for (let j = 0; j < tempdata.rows[i].content.length; j++) 
-    {
+  for (let i = 0; i < tempdata.rows.length; i++) {
+    for (let j = 0; j < tempdata.rows[i].content.length; j++) {
       tempdata.rows[i].content[j].date = formatdate(tempdata.rows[i].content[j].date);
       tableData.push(tempdata.rows[i].content[j]);
     }
@@ -82,6 +83,7 @@ const initdatearrary = (starttime, endtime) => {
       })
     }
   }
+
 }
 
 //合并单元格数据
@@ -231,17 +233,17 @@ watch(tableData, () => {
   checkdataarrary();
 })
 
-watch(() => route, ()=>{
-    const taskId = route.params?.id;
-    if (taskId)
-    {
-      inituserinfo(taskId);
-      initprojectarrary();
-      initdatearrary();
-    }
-},{
-    deep: true,
-    immediate: true
+watch(() => route, () => {
+  const taskId = route.params?.id;
+  if (taskId) {
+    inituserinfo(taskId);
+    initprojectarrary();
+    console.log(formdata)
+    initdatearrary(formdata.starttime, formdata.endtime);
+  }
+}, {
+  deep: true,
+  immediate: true
 })
 </script>
 
@@ -249,14 +251,20 @@ watch(() => route, ()=>{
   <div class="layout-padding">
     <div class="layout-padding-view">
       <div class="editcontainer">
-
         <div class="editcontainer weekreport-wrapper">
+          <el-select v-model="selectvalue" placeholder="Select">
+            <el-option v-for="item in dataarrary" :key="item.value" :label="item.label" :value="item.value"
+              :disabled="item.disabled" />
+          </el-select>
+          <el-button @click="addrow">新增日期</el-button>
           <el-button @click="save">保存</el-button>
           <el-button type="primary" @click="onsubmit">提交</el-button>
         </div>
-        <ElScrollbar height="450px">
+
+        <el-container>
           <el-table :data="tableData" :span-method="objectSpanMethod" style="width: 100%"
-            :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }">
+            :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }" :height="tableHeight">
+            <!-- <el-scrollbar height="200"> -->
             <el-table-column prop="date" label="日期" width="100px" />
             <el-table-column label="项目 " width="200px">
               <template #default="scope">
@@ -284,18 +292,9 @@ watch(() => route, ()=>{
                 <el-button text type="danger" @click="handledelete(scope.$index, scope.row)">删除</el-button>
               </template>
             </el-table-column>
+          <!-- </el-scrollbar> -->
           </el-table>
-          <div class="editcontainer weekreport-wrapper">
-            <el-select v-model="selectvalue" placeholder="Select">
-              <el-option v-for="item in dataarrary" :key="item.value" :label="item.label" :value="item.value"
-                :disabled="item.disabled" />
-            </el-select>
-            <el-button @click="addrow">插入行</el-button>
-          </div>
-        </ElScrollbar>
-
-
-
+        </el-container>
 
       </div>
     </div>
@@ -324,6 +323,11 @@ watch(() => route, ()=>{
   &-wrapper {
     display: flex;
     justify-content: end;
+  }
+
+  &-wrapperstart {
+    display: flex;
+    justify-content: start;
   }
 
   &-option {
