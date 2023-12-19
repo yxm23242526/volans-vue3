@@ -12,7 +12,7 @@ const userInfo = computed(() => {
   return Session.get('userInfo');
 })
 const getPhotoUrl = computed(() => {
-  return userInfo.value?.photo
+  return userInfo.value.image
 })
 const onDropDownCommand = (path) => {
   if (path === 'logout') {
@@ -52,7 +52,7 @@ const onDropDownCommand = (path) => {
   <div class="mr15">
     <el-dropdown trigger="click" @command="onDropDownCommand">
         <span class="topbars-avator">
-         <el-avatar :size="30"/>
+         <el-avatar :size="30" :src="getPhotoUrl"/>
         </span>
       <template #dropdown>
         <el-dropdown-menu>

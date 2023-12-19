@@ -1,24 +1,31 @@
 <script setup>
-import {ref, computed, reactive} from "vue";
+import {ref, computed, reactive, onMounted, nextTick} from "vue";
 import {Session} from '@/utils/storage'
 import {validatePassword} from "@/utils/validate";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {useUserStore} from "@/stores/user";
+const userInfo = ref({})
+const imageUrl = ref('');
 
-
-const userInfo = computed(() => {
-  return Session.get('userInfo');
-})
 const form = reactive({
   personalstate: {
-    userId: userInfo.value.userId,
-    nickName: userInfo.value.nickName,
-    signature: userInfo.value.signature,
-    password: userInfo.value.password,
-    groupId: userInfo.value.groupId,
+    userId: '',
+    nickName: '',
+    signature: '',
+    password: '',
+    groupId: '',
   }
-}
-)
+})
+
+onMounted(() => {
+      userInfo.value = Session.get('userInfo');
+      imageUrl.value = userInfo.value.image;
+      form.personalstate.userId = userInfo.value.userId;
+      form.personalstate.nickName = userInfo.value.nickName;
+      form.personalstate.signature = userInfo.value.signature;
+      form.personalstate.password = userInfo.value.password;
+      form.personalstate.groupId = userInfo.value.groupId;
+})
 // 获取form实例做统一校验
 const formRef = ref(null)
 const userStore = useUserStore()
@@ -35,7 +42,7 @@ const onUpdate = () => {
           if (action === 'confirm') {
             instance.confirmButtonLoading = true;
             instance.confirmButtonText = '修改中';
-            setTimeout( () => {
+            setTimeout(() => {
               ElMessage({type: 'success', message: '修改成功'})
               done();
             }, 700)
@@ -45,11 +52,11 @@ const onUpdate = () => {
           }
         },
       }).then(async () => {
-          await userStore.updateUserInfo(form.personalstate)
+        await userStore.updateUserInfo(form.personalstate)
       })
-          .catch(() => {});
-    }
-    else {
+          .catch(() => {
+          });
+    } else {
       //这里以后可以做定位到具体错误
       ElMessage({type: 'error', message: '存在不合法信息'})
     }
@@ -59,19 +66,31 @@ const onUpdate = () => {
 const validate_password_rules = (rule, value, callback) => {
   if (validatePassword(value)) {
     callback()
-  }
-  else {
+  } else {
     callback(new Error('密码格式不正确'))
   }
 }
 
 const formRules = {
   password: [
-    { required: true, validator: validate_password_rules, trigger: 'blur' }
+    {required: true, validator: validate_password_rules, trigger: 'blur'}
   ]
 }
 
-// 引入组件
+//默认激活的tabpane
+const activeTabpane = ref('board')
+
+const headers = ref({
+  Authorization: `Bearer ${Session.get('token')}`,
+  token: `Bearer ${Session.get('token')}`,
+})
+
+const onSuccess = () => {
+  userStore.refreshUserInfo()
+  //这里不知道怎么办 刷新一下吧
+  window.location.reload()
+}
+
 // 定义变量内容
 const state = reactive({
   noticeList: [
@@ -89,7 +108,7 @@ const state = reactive({
         <el-card shadow="hover" class="personal-user">
           <el-row>
             <el-col class="personal-user-avator">
-              <el-avatar :size="90"/>
+              <el-avatar :size="90" :src="imageUrl"/>
             </el-col>
           </el-row>
           <el-row>
@@ -156,46 +175,61 @@ const state = reactive({
       </el-col>
 
       <el-col :span="16">
-          <el-card shadow="hover" style="height: 500px">
-            <template #default>
-              <el-tabs>
-                <el-tab-pane label="基础信息" name="first">
-                  <el-form
-                      label-position="left"
-                      label-width="100px"
-                      style="max-width: 460px"
-                      :model="form.personalstate"
-                      :rules="formRules"
-                      ref="formRef"
-                  >
-                    <el-form-item label="个性签名">
-                      <el-input :placeholder="userInfo.signature" v-model="form.personalstate.signature"></el-input>
-                    </el-form-item>
-                    <el-form-item label="昵称">
-                      <el-input :placeholder="userInfo.nickName" v-model="form.personalstate.nickName"></el-input>
-                    </el-form-item>
-                    <el-form-item label="小组">
-                      <el-select :placeholder="userInfo.groupId" v-model="form.personalstate.groupId">
-                        <el-option label="model" value="1"/>
-                        <el-option label="控制" value="2"/>
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item label="密码">
-                      <el-input  style="width: 250px" type="password" :placeholder="userInfo.password"  v-model="form.personalstate.password" show-password></el-input>
-                      <!--              <span class="form-item-tipbox ml5" v-show="userInfo.password === form.personalstate.password"> * </span>-->
-                    </el-form-item>
-                    <el-form-item>
-                      <el-button type="primary" @click="onUpdate">
-                        更新个人信息
-                      </el-button>
-                    </el-form-item>
-                  </el-form>
+        <el-card shadow="hover" style="height: 500px">
+          <template #default>
+            <el-tabs v-model="activeTabpane">
+              <el-tab-pane label="看板" name="board"></el-tab-pane>
+              <el-tab-pane label="基础信息" name="basicInfo">
+                <el-form
+                    label-position="left"
+                    label-width="100px"
+                    style="max-width: 460px"
+                    :model="form.personalstate"
+                    :rules="formRules"
+                    ref="formRef"
+                >
+                  <el-form-item label="个性签名">
+                    <el-input :placeholder="userInfo.signature" v-model="form.personalstate.signature"></el-input>
+                  </el-form-item>
+                  <el-form-item label="昵称">
+                    <el-input :placeholder="userInfo.nickName" v-model="form.personalstate.nickName"></el-input>
+                  </el-form-item>
+                  <el-form-item label="小组">
+                    <el-select :placeholder="userInfo.groupId" v-model="form.personalstate.groupId">
+                      <el-option label="model" value="1"/>
+                      <el-option label="控制" value="2"/>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="密码">
+                    <el-input style="width: 250px" type="password" :placeholder="userInfo.password"
+                              v-model="form.personalstate.password" show-password></el-input>
+                    <!--              <span class="form-item-tipbox ml5" v-show="userInfo.password === form.personalstate.password"> * </span>-->
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="onUpdate">
+                      更新个人信息
+                    </el-button>
+                  </el-form-item>
+                </el-form>
 
-                </el-tab-pane>
-                <el-tab-pane label="头像" name="second">这里修改头像</el-tab-pane>
-              </el-tabs>
-            </template>
-          </el-card>
+              </el-tab-pane>
+              <el-tab-pane label="头像" name="photo">
+                <div style="text-align: center;">
+                  <el-upload
+                      action="http://192.168.0.100:10001/user/img"
+                      :headers="headers"
+                      :show-file-list="false"
+                      method="POST"
+                      :on-success="onSuccess"
+                  >
+                    <img title="点击修改用户头像" :src="userInfo.image"
+                         style="height: 200px; width: 200px; border-radius: 50px;">
+                  </el-upload>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
+          </template>
+        </el-card>
       </el-col>
 
       <el-col>

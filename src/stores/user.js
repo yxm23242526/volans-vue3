@@ -8,16 +8,14 @@
 
 import { defineStore } from "pinia";
 import { ref } from 'vue';
-import { loginAPI, updateInfo } from '@/apis/user'
+import { loginAPI, updateInfoAPI, refreshUserInfoAPI } from '@/apis/user'
 import { Session } from "@/utils/storage";
-import pic from '@/assets/images/touxiang.jpg'
+
 export const useUserStore = defineStore('user', () => {
     //1. 定义user的state管理
-    const userInfo = ref({
-        photo: pic
-    })
+    const userInfo = ref({})
     //2. 定义user的action
-    // 获得用户数据
+    // 获得登录时用户数据
     const getUserInfo = async ({userId, password}) => {
         const res = await loginAPI({userId, password})
         userInfo.value = res.data.user
@@ -31,16 +29,20 @@ export const useUserStore = defineStore('user', () => {
         userInfo.value = {}
         Session.remove('token')
         Session.remove('userInfo')
+        Session.remove('tagsView')
     }
     
-    //修改用户数据
+    //刷新/重新获取用户数据
+    const refreshUserInfo = async () => {
+        const res = await refreshUserInfoAPI();
+        userInfo.value = res.data.user;
+        Session.set('userInfo', userInfo.value)
+    }
+    
+    //修改用户指定数据
     const updateUserInfo = async(data) => {
-        const res = await updateInfo(data)
+        const res = await updateInfoAPI(data)
         userInfo.value = res.data.user
-        let token = res.data.token
-        Session.remove('token')
-        Session.remove('userInfo')
-        Session.set('token', token)
         Session.set('userInfo', userInfo.value)
     }
     
@@ -50,5 +52,6 @@ export const useUserStore = defineStore('user', () => {
         getUserInfo,
         updateUserInfo,
         clearUserInfo,
+        refreshUserInfo,
     }
 })

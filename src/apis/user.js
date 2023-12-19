@@ -27,10 +27,17 @@ export const loginAPI = ({userId, password}) => {
  * 修改用户个人信息
  * @returns
  */
-export const updateInfo = (data) => {
+export const updateInfoAPI = (data) => {
     return request({
         url: '/user/updateInfo',
         method: 'POST',
         data
+    })
+}
+
+
+export const refreshUserInfoAPI = () => {
+    return request({
+        url: '/user/refreshUserInfo',
     })
 }

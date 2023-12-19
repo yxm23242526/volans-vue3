@@ -25,7 +25,7 @@
           <template #label>
             <div @click.stop="changeArrow(index)" class="descripition-header">
               <Icon :size="10" :name="getIconName(index)" />
-              {{row.curdate}}
+              {{row.curDate}}
             </div>
           </template>
           <div class="descripition-main" v-show="expandArray[index]">
@@ -33,7 +33,7 @@
                       :header-cell-style="{padding: '0'}" :cell-style="{padding: '0'}"
             >
               <el-table-column prop="projectId" label="项目" width="180"  align="center"/>
-              <el-table-column prop="worktime" label="时长" width="100"  align="center"/>
+              <el-table-column prop="workTime" label="时长" width="100"  align="center"/>
               <el-table-column prop="workContent" label="内容"   align="center"/>
             </el-table>
           </div>

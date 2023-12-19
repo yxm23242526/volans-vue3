@@ -12,8 +12,10 @@ import Icon from "@/components/Icon/icon.vue";
 const userInfo = computed(() => {
   return Session.get('userInfo');
 })
+
+
 const getPhotoUrl = computed(() => {
-  return userInfo.value?.photo
+  return userInfo.value.image
 })
 
 
@@ -52,7 +54,7 @@ const drawer = ref(false)
       <template #title>
         <div class="drawer-header-container">
           <div class="drawer-header-photo">
-            <el-avatar :size="50"/>
+            <el-avatar :size="50" :src="getPhotoUrl"/>
           </div>
           <div class="drawer-header-info ml10">
             <span class="font18 mt3 mb3"> {{ userInfo.userName }}</span>

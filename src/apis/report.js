@@ -32,7 +32,6 @@ export const getProjectList = () => {
 export const getFieldList = () => {
     return request({
         url: '/weekreport/fieldList',
-
     })
 }
 
