@@ -79,7 +79,7 @@ async function doQuery(formData) {
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="doQuery(formData)">查询</el-button>
-          <el-button type="primary" @click="doExport(formData)">导出</el-button>
+          <el-button type="primary" @click="doExport(formData)" :disabled="results.length === 0">导出</el-button>
         </el-form-item>
       </el-form>
       <el-divider/>
