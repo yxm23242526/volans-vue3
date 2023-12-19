@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import { useTagsViewStore } from '@/stores/tags'
-import { useRouter, useRoute } from 'vue-router';
-import { storeToRefs } from 'pinia';
+import { useRoute, onBeforeRouteUpdate} from 'vue-router';
 const route = useRoute()
 //活跃路由
 const activeState = ref(route.path)
 const tagsViewStore = useTagsViewStore()
 const tagsviewState = tagsViewStore.tagsviewState;
+
+//第一次被挂载时
+onMounted( () => {
+  tagsViewStore.initState(route)
+})
+
+//路由更新时
+onBeforeRouteUpdate( (to) => {
+  tagsViewStore.addState(to)
+})
 
 //监听路由变化
 watch(() => route, ()=>{

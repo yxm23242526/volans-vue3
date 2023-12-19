@@ -6,6 +6,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useTagsViewStore } from "@/stores/tags";
 import pinia from '@/stores/index';
+import { Session } from '@/utils/storage';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,8 +41,9 @@ const router = createRouter({
                     },
                     children: [
                         {
-                            path: '/edit',
+                            path: '/:id',
                             name: 'edit',
+                            ishide: true,
                             component: () => import('@/views/weekreport/components/edit.vue'),
                             meta: {
                                 name: "编辑周报",
@@ -80,7 +82,27 @@ const router = createRouter({
                             }
                         },
                     ]
-                }
+                },
+                {
+                    path: '/chat',
+                    name: 'chat',
+                    component: () => import('@/views/chat/index.vue'),
+                    meta: {
+                        name: "素质广场",
+                        icon: "ChatLineRound",
+                        roles: ['admin', 'common'],
+                    }
+                },
+                {
+                    path: '/personal',
+                    name: 'personal',
+                    component: () => import('@/views/personal/index.vue'),
+                    meta: {
+                        name: "奇迹暖暖",
+                        icon: "User",
+                        roles: ['admin', 'common'],
+                    }
+                },
             ]
         },
         {
@@ -106,13 +128,30 @@ const router = createRouter({
 const role = 'admin';
 const tagsviewStore = useTagsViewStore(pinia)
 router.beforeEach((to,from,next)=>{
-	if(to.meta.roles.includes(role)){
-		next()	//放行
-        //监听路由变化
-        tagsviewStore.addState(to)
-	}else{
-		next({path:"/404"})	//跳到404页面
-	}
+    // //验证token，只有存在token的时候，才能跳转到内容页
+    let token = Session.get('token')
+    // 这里逻辑不知道对不对
+    if (to.path === '/login')
+    {
+        next()
+    }
+    else
+    {
+        if (token)
+        {
+            if (to.meta.roles.includes(role))
+            {
+                next()	//放行
+            }
+            else{
+                next({path:"/404"})	//跳到404页面
+            }
+        }
+        else
+        {
+            next('/login');
+        }
+    }
 })
 
 export default router

@@ -30,7 +30,7 @@
           </template>
           <div class="descripition-main" v-show="expandArray[index]">
             <el-table class="descripition-table" :data="row.content" style="width: 100%"
-                      :header-cell-style="{padding: '0'}"
+                      :header-cell-style="{padding: '0'}" :cell-style="{padding: '0'}"
             >
               <el-table-column prop="projectId" label="项目" width="180"  align="center"/>
               <el-table-column prop="worktime" label="时长" width="100"  align="center"/>

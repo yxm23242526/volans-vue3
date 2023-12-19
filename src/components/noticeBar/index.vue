@@ -6,7 +6,7 @@
 				<div class="notice-bar-warp-text" ref="noticeBarTextRef" v-if="!scrollable">{{ text }}</div>
 				<div class="notice-bar-warp-slot" v-else><slot /></div>
 			</div>
-			<SvgIcon :name="rightIcon" v-if="rightIcon" class="notice-bar-warp-right-icon" @click="onRightIconClick" />
+			<Icon :name="rightIcon" v-if="rightIcon" class="notice-bar-warp-right-icon" @click="onRightIconClick" />
 		</div>
 	</div>
 </template>
@@ -109,7 +109,7 @@ const computeAnimationTime = () => {
 // 改变 animation 动画调用
 const changeAnimation = () => {
 	if (state.order === 1) {
-		noticeBarTextRef.value.style.cssText = `animation: oneAnimation ${state.oneTime}s linear; opactity: 1;`;
+		noticeBarTextRef.value.style.cssText = `animation: oneAnimation ${state.oneTime}s linear; opacity: 1;`;
 		state.order = 2;
 	} else {
 		noticeBarTextRef.value.style.cssText = `animation: twoAnimation ${state.twoTime}s linear infinite; opacity: 1;`;

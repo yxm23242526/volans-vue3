@@ -5,7 +5,7 @@
 #### 💒 代码仓库
 
 -  [yxm的Gitee版本](https://gitee.com/yxmloveslife/volans.git) 
-- bitbucket
+- [bitbucket版本](https://yxm980918@bitbucket.org/yozofather/volans-vue.git)
 
 #### 📚 开发文档
 

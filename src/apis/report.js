@@ -26,6 +26,7 @@ export const getProjectList = () => {
     return request({
         url: '/project/list',
 
+        params
     })
 }
 
