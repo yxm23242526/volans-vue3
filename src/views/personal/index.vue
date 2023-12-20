@@ -1,9 +1,10 @@
 <script setup>
-import {ref, computed, reactive, onMounted, nextTick} from "vue";
+import {ref, computed, reactive, onMounted, nextTick, watch} from "vue";
 import {Session} from '@/utils/storage'
 import {validatePassword} from "@/utils/validate";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {useUserStore} from "@/stores/user";
+
 const userInfo = ref({})
 const imageUrl = ref('');
 
@@ -18,13 +19,13 @@ const form = reactive({
 })
 
 onMounted(() => {
-      userInfo.value = Session.get('userInfo');
-      imageUrl.value = userInfo.value.image;
-      form.personalstate.userId = userInfo.value.userId;
-      form.personalstate.nickName = userInfo.value.nickName;
-      form.personalstate.signature = userInfo.value.signature;
-      form.personalstate.password = userInfo.value.password;
-      form.personalstate.groupId = userInfo.value.groupId;
+  userInfo.value = Session.get('userInfo');
+  imageUrl.value = userInfo.value.image;
+  form.personalstate.userId = userInfo.value.userId;
+  form.personalstate.nickName = userInfo.value.nickName;
+  form.personalstate.signature = userInfo.value.signature;
+  form.personalstate.password = userInfo.value.password;
+  form.personalstate.groupId = userInfo.value.groupId;
 })
 // 获取form实例做统一校验
 const formRef = ref(null)

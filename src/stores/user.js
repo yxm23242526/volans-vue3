@@ -27,9 +27,7 @@ export const useUserStore = defineStore('user', () => {
     // 清除用户数据
     const clearUserInfo = () => {
         userInfo.value = {}
-        Session.remove('token')
-        Session.remove('userInfo')
-        Session.remove('tagsView')
+        Session.clear()
     }
     
     //刷新/重新获取用户数据
