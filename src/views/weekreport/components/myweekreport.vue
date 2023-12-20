@@ -20,8 +20,8 @@
             <el-tag type="danger" v-else round>回退</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="observer" label="最近查看人" />
-        <el-table-column prop="action" label="操作" width="180">
+
+        <el-table-column prop="action" label="操作">
           <template #default="scope">
             <div v-if="scope.row.status === 2">
               <el-button text type="primary" size="small" @click="onPreview(scope.$index)">查看</el-button>
@@ -33,6 +33,7 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column prop="observer" label="最近查看人"  width="180"/>
       </el-table>
       <WeekReportPrview ref="previewObj" :reportName="previewData.reportName" :isshow="previewData.isshow"/>
       <!-- 分页组件 -->
