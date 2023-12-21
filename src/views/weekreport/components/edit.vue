@@ -311,6 +311,12 @@ watch(() => route, () => {
   }
   :deep(.el-textarea__inner){
     box-shadow: unset !important;
+    &:hover{
+      background-color: var(--el-color-primary-light-8);
+    }
+    &:focus{
+      background-color: var(--el-color-primary-light-8);
+    }
   }
   :deep(.el-table__cell){
     padding: 0 0 !important;
