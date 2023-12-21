@@ -25,11 +25,11 @@
           <template #default="scope">
             <div v-if="scope.row.status === 2">
               <el-button text type="primary" size="small" @click="onPreview(scope.$index)">查看</el-button>
-              <el-button text type="primary" size="small" @click="onPopMessage">撤回</el-button>
+              <el-button text type="primary" size="small" @click="onPopMessage(scope.row.taskId)">撤回</el-button>
             </div>
             <div v-else>
               <el-button text type="primary" size="small" @click="onPreview(scope.$index)">查看</el-button>
-              <el-button text type="primary" size="small" @click="onEdit(scope.$index)">编辑</el-button>
+              <el-button text type="primary" size="small" @click="onEdit(scope.row.taskId)">编辑</el-button>
             </div>
           </template>
         </el-table-column>
@@ -56,7 +56,7 @@
 
 
 import { ref, onMounted, computed } from 'vue';
-import { getWeekreportList } from '@/apis/report';
+import { getWeekreportList, revokeWeekreport } from '@/apis/report';
 import { Session } from '@/utils/storage';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { getMonthandDay } from '@/utils/datetimeUtils'
@@ -105,7 +105,7 @@ const changePage = (newPage) => {
 
 
 //操作栏弹框
-const onPopMessage = () => {
+const onPopMessage = (taskId) => {
   ElMessageBox.confirm(
     '撤回已提交周报， 是否继续？',
     '提示',
@@ -116,10 +116,7 @@ const onPopMessage = () => {
     }
   )
     .then(() => {
-      ElMessage({
-        type: 'success',
-        message: '撤回成功',
-      })
+      revokeWeekreport(taskId);
     }).catch(() => {
       //什么都不做
     })
@@ -141,10 +138,9 @@ const onPreview = (rowIndex) => {
 import { useRouter } from "vue-router";
 const router = useRouter()
 //打开编辑窗口
-const onEdit = (rowIndex) => {
-  const id = weekReportData.value[rowIndex].taskId
-  Session.set(`weekreport${id}`,weekReportData.value[rowIndex])
-  router.push({path: `/${id}`})
+const onEdit = (taskId) => {
+  Session.set(`weekreport${taskId}`,taskId)
+  router.push({path: `/${taskId}`})
 }
 </script>
 
