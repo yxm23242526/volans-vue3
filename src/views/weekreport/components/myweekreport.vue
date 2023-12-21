@@ -29,7 +29,7 @@
             </div>
             <div v-else>
               <el-button text type="primary" size="small" @click="onPreview(scope.$index)">查看</el-button>
-              <el-button text type="primary" size="small" @click="onEdit(scope.row.taskId)">编辑</el-button>
+              <el-button text type="primary" size="small" @click="onEdit(scope.$index)">编辑</el-button>
             </div>
           </template>
         </el-table-column>
@@ -138,9 +138,10 @@ const onPreview = (rowIndex) => {
 import { useRouter } from "vue-router";
 const router = useRouter()
 //打开编辑窗口
-const onEdit = (taskId) => {
-  Session.set(`weekreport${taskId}`,taskId)
-  router.push({path: `/${taskId}`})
+const onEdit = (rowIndex) => {
+  const id = weekReportData.value[rowIndex].taskId
+  Session.set(`weekreport${id}`,weekReportData.value[rowIndex])
+  router.push({path: `/${id}`})
 }
 </script>
 
