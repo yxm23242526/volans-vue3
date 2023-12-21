@@ -1,9 +1,9 @@
 <script setup>
-import {reactive, watch, ref, computed} from 'vue';
-import {submit, getProject} from '@/apis/edit';
-import {comparedate, calcuatedate, mult, formatdate} from '@/utils/datetimeUtils';
-import {useRoute} from "vue-router";
-import {Session} from '@/utils/storage';
+import { reactive, watch, ref, computed } from 'vue';
+import { submit, getProject } from '@/apis/edit';
+import { comparedate, calcuatedate, mult, formatdate } from '@/utils/datetimeUtils';
+import { useRoute } from "vue-router";
+import { Session } from '@/utils/storage';
 
 const route = useRoute();
 
@@ -85,11 +85,11 @@ const initdatearrary = (starttime, endtime) => {
 
 //合并单元格数据
 const objectSpanMethod = ({
-                            row,
-                            column,
-                            rowIndex,
-                            columnIndex,
-                          }) => {
+  row,
+  column,
+  rowIndex,
+  columnIndex,
+}) => {
   if (columnIndex == 0) {
     return {
       rowspan: spanarr[rowIndex],
@@ -131,9 +131,9 @@ const addrow = () => {
       }
     } else {
       tableData.push(
-          {
-            date: selectvalue.value,
-          }
+        {
+          date: selectvalue.value,
+        }
       )
     }
   }
@@ -204,18 +204,31 @@ const checktabel = () => {
       temp[tableData[i].projectId] = 1;
     }
   }
-  alert("success");
+  return true;
 }
 
 const save = async () => {
-  checktabel();
-  const data = await submit(tableData, 0);
+  if (checktabel()) {
+    const data = await submit(tableData, 0);
+    if (data.code === 200) {
+      alert("success")
+    }
+    else {
+      alert("error")
+    }
+  }
 }
 
 const onsubmit = async () => {
-  checktabel();
-  const data = await submit(tableData, 2);
-
+  if (checktabel()) {
+    const data = await submit(tableData, 2);
+    if (data.code === 200) {
+      alert("success")
+    }
+    else {
+      alert("error")
+    }
+  }
 }
 
 
@@ -243,11 +256,11 @@ watch(() => route, () => {
   <div class="layout-padding">
     <div class="layout-padding-view">
       <div class="layout-pd layout-edit-wrapper">
-        <h1 class="layout-edit-wrapper-title pl15"> {{ formdata.starttime }} ~ {{formdata.endtime}}</h1>
+        <h1 class="layout-edit-wrapper-title pl15"> {{ formdata.starttime }} ~ {{ formdata.endtime }}</h1>
         <div>
           <el-select v-model="selectvalue" placeholder="Select">
             <el-option v-for="item in dataarrary" :key="item.value" :label="item.label" :value="item.value"
-                       :disabled="item.disabled"/>
+              :disabled="item.disabled" />
           </el-select>
           <el-button @click="addrow">新增日期</el-button>
           <el-button @click="save">保存</el-button>
@@ -257,15 +270,14 @@ watch(() => route, () => {
 
       <el-container class="layout-edit-containter layout-pd">
         <el-table :data="tableData" :span-method="objectSpanMethod" style="width: 100%"
-                  :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }"
-                  :height="tableHeight" border >
+          :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }" :height="tableHeight" border>
           <!-- <el-scrollbar height="200"> -->
-          <el-table-column prop="date" label="日期" width="100px"/>
+          <el-table-column prop="date" label="日期" width="100px" />
           <el-table-column label="项目 " width="200px">
             <template #default="scope">
               <el-select v-model="scope.row.projectId" placeholder="Select">
                 <el-option v-for="item in projectarrary" :key="item.projectId" :label="item.projectName"
-                           :value="item.projectId"/>
+                  :value="item.projectId" />
               </el-select>
             </template>
           </el-table-column>
@@ -273,12 +285,12 @@ watch(() => route, () => {
           <el-table-column label="工作内容">
             <template #default="scope">
               <el-input v-model="scope.row.workContent" :autosize="{ minRows: 2, maxRows: 8 }" type="textarea"
-                        placeholder="工作内容" resize="none"/>
+                placeholder="工作内容" resize="none" />
             </template>
           </el-table-column>
           <el-table-column label="工时" width="100px">
             <template #default="scope">
-              <el-input-number v-model="scope.row.workTime" :controls="false" style="width: 50px"/>
+              <el-input-number v-model="scope.row.workTime" :controls="false" style="width: 50px" />
             </template>
           </el-table-column>
           <el-table-column label="操作" width="180px">
@@ -296,29 +308,33 @@ watch(() => route, () => {
 </template>
 
 <style lang="scss" scoped>
-
 .layout-edit-wrapper {
   display: flex;
   justify-content: space-between;
-  &-title{
+
+  &-title {
     font-size: 28px;
   }
 }
 
-.layout-edit-containter{
-  :deep(.el-input__wrapper){
+.layout-edit-containter {
+  :deep(.el-input__wrapper) {
     box-shadow: unset !important;
   }
-  :deep(.el-textarea__inner){
+
+  :deep(.el-textarea__inner) {
     box-shadow: unset !important;
-    &:hover{
+
+    &:hover {
       background-color: var(--el-color-primary-light-8);
     }
-    &:focus{
+
+    &:focus {
       background-color: var(--el-color-primary-light-8);
     }
   }
-  :deep(.el-table__cell){
+
+  :deep(.el-table__cell) {
     padding: 0 0 !important;
   }
 
