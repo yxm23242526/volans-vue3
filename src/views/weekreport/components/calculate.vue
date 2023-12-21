@@ -9,10 +9,20 @@ let results = ref([])
 
 const formData = ref({
   "model": '1',
-  "projectId": '',
-  "userId": '',
+  "projectId": [],
+  "userId": [],
   "date": [],
 })
+
+const userProps = {
+  label: 'userName',
+  value: 'userId',
+}
+
+const projectProps = {
+  label: 'projectName',
+  value: 'projectId',
+}
 
 function clearResult() {
   results.value = []
@@ -25,7 +35,17 @@ onMounted(async () => {
 })
 
 async function doExport(formData) {
-  results.value = (await exportResult(formData)).data
+  let url =  (await exportResult(formData)).data
+  let fileName = url.split('/').pop();
+  fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        link.click();
+      });
 }
 
 async function doQuery(formData) {
@@ -45,24 +65,26 @@ async function doQuery(formData) {
           </el-radio-group>
         </el-form-item>
         <el-form-item label="项目:">
-          <el-select v-model="formData.projectId" clearable>
-            <el-option
-                v-for="project in projectList"
-                :key="project.projectId"
-                :label="project.projectName"
-                :value="project.projectId"
-            />
-          </el-select>
+          <el-select-v2
+              v-model="formData.projectId"
+              :options="projectList"
+              :props="projectProps"
+              style="width: 300px;"
+              multiple
+              filterable
+              clearable>
+          </el-select-v2>
         </el-form-item>
         <el-form-item label="员工:">
-          <el-select v-model="formData.userId" clearable>
-            <el-option
-                v-for="user in userList"
-                :key="user.userId"
-                :label="user.userName"
-                :value="user.userId"
-            />
-          </el-select>
+          <el-select-v2
+              v-model="formData.userId"
+              :options="userList"
+              :props="userProps"
+              style="width: 300px;"
+              multiple
+              filterable
+              clearable>
+          </el-select-v2>
         </el-form-item>
         <el-form-item label="起始时间:">
           <div style="width: 500px">

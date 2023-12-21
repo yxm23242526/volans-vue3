@@ -121,7 +121,7 @@ const changeArrow = (row) => {
     overflow: hidden;
 }
 .descripition-table::v-deep .el-table__body tr:hover > td {
-  background-color: #f0f9eb !important;
+  background-color: var(--el-color-primary-light-8) !important;
 }
 
 </style>

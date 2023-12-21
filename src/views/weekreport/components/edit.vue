@@ -1,15 +1,14 @@
 <script setup>
-import { reactive, watch, ref, computed } from 'vue';
-import { submit, getProject } from '@/apis/edit';
-import { comparedate, calcuatedate, mult, formatdate } from '@/utils/datetimeUtils';
-import { useRoute } from "vue-router";
-import { Session } from '@/utils/storage';
+import {reactive, watch, ref, computed} from 'vue';
+import {submit, getProject} from '@/apis/edit';
+import {comparedate, calcuatedate, mult, formatdate} from '@/utils/datetimeUtils';
+import {useRoute} from "vue-router";
+import {Session} from '@/utils/storage';
+
 const route = useRoute();
 
 //用户数据，后期从用户信息拿
-var formdata = reactive({
-
-})
+var formdata = reactive({})
 
 
 const spanarr = reactive([]);//合并单元格数据
@@ -22,7 +21,7 @@ const projectarrary = reactive([]);
 
 const tableData = reactive([]);//表格数据
 
-const tableHeight = computed (()=>{
+const tableHeight = computed(() => {
   return document.body.clientHeight / 5 * 4;
 })
 
@@ -34,13 +33,11 @@ const getspanarr = () => {
     if (index == 0) {
       spanarr.push(1);
       temp = 0;
-    }
-    else {
+    } else {
       if (tableData[index].date == tableData[index - 1].date) {
         spanarr.push(0);
         spanarr[temp]++;
-      }
-      else {
+      } else {
         temp = index;
         spanarr.push(1);
       }
@@ -88,11 +85,11 @@ const initdatearrary = (starttime, endtime) => {
 
 //合并单元格数据
 const objectSpanMethod = ({
-  row,
-  column,
-  rowIndex,
-  columnIndex,
-}) => {
+                            row,
+                            column,
+                            rowIndex,
+                            columnIndex,
+                          }) => {
   if (columnIndex == 0) {
     return {
       rowspan: spanarr[rowIndex],
@@ -117,8 +114,7 @@ const handledelete = (index, row) => {
 const addrow = () => {
   if (selectvalue.value === '') {
     alert('请选择日期');
-  }
-  else {
+  } else {
     if (tableData.length > 0) {
       for (let i = 0; i < tableData.length; i++) {
         if (comparedate(selectvalue.value, tableData[i].date) < 0) {
@@ -126,20 +122,18 @@ const addrow = () => {
             date: selectvalue.value,
           });
           break;
-        }
-        else if (i === tableData.length - 1) {
+        } else if (i === tableData.length - 1) {
           tableData.splice(i + 1, 0, {
             date: selectvalue.value,
           });
           break;
         }
       }
-    }
-    else {
+    } else {
       tableData.push(
-        {
-          date: selectvalue.value,
-        }
+          {
+            date: selectvalue.value,
+          }
       )
     }
   }
@@ -206,8 +200,7 @@ const checktabel = () => {
     if (temp[tableData[i].projectId]) {
       alert("重复项");
       return false;
-    }
-    else {
+    } else {
       temp[tableData[i].projectId] = 1;
     }
   }
@@ -224,7 +217,6 @@ const onsubmit = async () => {
   const data = await submit(tableData, 2);
 
 }
-
 
 
 //检测表格数据更新合并单元格数组
@@ -250,89 +242,85 @@ watch(() => route, () => {
 <template>
   <div class="layout-padding">
     <div class="layout-padding-view">
-      <div class="editcontainer">
-        <div class="editcontainer weekreport-wrapper">
+      <div class="layout-pd layout-edit-wrapper">
+        <h1 class="layout-edit-wrapper-title pl15"> {{ formdata.starttime }} ~ {{formdata.endtime}}</h1>
+        <div>
           <el-select v-model="selectvalue" placeholder="Select">
             <el-option v-for="item in dataarrary" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.disabled" />
+                       :disabled="item.disabled"/>
           </el-select>
           <el-button @click="addrow">新增日期</el-button>
           <el-button @click="save">保存</el-button>
           <el-button type="primary" @click="onsubmit">提交</el-button>
         </div>
-
-        <el-container>
-          <el-table :data="tableData" :span-method="objectSpanMethod" style="width: 100%"
-            :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }" :height="tableHeight">
-            <!-- <el-scrollbar height="200"> -->
-            <el-table-column prop="date" label="日期" width="100px" />
-            <el-table-column label="项目 " width="200px">
-              <template #default="scope">
-                <el-select v-model="scope.row.projectId" placeholder="Select">
-                  <el-option v-for="item in projectarrary" :key="item.projectId" :label="item.projectName"
-                    :value="item.projectId" />
-                </el-select>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="工作内容">
-              <template #default="scope">
-                <el-input v-model="scope.row.workContent" :autosize="{ minRows: 2, maxRows: 8 }" type="textarea"
-                  placeholder="工作内容" resize="none" />
-              </template>
-            </el-table-column>
-            <el-table-column label="工时" width="100px">
-              <template #default="scope">
-                <el-input-number v-model="scope.row.workTime" :controls="false" style="width: 50px" />
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="180px">
-              <template #default="scope">
-                <el-button text type="primary" @click="handleadd(scope.$index, scope.row)">添加项目</el-button>
-                <el-button text type="danger" @click="handledelete(scope.$index, scope.row)">删除</el-button>
-              </template>
-            </el-table-column>
-          <!-- </el-scrollbar> -->
-          </el-table>
-        </el-container>
-
       </div>
+
+      <el-container class="layout-edit-containter layout-pd">
+        <el-table :data="tableData" :span-method="objectSpanMethod" style="width: 100%"
+                  :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }"
+                  :height="tableHeight" border >
+          <!-- <el-scrollbar height="200"> -->
+          <el-table-column prop="date" label="日期" width="100px"/>
+          <el-table-column label="项目 " width="200px">
+            <template #default="scope">
+              <el-select v-model="scope.row.projectId" placeholder="Select">
+                <el-option v-for="item in projectarrary" :key="item.projectId" :label="item.projectName"
+                           :value="item.projectId"/>
+              </el-select>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="工作内容">
+            <template #default="scope">
+              <el-input v-model="scope.row.workContent" :autosize="{ minRows: 2, maxRows: 8 }" type="textarea"
+                        placeholder="工作内容" resize="none"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="工时" width="100px">
+            <template #default="scope">
+              <el-input-number v-model="scope.row.workTime" :controls="false" style="width: 50px"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="180px">
+            <template #default="scope">
+              <el-button text type="primary" @click="handleadd(scope.$index, scope.row)">添加项目</el-button>
+              <el-button text type="danger" @click="handledelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+          <!-- </el-scrollbar> -->
+        </el-table>
+      </el-container>
+
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.editcontainer {
-  padding: 15px;
+
+.layout-edit-wrapper {
+  display: flex;
+  justify-content: space-between;
+  &-title{
+    font-size: 28px;
+  }
 }
 
-.weekreport {
-  &-mwr {
-    padding: 20px;
+.layout-edit-containter{
+  :deep(.el-input__wrapper){
+    box-shadow: unset !important;
+  }
+  :deep(.el-textarea__inner){
+    box-shadow: unset !important;
+    &:hover{
+      background-color: var(--el-color-primary-light-8);
+    }
+    &:focus{
+      background-color: var(--el-color-primary-light-8);
+    }
+  }
+  :deep(.el-table__cell){
+    padding: 0 0 !important;
   }
 
-  &-date {
-    color: var(--vl-text-main-color);
-  }
-
-  &-row {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &-wrapper {
-    display: flex;
-    justify-content: end;
-  }
-
-  &-wrapperstart {
-    display: flex;
-    justify-content: start;
-  }
-
-  &-option {
-    display: flex;
-    flex-direction: row;
-  }
 }
 </style>

@@ -19,7 +19,6 @@ export const getWeekreportList = (params) => {
 export const getUserList = () => {
     return request({
         url: '/user/getUserList',
-
     })
 }
 
@@ -38,25 +37,15 @@ export const getFieldList = () => {
 export const exportResult = (params) => {
     return request({
         url: '/weekreport/export',
-        params: {
-            model: params.model,
-            projectId: params.projectId,
-            userId: params.userId,
-            startDate: params.date[0],
-            endDate: params.date[1]
-        }
+        method: 'POST',
+        data: params
     })
 }
 
 export const query = (params) => {
     return request({
         url: '/weekreport/export/query',
-        params: {
-            model: params.model,
-            projectId: params.projectId,
-            userId: params.userId,
-            startDate: params.date[0],
-            endDate: params.date[1]
-        }
+        method: 'POST',
+        data: params
     })
 }
