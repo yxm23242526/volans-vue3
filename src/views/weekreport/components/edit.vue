@@ -221,7 +221,7 @@ const save = async () => {
 
 const onsubmit = async () => {
   checktabel();
-  const data = await submit(tableData, 1);
+  const data = await submit(tableData, 2);
 
 }
 

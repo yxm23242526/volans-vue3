@@ -37,13 +37,13 @@ export const getProject = () => {
  * 提交周报
  * @returns 
  */
-export const submit = (tabledata, state) => {
+export const submit = (tableData, status) => {
     return request({
         url: '/weekreport/submit',
         method: 'POST',
         data: { //请求体参数
-            tabledata,
-            state
+            tableData,
+            status
         }
     })
 }
