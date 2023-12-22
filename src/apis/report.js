@@ -49,3 +49,10 @@ export const query = (params) => {
         data: params
     })
 }
+
+export const revokeWeekreport = (taskId) => {
+    return request({
+        url: '/weekreport/revokeWeekreport/' + taskId,
+        method: 'post',
+    })
+}

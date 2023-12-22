@@ -18,7 +18,7 @@ const router = createRouter({
             meta: {
                 name: "首页",
                 icon: "House",
-                roles: ['admin', 'common'],
+                roles: [0, 1, 2],
             },
             children: [
                 {
@@ -28,7 +28,7 @@ const router = createRouter({
                     meta: {
                         name: "首页",
                         icon: "House",
-                        roles: ['admin', 'common'],
+                        roles: [0, 1, 2],
                     }
                 }, 
                 {
@@ -37,7 +37,7 @@ const router = createRouter({
                     meta: {
                         name: "周报管理",
                         icon: "Notification",
-                        roles: ['admin', 'common'],
+                        roles: [0, 1, 2],
                     },
                     children: [
                         {
@@ -48,7 +48,7 @@ const router = createRouter({
                             meta: {
                                 name: "编辑周报",
                                 icon: "Edit",
-                                roles: ['admin', 'common'],
+                                roles: [0, 1, 2],
                             },
                         },
                         {
@@ -58,7 +58,7 @@ const router = createRouter({
                             meta: {
                                 name: "统计周报",
                                 icon: "Histogram",
-                                roles: ['admin'],
+                                roles: [1, 2],
                             },
                         },
                         {
@@ -68,7 +68,7 @@ const router = createRouter({
                             meta: {
                                 name: "我的周报",
                                 icon: "UserFilled",
-                                roles: ['admin', 'common'],
+                                roles: [0, 1, 2],
                             }
                         },
                         {
@@ -78,7 +78,7 @@ const router = createRouter({
                             meta: {
                                 name: "测试专用",
                                 icon: "SwitchFilled",
-                                roles: ['admin', 'common'],
+                                roles: [0,1,2],
                             }
                         },
                     ]
@@ -90,7 +90,7 @@ const router = createRouter({
                     meta: {
                         name: "意见板",
                         icon: "ChatLineRound",
-                        roles: ['admin', 'common'],
+                        roles:[0, 1, 2],
                     }
                 },
                 {
@@ -100,7 +100,7 @@ const router = createRouter({
                     meta: {
                         name: "个人中心",
                         icon: "User",
-                        roles: ['admin', 'common'],
+                        roles:[0, 1, 2],
                     }
                 },
                 {
@@ -110,7 +110,7 @@ const router = createRouter({
                     meta: {
                         name: "功能域",
                         icon: "MagicStick",
-                        roles: ['admin', 'common'],
+                        roles: [0, 1, 2],
                     }
                 },
             ]
@@ -121,7 +121,7 @@ const router = createRouter({
             hide: true,
             component: () => import('@/views/login/index.vue'),
             meta: {
-                roles: ['admin', 'common']
+                roles: [0, 1, 2]
             }
         },
 
@@ -134,8 +134,6 @@ const router = createRouter({
     },
 })
 
-//假设通过接口从后台获取的用户角色，可以存储在token中
-const role = 'admin';
 const tagsviewStore = useTagsViewStore(pinia)
 router.beforeEach((to,from,next)=>{
     // //验证token，只有存在token的时候，才能跳转到内容页
@@ -149,7 +147,8 @@ router.beforeEach((to,from,next)=>{
     {
         if (token)
         {
-            if (to.meta.roles.includes(role))
+            let userinfo = Session.get('userInfo')
+            if (userinfo && to.meta.roles.includes(userinfo.identityId))
             {
                 next()	//放行
             }

@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, reactive, onMounted, nextTick, watch} from "vue";
+import {ref, reactive, onMounted} from "vue";
 import {Session} from '@/utils/storage'
 import {validatePassword} from "@/utils/validate";
 import {ElMessage, ElMessageBox} from "element-plus";
@@ -86,11 +86,13 @@ const headers = ref({
   token: `Bearer ${Session.get('token')}`,
 })
 
-const onSuccess = () => {
-  userStore.refreshUserInfo()
-  //这里不知道怎么办 刷新一下吧
-  window.location.reload()
+//头像替换成功
+const onSuccess = async () => {
+  await userStore.refreshUserInfo()
+  userInfo.value = Session.get('userInfo')
+  imageUrl.value = userInfo.value.image;
 }
+
 
 // 定义变量内容
 const state = reactive({

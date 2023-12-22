@@ -8,6 +8,7 @@
 <script setup>
 import {reactive, ref, watch, computed, onMounted} from "vue";
 import Asideitem from "./asideitem.vue";
+import { Session } from '@/utils/storage';
 import {useRouter, useRoute} from "vue-router";
 import {useThemeConfigStore} from "@/stores/themeConfig";
 
@@ -18,12 +19,14 @@ const themeConfig = computed(() => {
 const router = useRouter();
 const route = useRoute();
 const routers = reactive(router.options.routes);
+const level= ref(0);
 
 const asideState = ref({
   isCollapse: false,
 })
 
 onMounted( () => {
+  level.value = Session.get('userInfo').identityId;
 })
 
 //监听左侧是否折叠
@@ -66,16 +69,15 @@ const setCollapseStyle = computed( () => {
                :default-active="route.path"
                :collapse="asideState.isCollapse">
         <template v-for="item in arrlist">
-          <el-sub-menu v-if="item.children && item.children.length > 0" :index="item.path">
+          <el-sub-menu v-if="item.children && item.children.length > 0 && item.meta.roles.includes(level)" :index="item.path">
             <template #title>
               <Icon :name="item.meta.icon"/>
               <span> {{ item.meta.name }} </span>
-
             </template>
             <Asideitem :chil="item.children"/>
           </el-sub-menu>
 
-          <template v-else>
+          <template v-else-if = "item.meta.roles.includes(level)">
             <el-menu-item :index="item.path">
               <Icon :name="item.meta.icon"/>
               <span> {{ item.meta.name }} </span>
