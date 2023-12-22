@@ -10,40 +10,64 @@ const props = defineProps({
   },
   content: {
     type: String
+  },
+  time: {
+    type: Date
   }
 })
 
-const now = computed(() => {
-      return new Date().toLocaleString()
-    }
-)
 </script>
 
 <template>
-  <div class="comment-container pl10">
-    <div class="comment-header">
-      <el-avatar size="small" :src="image"/>
-      <div class="ml10"> 名称{{ nickName }}</div>
+  <div class="comment-container">
+    <div class="comment-aside">
+      <el-avatar class="comment-aside-image" :size="80" shape="square" :src="image"/>
+      <div class="comment-aside-name" style="text-align: center"> {{ nickName }}</div>
     </div>
     <div class="comment-body">
-      正文内容{{ content }}
-    </div>
-    <div class="comment-footer">
-      {{ now }}
+      <div class="comment-body-text">{{ content }}</div>
+      <div class="comment-body-time">{{ time }}</div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .comment-container {
+  display: flex;
   border-radius: 4px;
   border: 1px solid var(--vl-border-color-light);
 }
 
-.comment-header {
+.comment-aside {
+  margin: 10px 0;
+  height: 100px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 }
-.comment-body{
-  height: 80px;
+
+.comment-aside-name {
+  margin: 5px;
 }
+
+.comment-body {
+  padding: 10px;
+  border-left: 1px solid var(--vl-border-color-light);
+  flex: 4;
+  display: block;
+}
+
+.comment-body-text {
+  font-size: 17px;
+  font-family: 黑体;
+  min-height: 80px;
+}
+
+.comment-body-time {
+  color: #cccccc;
+  text-align: end;
+}
+
 </style>

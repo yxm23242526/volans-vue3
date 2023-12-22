@@ -11,15 +11,15 @@ import request from '@/utils/request'
  * @description
  * @returns
  */
-export const getAllComments = () => {
+export const getAllCommentsAPI = () => {
     return request({
-        url: '/comment/getAllComments,',
+        url: '/comment/getAllComments',
         method: 'GET',
     })
 }
-export const insertComment = (data) => {
+export const insertCommentAPI = (data) => {
     return request({
-        url: '/comment/addComment,',
+        url: '/comment/addComment',
         method: 'POST',
         data
     })

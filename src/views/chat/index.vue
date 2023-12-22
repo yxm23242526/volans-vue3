@@ -2,10 +2,10 @@
   <div class="layout-waterfall">
     <div class="layout-comment-container layout-pd">
       <el-card shadow="hover" header="留言">
-        <el-scrollbar>
-          <div v-for="(comment, index) in comments" :key="index" class="comment-text comment-item">
-            <Comment :nickName="comment.nickName"
-                     :content="comment.content" :image="comment.image"/>
+        <el-scrollbar height="730px">
+          <div v-for="(comment, commentId) in comments" :key="commentId" class="comment-text">
+            <Comment :nickName="comment.nickName == null ? comment.userId :comment.nickName"
+                     :content="comment.commentContent" :image="comment.image" :time = "comment.commentTime"/>
           </div>
         </el-scrollbar>
       </el-card>
@@ -13,9 +13,9 @@
     <div class="layout-waterfall-comment layout-pd">
       <el-card header="发送留言">
         <el-input :rows="5" autosize type="textarea"
-                  v-model="inputComment" placeholder="请输入评论">
+                  v-model="commentContent" placeholder="请输入评论">
         </el-input>
-        <el-button class="mt15" type="primary" @click="onComment"> 评论</el-button>
+        <el-button class="mt15" type="primary" @click="onComment(addCommentInfo)"> 评论</el-button>
       </el-card>
     </div>
   </div>
@@ -24,25 +24,28 @@
 
 <script setup lang="ts">
 import {ref, onMounted} from 'vue'
-import {useCommentStore} from '@/stores/comment'
 import {Session} from '@/utils/storage'
 import {ElMessage, ElMessageBox} from "element-plus";
+import {getAllCommentsAPI, insertCommentAPI} from '@/apis/comment'
 
-const inputComment = ref('')
-const commentStore = useCommentStore()
+const commentContent = ref('')
 const comments = ref([])
 const userInfo = Session.get('userInfo');
+const addCommentInfo = ref({
+  'userId' : userInfo.userId,
+  'commentContent' : commentContent,
+  'commentTime' : new Date().toLocaleString()
+})
 const getAllComments = async () => {
-  const res = await commentStore.getComments;
-  comments.value = res.data;
+  comments.value = (await getAllCommentsAPI()).data;
 }
 
 onMounted(() => {
   getAllComments();
 })
 
-const onComment = () => {
-  if (inputComment.value === '') {
+const onComment = (addCommentInfo) => {
+  if (addCommentInfo.commentContent === '') {
     ElMessage.error('输入内容不能为空')
   } else {
     ElMessageBox.confirm(
@@ -56,11 +59,8 @@ const onComment = () => {
     ).then(async () => {
       const nickName = userInfo.nickName;
       const image = userInfo.image;
-      await commentStore.addComment({
-        inputComment,
-        nickName,
-        image,
-      })
+      await (insertCommentAPI(addCommentInfo))
+      getAllComments()
       ElMessage({
         type: 'success',
         message: '提交成功',
@@ -69,8 +69,6 @@ const onComment = () => {
       //什么都不做
     })
   }
-
-  getAllComments()
 }
 </script>
 
