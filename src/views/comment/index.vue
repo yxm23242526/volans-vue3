@@ -1,24 +1,22 @@
 <template>
-  <div class="layout-waterfall">
-    <div class="layout-comment-container layout-pd">
-      <el-card shadow="hover" header="留言">
-        <el-scrollbar height="730px">
-          <div v-for="(comment, commentId) in comments" :key="commentId" class="comment-text">
-            <Comment :nickName="comment.nickName == null ? comment.userId :comment.nickName"
-                     :content="comment.commentContent" :image="comment.image" :time = "comment.commentTime"/>
-          </div>
-        </el-scrollbar>
-      </el-card>
+    <div class="layout-waterfall">
+        <el-card shadow="hover" header="留言" class="layout-comment-container">
+          <el-scrollbar>
+            <div v-for="(comment, commentId) in comments" :key="commentId" class="comment-text">
+              <Comment :nickName="comment.nickName == null ? comment.userId :comment.nickName"
+                       :content="comment.commentContent" :image="comment.image" :time = "comment.commentTime"/>
+            </div>
+          </el-scrollbar>
+        </el-card>
+      <div class="layout-waterfall-comment pl15">
+        <el-card header="发送留言">
+          <el-input :rows="5" autosize type="textarea"
+                    v-model="commentContent" placeholder="请输入评论">
+          </el-input>
+          <el-button class="mt15" type="primary" @click="onComment(addCommentInfo)"> 评论</el-button>
+        </el-card>
+      </div>
     </div>
-    <div class="layout-waterfall-comment layout-pd">
-      <el-card header="发送留言">
-        <el-input :rows="5" autosize type="textarea"
-                  v-model="commentContent" placeholder="请输入评论">
-        </el-input>
-        <el-button class="mt15" type="primary" @click="onComment(addCommentInfo)"> 评论</el-button>
-      </el-card>
-    </div>
-  </div>
 
 </template>
 
@@ -75,7 +73,7 @@ const onComment = (addCommentInfo) => {
 <style scoped lang="scss">
 .layout-waterfall {
   display: flex;
-
+  height: 100%;
   &-comment {
     flex: 1;
   }
@@ -87,9 +85,6 @@ const onComment = (addCommentInfo) => {
 
 .comment-text {
   font-size: 14px;
-}
-
-.comment-text {
   margin-bottom: 18px;
   border-bottom: 1px solid var(--el-card-border-color);
 }

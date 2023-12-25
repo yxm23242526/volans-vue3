@@ -84,9 +84,9 @@ const router = createRouter({
                     ]
                 },
                 {
-                    path: '/chat',
-                    name: 'chat',
-                    component: () => import('@/views/chat/index.vue'),
+                    path: '/comment',
+                    name: 'comment',
+                    component: () => import('@/views/comment/index.vue'),
                     meta: {
                         name: "意见板",
                         icon: "ChatLineRound",

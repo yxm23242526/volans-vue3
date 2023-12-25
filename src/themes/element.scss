@@ -73,3 +73,7 @@
 .layout-container-view .el-scrollbar__view {
 	height: 100%;
 }
+
+.el-scrollbar__bar {
+	z-index: 4;
+}

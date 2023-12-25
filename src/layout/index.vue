@@ -10,7 +10,7 @@ import LayoutMain from '@/layout/components/main.vue'
   <!-- 且跳转至首页-->
   <el-container class="layout-container">
     <LayoutAside />
-    <el-container class="layout-main">
+    <el-container class="layout-container-view h100">
       <el-scrollbar>
         <LayoutHeader/>
         <LayoutMain/>

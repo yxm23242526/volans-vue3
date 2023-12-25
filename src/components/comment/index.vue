@@ -1,5 +1,4 @@
 <script setup>
-import {ref, computed} from 'vue'
 
 const props = defineProps({
   image: {
@@ -22,11 +21,11 @@ const props = defineProps({
   <div class="comment-container">
     <div class="comment-aside">
       <el-avatar class="comment-aside-image" :size="80" shape="square" :src="image"/>
-      <div class="comment-aside-name" style="text-align: center"> {{ nickName }}</div>
+      <div class="comment-aside-name" style="text-align: center"> {{ props.nickName }}</div>
     </div>
     <div class="comment-body">
-      <div class="comment-body-text">{{ content }}</div>
-      <div class="comment-body-time">{{ time }}</div>
+      <div class="comment-body-text">{{ props.content }}</div>
+      <div class="comment-body-time">{{ props.time }}</div>
     </div>
   </div>
 </template>

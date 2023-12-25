@@ -1,14 +1,6 @@
 <template>
   <div class="layout-padding">
-    <div class="weekreport-mwr layout-padding-view">
-<!--      <div class="weekreport-wrapper">-->
-<!--        <el-button @click="isExpand = !isExpand">-->
-<!--          {{ isExpand ? '收起' : '全部展开' }}-->
-<!--          <template #icon>-->
-<!--            <Icon :name="isExpand ? 'ArrowUp' : 'ArrowDown'" />-->
-<!--          </template>-->
-<!--        </el-button>-->
-<!--      </div>-->
+    <div class="layout-padding-view layout-padding-auto">
       <el-table :data="weekReportData" style="width: 100%" >
         <el-table-column prop="year" label="年份" width="150" />
         <el-table-column prop="name" label="期间" />
@@ -147,28 +139,5 @@ const onEdit = (rowIndex) => {
 
 
 <style lang="scss">
-.weekreport {
-  &-mwr {
-    padding: 20px;
-  }
 
-  &-date {
-    color: var(--vl-text-main-color);
-  }
-
-  &-row {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &-wrapper {
-    display: flex;
-    justify-content: end;
-  }
-
-  &-option {
-    display: flex;
-    flex-direction: row;
-  }
-}
 </style>
