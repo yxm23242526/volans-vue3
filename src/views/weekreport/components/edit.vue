@@ -243,7 +243,6 @@ watch(() => route, () => {
   if (taskId) {
     inituserinfo(taskId);
     initprojectarrary();
-    console.log(formdata)
     initdatearrary(formdata.starttime, formdata.endtime);
   }
 }, {

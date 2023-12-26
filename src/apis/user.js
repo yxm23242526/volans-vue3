@@ -41,3 +41,15 @@ export const refreshUserInfoAPI = () => {
         url: '/user/refreshUserInfo',
     })
 }
+
+
+export const uploadImageAPI = (data) => {
+    return request({
+        url: '/user/img',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        data
+    })
+}

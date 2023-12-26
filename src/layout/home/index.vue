@@ -17,7 +17,7 @@
 		<el-card shadow="hover" header="未来可期" class="mt15">
 			<NoticeBar :scrollable="true">
 				<el-carousel height="40px" direction="vertical" :autoplay="true" indicator-position="none" :interval="3000">
-					<el-carousel-item v-for="v in state.noticeList" :key="v">{{ v }} </el-carousel-item>
+					<el-carousel-item v-for="v in state.noticeList" :key="v" >{{ v }} </el-carousel-item>
 				</el-carousel>
 			</NoticeBar>
 		</el-card>

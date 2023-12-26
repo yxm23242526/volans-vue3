@@ -8,7 +8,7 @@
 
 import { defineStore } from "pinia";
 import { ref } from 'vue';
-import { loginAPI, updateInfoAPI, refreshUserInfoAPI } from '@/apis/user'
+import { loginAPI, updateInfoAPI, refreshUserInfoAPI, uploadImageAPI} from '@/apis/user'
 import { Session } from "@/utils/storage";
 
 export const useUserStore = defineStore('user', () => {
@@ -44,6 +44,11 @@ export const useUserStore = defineStore('user', () => {
         Session.set('userInfo', userInfo.value)
     }
     
+    
+    //更新个人头像
+    const uploadUserImage = async(data) => {
+        return await uploadImageAPI(data);
+    }
     //3. 返回action
     return {
         userInfo,
@@ -51,5 +56,6 @@ export const useUserStore = defineStore('user', () => {
         updateUserInfo,
         clearUserInfo,
         refreshUserInfo,
+        uploadUserImage
     }
 })

@@ -86,20 +86,27 @@ const headers = ref({
   token: `Bearer ${Session.get('token')}`,
 })
 
-//头像替换成功
-const onSuccess = async () => {
-  await userStore.refreshUserInfo()
-  userInfo.value = Session.get('userInfo')
-  imageUrl.value = userInfo.value.image;
+
+//更新头像
+const uploadImage = async (params) => {
+  const formData = new FormData();
+  formData.append('file',params.file)
+  const res = await userStore.uploadUserImage(formData)
+  if (res.code === 200)//头像替换成功
+  {
+    await userStore.refreshUserInfo()
+    userInfo.value = Session.get('userInfo')
+    imageUrl.value = userInfo.value.image;
+  }
 }
 
 
 // 定义变量内容
 const state = reactive({
   noticeList: [
-    '✋有好的idea请告诉我✋',
-    '😭不知道这里还能放什么所以放个滚动消息栏😭',
-    '😕并且这里页面缩小后没有scrollbar😕',
+    '✋广告位招租✋',
+    '😭广告位招租😭',
+    '😕广告位招租😕',
   ],
 });
 </script>
@@ -165,15 +172,15 @@ const state = reactive({
             </el-col>
             <el-col class="personal-user-item-content" :span="8"> {{ userInfo.groupId }}</el-col>
           </el-row>
-          <el-row>
-            <el-col class="personal-user-item" :span="8">
-              <div>
-                <Icon name="MagicStick"/>
-              </div>
-              <div>功能域：</div>
-            </el-col>
-            <el-col class="personal-user-item-content" :span="13"> 功能域1、功能域2、功能域3、功能域4、功能域5等</el-col>
-          </el-row>
+<!--          <el-row>-->
+<!--            <el-col class="personal-user-item" :span="8">-->
+<!--              <div>-->
+<!--                <Icon name="MagicStick"/>-->
+<!--              </div>-->
+<!--              <div>功能域：</div>-->
+<!--            </el-col>-->
+<!--            <el-col class="personal-user-item-content" :span="13"> 功能域1、功能域2、功能域3、功能域4、功能域5等</el-col>-->
+<!--          </el-row>-->
         </el-card>
       </el-col>
 
@@ -219,11 +226,10 @@ const state = reactive({
               <el-tab-pane label="头像" name="photo">
                 <div style="text-align: center;">
                   <el-upload
-                      action="http://192.168.0.100:10001/user/img"
-                      :headers="headers"
+                      action=""
+                      :limit="1"
                       :show-file-list="false"
-                      method="POST"
-                      :on-success="onSuccess"
+                      :http-request="uploadImage"
                   >
                     <img title="点击修改用户头像" :src="userInfo.image"
                          style="height: 200px; width: 200px; border-radius: 50px;">
