@@ -4,12 +4,16 @@
 
 #### 💒 代码仓库
 
--  [yxm的Gitee版本](https://gitee.com/yxmloveslife/volans.git) 
-- [bitbucket版本](https://yxm980918@bitbucket.org/yozofather/volans-vue.git)
+-  [开源的Gitee版本/纯前端](https://gitee.com/yxmloveslife/volans.git) 
+- [后端地址暂无]()
 
 #### 📚 开发文档
 
 - [查看开发文档](https://yxm980918@bitbucket.org/yozofather/volans-doc.git)
+
+#### 💝 参考项目
+
+- [查看地址](https://gitee.com/lyt-top/vue-next-admin.git)
 
 ```bash
 # 进入项目
