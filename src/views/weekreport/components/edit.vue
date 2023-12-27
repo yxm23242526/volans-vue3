@@ -3,6 +3,7 @@ import { reactive, watch, ref, computed } from 'vue';
 import { submit, getProject } from '@/apis/edit';
 import { comparedate, calcuatedate, mult, formatdate } from '@/utils/datetimeUtils';
 import { useRoute } from "vue-router";
+import { useTagsViewStore } from '@/stores/tags'
 import { Session } from '@/utils/storage';
 
 const route = useRoute();
@@ -176,7 +177,6 @@ const checktabel = () => {
     return false;
   }
   if (tableData.length == 1) {
-    alert("success");
     return true
   }
   let temp = {};
@@ -223,7 +223,9 @@ const onsubmit = async () => {
   if (checktabel()) {
     const data = await submit(tableData, 2);
     if (data.code === 200) {
-      alert("success")
+        const tagsViewStore = useTagsViewStore()
+        tagsViewStore.removeState(route.path, route.path)
+        tagsViewStore.gotoPage(`/myWeekreport`)
     }
     else {
       alert("error")
