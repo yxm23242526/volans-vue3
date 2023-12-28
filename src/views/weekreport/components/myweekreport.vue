@@ -29,12 +29,12 @@
       </el-table>
       <WeekReportPrview ref="previewObj" :reportName="previewData.reportName" :isshow="previewData.isshow"/>
       <!-- 分页组件 -->
-      <el-row class="mt15 ml5" v-if="isExpand">
+      <el-row class="mt15 ml15" v-if="isExpand">
         <el-pagination :page-size="pageParams.pagesize" :current-page="pageParams.page" :total="pageParams.total"
           @current-change="changePage" layout="total, prev, pager, next">
         </el-pagination>
       </el-row>
-      <el-row class="mt15 ml5" v-else>
+      <el-row class="mt15 ml15" v-else>
         <div class="weekreport-date">
           <!-- 这个以后再做 没想好怎么展示-->
           <p> {{ weekReportData[0]?.year }} 年 12 月</p>

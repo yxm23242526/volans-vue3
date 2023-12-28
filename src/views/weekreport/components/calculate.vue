@@ -1,6 +1,7 @@
 <script setup>
 import {ref, reactive, onMounted, watch} from 'vue'
-import {getProjectList, getUserList, exportResult, query} from "@/apis/report";
+import {getUserList, exportResult, query} from "@/apis/report";
+import {getProjectsAPI} from "@/apis/project";
 
 let projectList = ref('')
 let userList = ref('')
@@ -30,7 +31,7 @@ function clearResult() {
 
 onMounted(async () => {
   userList.value = (await getUserList()).data
-  projectList.value = (await getProjectList()).data
+  projectList.value = (await getProjectsAPI()).data
 
 })
 

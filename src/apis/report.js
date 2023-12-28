@@ -22,12 +22,6 @@ export const getUserList = () => {
     })
 }
 
-export const getProjectList = () => {
-    return request({
-        url: '/project/list',
-    })
-}
-
 export const getFieldList = () => {
     return request({
         url: '/weekreport/fieldList',

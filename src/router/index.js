@@ -23,7 +23,6 @@ const router = createRouter({
             children: [
                 {
                     path: '/home',
-                    name: 'home',
                     component: () => import('@/layout/home/index.vue'),
                     meta: {
                         name: "首页",
@@ -42,7 +41,6 @@ const router = createRouter({
                     children: [
                         {
                             path: '/:id',
-                            name: 'edit',
                             ishide: true,
                             component: () => import('@/views/weekreport/components/edit.vue'),
                             meta: {
@@ -53,7 +51,6 @@ const router = createRouter({
                         },
                         {
                             path: '/calculate',
-                            name: 'calculate',
                             component: () => import('@/views/weekreport/components/calculate.vue'),
                             meta: {
                                 name: "统计周报",
@@ -63,7 +60,6 @@ const router = createRouter({
                         },
                         {
                             path: '/myWeekreport',
-                            name: 'myWeekreport',
                             component: () => import('@/views/weekreport/components/myweekreport.vue'),
                             meta: {
                                 name: "我的周报",
@@ -73,7 +69,6 @@ const router = createRouter({
                         },
                         {
                             path: '/TESTDEMO/:id',
-                            name: 'TESTDEMO',
                             component: () => import('@/views/TESTDEMO/index.vue'),
                             meta: {
                                 name: "测试专用",
@@ -84,8 +79,35 @@ const router = createRouter({
                     ]
                 },
                 {
+                    path: '/system',
+                    meta: {
+                        name: "系统管理",
+                        icon: "Menu",
+                        roles:[1, 2],
+                    },
+                    children: [
+                        {
+                            path: '/system/role',
+                            component: () => import('@/views/system/role/index.vue'),
+                            meta: {
+                                name: "角色管理",
+                                icon: "UserFilled",
+                                roles: [1, 2],
+                            }
+                        },
+                        {
+                            path: '/system/project',
+                            component: () => import('@/views/system/project/index.vue'),
+                            meta: {
+                                name: "项目管理",
+                                icon: "List",
+                                roles: [1, 2],
+                            }
+                        },
+                    ]
+                },
+                {
                     path: '/comment',
-                    name: 'comment',
                     component: () => import('@/views/comment/index.vue'),
                     meta: {
                         name: "意见板",
@@ -95,7 +117,6 @@ const router = createRouter({
                 },
                 {
                     path: '/personal',
-                    name: 'personal',
                     component: () => import('@/views/personal/index.vue'),
                     meta: {
                         name: "个人中心",
@@ -105,7 +126,6 @@ const router = createRouter({
                 },
                 {
                     path: '/domain',
-                    name: 'domain',
                     component: () => import('@/views/domain/index.vue'),
                     meta: {
                         name: "功能域",

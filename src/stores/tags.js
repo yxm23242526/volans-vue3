@@ -68,11 +68,16 @@ export const useTagsViewStore = defineStore('tagsView', () => {
         router.push({path: newPath})
     }
     
+    
+    const clearState = () => {
+        tagsviewState.value = [];
+    }
     return {
         tagsviewState,
         initState,
         addState,
         removeState,
-        gotoPage
+        gotoPage,
+        clearState,
     }
 })

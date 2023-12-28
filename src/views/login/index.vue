@@ -3,8 +3,10 @@ import { ref, reactive } from 'vue'
 import { validateAccount, validatePassword } from '@/utils/validate'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
+import { useTagsViewStore } from "@/stores/tags";
 import { useRouter } from 'vue-router'
 const router = useRouter()
+const tagsViewState = useTagsViewStore()
 //自定义校验账户规则
 const validate_account_rules = (rule, value, callback) => {
     if (validateAccount(value)) {
@@ -55,6 +57,7 @@ const doLogin = () => {
             //使用router.push方法导航到不同的 URL。这个方法会向history栈添加一个新的记录，所以，当用户点击浏览器后退按钮时，会回到之前的 URL。
             //使用router.replace方法导航到不同的 URL。这个方法会在history栈替换历史记录。
             router.replace({ path: '/' })
+            tagsViewState.clearState()
         }
     })
 }
