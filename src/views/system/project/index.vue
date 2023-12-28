@@ -9,25 +9,13 @@ const activeProject = ref([])
 //用于搜索框的响应式数组对象
 const projectList = ref([])
 
-
 const projectProps = {
   label: 'projectName',
   value: 'projectId',
 }
 
-
-//用于多选框的响应式数组对象
-const checkedProjectList = ref([])
-
-const getProjectList = async () => {
-  const res = await getProjectsAPI()
-  projectList.value = res.data
-}
-
-
 onMounted(async () => {
-  await getProjectList()
-  checkedProjectList.value = [];
+  projectList.value = (await getProjectsAPI()).data
 })
 
 //激活搜索框中项目
@@ -46,9 +34,10 @@ const mutipleSelection = ref([])
 const handleSelectionChange = (value) => {
   mutipleSelection.value = value;
 }
+
 //删除选中的项目条
 const onRemove = () => {
-  if (mutipleSelection.value.length === 0){
+  if (mutipleSelection.value.length === 0) {
     ElMessage({type: 'info', message: '没有任何选中'})
     return;
   }
@@ -75,7 +64,8 @@ const onRemove = () => {
     }, 1000)
     //重新获取数据
     await getProjectList()
-  }).catch((action) => {})
+  }).catch((action) => {
+  })
 }
 
 const previewObj = ref(null)

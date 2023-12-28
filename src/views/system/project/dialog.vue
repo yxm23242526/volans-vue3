@@ -1,7 +1,8 @@
 <script setup>
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {addProjectAPI, updateProjectAPI} from "@/apis/project";
+import {getUserList} from "@/apis/report";
 
 const state = reactive({
   projectData: {
@@ -17,12 +18,19 @@ const state = reactive({
   }
 })
 const emit = defineEmits(['onUpdate'])
+
 //所有用户 TODO
-const users = [];
+const users = ref([]);
+const userProps = {
+  label: 'userName',
+  value: 'userId',
+}
 
 //打开弹窗
-const onOpenDialog = (type, data) => {
-  state.projectData = data;
+const onOpenDialog = async (type, data) => {
+  const temp = reactive(JSON.parse(JSON.stringify(data)))
+  users.value = (await getUserList()).data
+  state.projectData = temp;
   //编辑项目
   if (type === 'edit'){
 
@@ -71,13 +79,24 @@ defineExpose({
 
 <template>
   <div>
-    <el-dialog v-model="state.dialog.isShow" @close="onCloseDialog" :title="state.dialog.title">
+    <el-dialog v-model="state.dialog.isShow" @close="onCloseDialog" :title="state.dialog.title" :close-on-click-modal="false">
         <el-form label-position="left" label-width="100px">
           <el-form-item label="项目名称">
             <el-input style="width: 300px" v-model="state.projectData.projectName" placeholder="添加项目名称" clearable />
           </el-form-item>
           <el-form-item label="项目负责人">
-            <el-input style="width: 240px" v-model="state.projectData.projectLeader" placeholder="添加项目负责人" clearable />
+            <el-select
+                v-model="state.projectData.projectLeader"
+                style="width: 300px;"
+                clearable
+            >
+              <el-option
+                 v-for="item in users"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              />
+            </el-select>
           </el-form-item>
           <el-form-item label="项目时间">
             <el-date-picker
@@ -89,19 +108,15 @@ defineExpose({
             />
           </el-form-item>
           <el-form-item label="项目参与者">
-            <el-select
+            <el-select-v2
                 v-model="state.projectData.projectPartner"
+                :options="users"
+                :props="userProps"
+                style="width: 300px;"
                 multiple
-                placeholder="Select"
-                style="width: 240px"
-            >
-              <el-option
-                  v-for="item in users"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
+                filterable
+                clearable>
+            </el-select-v2>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">提交</el-button>
