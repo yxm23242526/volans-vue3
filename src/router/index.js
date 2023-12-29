@@ -154,7 +154,6 @@ const router = createRouter({
     },
 })
 
-const tagsviewStore = useTagsViewStore(pinia)
 router.beforeEach((to,from,next)=>{
     // //验证token，只有存在token的时候，才能跳转到内容页
     let token = Session.get('token')

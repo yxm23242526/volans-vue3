@@ -4,7 +4,9 @@
 <template>
 <!--首页-->
     <el-main class="layout-main layout-main-h">
-      <el-scrollbar>
+      <el-scrollbar class="layout-main-scroll"
+                    wrap-class="layout-main-scroll"
+                    view-class="layout-main-scroll">
         <div class="layout-parent">
           <RouterView class="w100"/>
         </div>

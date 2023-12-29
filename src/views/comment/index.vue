@@ -1,22 +1,23 @@
 <template>
-    <div class="layout-waterfall">
-        <el-card shadow="hover" header="留言" class="layout-comment-container">
-          <el-scrollbar>
-            <div v-for="(comment, commentId) in comments" :key="commentId" class="comment-text">
-              <Comment :nickName="comment.nickName == null ? comment.userId :comment.nickName"
-                       :content="comment.commentContent" :image="comment.image" :time = "comment.commentTime"/>
-            </div>
-          </el-scrollbar>
-        </el-card>
-      <div class="layout-waterfall-comment pl15">
-        <el-card header="发送留言">
-          <el-input :rows="5" autosize type="textarea"
-                    v-model="commentContent" placeholder="请输入评论">
-          </el-input>
-          <el-button class="mt15" type="primary" @click="onComment(addCommentInfo)"> 评论</el-button>
-        </el-card>
-      </div>
+  <div class="layout-comment layout-pd">
+    <el-card shadow="hover" header="留言" class="layout-comment-container"
+    body-style="flex: 1">
+      <el-scrollbar>
+        <div v-for="(comment, commentId) in comments" :key="commentId" class="comment-text">
+          <Comment :nickName="comment.nickName == null ? comment.userId :comment.nickName"
+                   :content="comment.commentContent" :image="comment.image" :time="comment.commentTime"/>
+        </div>
+      </el-scrollbar>
+    </el-card>
+    <div class="layout-comment-submit pl15">
+      <el-card header="发送留言" shadow="never">
+        <el-input :rows="5" autosize type="textarea"
+                  v-model="commentContent" placeholder="请输入评论">
+        </el-input>
+        <el-button class="mt15" type="primary" @click="onComment(addCommentInfo)"> 评论</el-button>
+      </el-card>
     </div>
+  </div>
 
 </template>
 
@@ -30,9 +31,9 @@ const commentContent = ref('')
 const comments = ref([])
 const userInfo = Session.get('userInfo');
 const addCommentInfo = ref({
-  'userId' : userInfo.userId,
-  'commentContent' : commentContent,
-  'commentTime' : new Date().toLocaleString()
+  'userId': userInfo.userId,
+  'commentContent': commentContent,
+  'commentTime': new Date().toLocaleString()
 })
 const getAllComments = async () => {
   comments.value = (await getAllCommentsAPI()).data;
@@ -71,19 +72,24 @@ const onComment = (addCommentInfo) => {
 </script>
 
 <style scoped lang="scss">
-.layout-waterfall {
-  display: flex;
+.layout-comment {
+  position: absolute;
   height: 100%;
-  &-comment {
-    flex: 1;
+  display: flex;
+  flex: 1;
+  .layout-comment-container{
+    display: flex;
+    flex:3;
+    height: inherit;
+  }
+  .layout-comment-submit{
+    flex:1;
   }
 }
 
-.layout-comment-container {
-  flex: 3;
-}
 
 .comment-text {
+  flex:1;
   font-size: 14px;
   margin-bottom: 18px;
   border-bottom: 1px solid var(--el-card-border-color);
