@@ -4,6 +4,7 @@ import { submit, getProject } from '@/apis/edit';
 import { comparedate, calcuatedate, mult, formatdate } from '@/utils/datetimeUtils';
 import { useRoute } from "vue-router";
 import { useTagsViewStore } from '@/stores/tags'
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { Session } from '@/utils/storage';
 
 const route = useRoute();
@@ -161,19 +162,31 @@ const checkdataarrary = () => {
 
 const checktabel = () => {
   if (tableData.length == 0) {
-    alert("没有数据");
+    ElMessage({
+            message: '没有数据',
+            type: 'warning',
+          })
     return false;
   }
   if (!tableData[0].projectId || tableData[0].projectId <= 0) {
-    alert("项目id");
+    ElMessage({
+            message: '项目id为空',
+            type: 'warning',
+          })
     return false;
   }
   if (!tableData[0].workContent || tableData[0].workContent === '') {
-    alert("工作内容");
+    ElMessage({
+            message: '工作内容为空',
+            type: 'warning',
+          })
     return false;
   }
   if (!tableData[0].workTime || tableData[0].workTime === '') {
-    alert("工时");
+    ElMessage({
+            message: '工时为空',
+            type: 'warning',
+          })
     return false;
   }
   if (tableData.length == 1) {
@@ -183,22 +196,34 @@ const checktabel = () => {
   temp[tableData[0].projectId] = 1;
   for (let i = 1; i < tableData.length; i++) {
     if (!tableData[i].projectId || tableData[i].projectId <= 0) {
-      alert("项目id");
+      ElMessage({
+            message: '项目id为空',
+            type: 'warning',
+          })
       return false;
     }
     if (!tableData[i].workContent || tableData[i].workContent === '') {
-      alert("工作内容");
+      ElMessage({
+            message: '工作内容为空',
+            type: 'warning',
+          })
       return false;
     }
     if (!tableData[i].workTime || tableData[i].workTime === '') {
-      alert("工时");
+      ElMessage({
+            message: '工时为空',
+            type: 'warning',
+          })
       return false;
     }
     if (tableData[i].date != tableData[i - 1].date) {
       temp = {}
     }
     if (temp[tableData[i].projectId]) {
-      alert("重复项");
+      ElMessage({
+            message: '某天有重复项目',
+            type: 'warning',
+          })
       return false;
     } else {
       temp[tableData[i].projectId] = 1;
@@ -207,32 +232,71 @@ const checktabel = () => {
   return true;
 }
 
-const save = async () => {
-  if (checktabel()) {
-    const data = await submit(tableData, 0);
-    if (data.code === 200) {
-      alert("success")
+const save = () => {
+  ElMessageBox.confirm(
+    '保存周报， 是否继续？',
+    '提示',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
     }
-    else {
-      alert("error")
+  )
+    .then(async () => {
+      if (checktabel()) {
+        const data = await submit(tableData, 0);
+        if (data.code === 200) {
+          ElMessage({
+            message: '保存成功',
+            type: 'success',
+          })
+          const tagsViewStore = useTagsViewStore()
+          tagsViewStore.removeState(route.path, route.path)
+          tagsViewStore.gotoPage(`/myWeekreport`)
+        }
+        else {
+          ElMessage.error('保存失败')
+        }
+      }
     }
-  }
+    ).catch(() => {
+      //什么都不做
+    })
 }
 
-const onsubmit = async () => {
-  if (checktabel()) {
-    const data = await submit(tableData, 2);
-    if (data.code === 200) {
-        const tagsViewStore = useTagsViewStore()
-        tagsViewStore.removeState(route.path, route.path)
-        tagsViewStore.gotoPage(`/myWeekreport`)
-    }
-    else {
-      alert("error")
-    }
-  }
-}
 
+//操作栏弹框
+const onsubmit = () => {
+  ElMessageBox.confirm(
+    '提交周报， 是否继续？',
+    '提示',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(async () => {
+      if (checktabel()) {
+        const data = await submit(tableData, 2);
+        if (data.code === 200) {
+          ElMessage({
+            message: '提交成功',
+            type: 'success',
+          })
+          const tagsViewStore = useTagsViewStore()
+          tagsViewStore.removeState(route.path, route.path)
+          tagsViewStore.gotoPage(`/myWeekreport`)
+        }
+        else {
+          ElMessage.error('提交失败')
+        }
+      }
+    }
+    ).catch(() => {
+      //什么都不做
+    })
+}
 
 //检测表格数据更新合并单元格数组
 watch(tableData, () => {
