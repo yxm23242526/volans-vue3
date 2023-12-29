@@ -34,7 +34,7 @@ export const removeProjectAPI = (data) => {
  */
 export const addProjectAPI = (data) => {
     return request({
-        url: '/project/addProjects',
+        url: '/project/addProject',
         method: 'POST',
         data
     })
@@ -46,7 +46,7 @@ export const addProjectAPI = (data) => {
  */
 export const updateProjectAPI = (data) => {
     return request({
-        url: '/project/updateProjects',
+        url: '/project/update/' + data.projectId,
         method: 'POST',
         data
     })

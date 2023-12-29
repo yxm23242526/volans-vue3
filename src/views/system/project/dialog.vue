@@ -59,7 +59,7 @@ const onSubmit = () => {
       },
   ).then(async () => {
     state.dialog.title === '编辑项目' ?
-        await addProjectAPI(state.projectData) : await updateProjectAPI(state.projectData);
+        await updateProjectAPI(state.projectData) : await addProjectAPI(state.projectData)
     setTimeout(() => {
       ElMessage({
         type: 'success',
