@@ -134,7 +134,7 @@ const router = useRouter()
 const onEdit = (rowIndex) => {
   const id = weekReportData.value[rowIndex].taskId
   Session.set(`weekreport${id}`,weekReportData.value[rowIndex])
-  router.push({path: `/${id}`})
+  router.push({path: `/weekreport/edit/${id}`})
 }
 </script>
 

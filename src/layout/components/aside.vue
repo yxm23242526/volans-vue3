@@ -77,7 +77,7 @@ const setCollapseStyle = computed( () => {
             <Asideitem :chil="item.children"/>
           </el-sub-menu>
 
-          <template v-else-if = "item.meta.roles.includes(level)">
+          <template v-else-if = "item.meta.roles.includes(level) && !item.ishide">
             <el-menu-item :index="item.path">
               <Icon :name="item.meta.icon"/>
               <span> {{ item.meta.name }} </span>

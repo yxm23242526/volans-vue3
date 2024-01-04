@@ -104,9 +104,7 @@ const uploadImage = async (params) => {
 // 定义变量内容
 const state = reactive({
   noticeList: [
-    '✋广告位招租✋',
-    '😭广告位招租😭',
-    '😕广告位招租😕',
+    '✋此模块仍在开发中✋',
   ],
 });
 </script>
@@ -188,41 +186,41 @@ const state = reactive({
         <el-card shadow="hover" style="height: 500px">
           <template #default>
             <el-tabs v-model="activeTabpane">
-              <el-tab-pane label="看板" name="board"></el-tab-pane>
-              <el-tab-pane label="基础信息" name="basicInfo">
-                <el-form
-                    label-position="left"
-                    label-width="100px"
-                    style="max-width: 460px"
-                    :model="form.personalstate"
-                    :rules="formRules"
-                    ref="formRef"
-                >
-                  <el-form-item label="个性签名">
-                    <el-input :placeholder="userInfo.signature" v-model="form.personalstate.signature"></el-input>
-                  </el-form-item>
-                  <el-form-item label="昵称">
-                    <el-input :placeholder="userInfo.nickName" v-model="form.personalstate.nickName"></el-input>
-                  </el-form-item>
-                  <el-form-item label="小组">
-                    <el-select :placeholder="userInfo.groupId" v-model="form.personalstate.groupId">
-                      <el-option label="model" value="1"/>
-                      <el-option label="控制" value="2"/>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="密码">
-                    <el-input style="width: 250px" type="password" :placeholder="userInfo.password"
-                              v-model="form.personalstate.password" show-password></el-input>
-                    <!--              <span class="form-item-tipbox ml5" v-show="userInfo.password === form.personalstate.password"> * </span>-->
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="onUpdate">
-                      更新个人信息
-                    </el-button>
-                  </el-form-item>
-                </el-form>
+<!--              <el-tab-pane label="看板" name="board"></el-tab-pane>-->
+<!--              <el-tab-pane label="基础信息" name="basicInfo">-->
+<!--                <el-form-->
+<!--                    label-position="left"-->
+<!--                    label-width="100px"-->
+<!--                    style="max-width: 460px"-->
+<!--                    :model="form.personalstate"-->
+<!--                    :rules="formRules"-->
+<!--                    ref="formRef"-->
+<!--                >-->
+<!--                  <el-form-item label="个性签名">-->
+<!--                    <el-input :placeholder="userInfo.signature" v-model="form.personalstate.signature"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="昵称">-->
+<!--                    <el-input :placeholder="userInfo.nickName" v-model="form.personalstate.nickName"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="小组">-->
+<!--                    <el-select :placeholder="userInfo.groupId" v-model="form.personalstate.groupId">-->
+<!--                      <el-option label="model" value="1"/>-->
+<!--                      <el-option label="控制" value="2"/>-->
+<!--                    </el-select>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="密码">-->
+<!--                    <el-input style="width: 250px" type="password" :placeholder="userInfo.password"-->
+<!--                              v-model="form.personalstate.password" show-password></el-input>-->
+<!--                    &lt;!&ndash;              <span class="form-item-tipbox ml5" v-show="userInfo.password === form.personalstate.password"> * </span>&ndash;&gt;-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item>-->
+<!--                    <el-button type="primary" @click="onUpdate">-->
+<!--                      更新个人信息-->
+<!--                    </el-button>-->
+<!--                  </el-form-item>-->
+<!--                </el-form>-->
 
-              </el-tab-pane>
+<!--              </el-tab-pane>-->
               <el-tab-pane label="头像" name="photo">
                 <div style="text-align: center;">
                   <el-upload

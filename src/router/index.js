@@ -4,9 +4,9 @@
  * @Date: 2023-11-22
  */
 import { createRouter, createWebHistory } from "vue-router";
-import { useTagsViewStore } from "@/stores/tags";
-import pinia from '@/stores/index';
 import { Session } from '@/utils/storage';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,7 +32,6 @@ const router = createRouter({
                 }, 
                 {
                     path: '/weekreport',
-                    redirect: '/edit',
                     meta: {
                         name: "周报管理",
                         icon: "Notification",
@@ -40,7 +39,7 @@ const router = createRouter({
                     },
                     children: [
                         {
-                            path: '/:id',
+                            path: '/weekreport/edit/:id',
                             ishide: true,
                             component: () => import('@/views/weekreport/components/edit.vue'),
                             meta: {
@@ -50,7 +49,7 @@ const router = createRouter({
                             },
                         },
                         {
-                            path: '/calculate',
+                            path: '/weekreport/calculate',
                             component: () => import('@/views/weekreport/components/calculate.vue'),
                             meta: {
                                 name: "统计周报",
@@ -59,7 +58,7 @@ const router = createRouter({
                             },
                         },
                         {
-                            path: '/myWeekreport',
+                            path: '/weekreport/myWeekreport',
                             component: () => import('@/views/weekreport/components/myweekreport.vue'),
                             meta: {
                                 name: "我的周报",
@@ -68,7 +67,7 @@ const router = createRouter({
                             }
                         },
                         {
-                            path: '/TESTDEMO/:id',
+                            path: '/weekreport/TESTDEMO/:id',
                             component: () => import('@/views/TESTDEMO/index.vue'),
                             meta: {
                                 name: "测试专用",
@@ -133,6 +132,15 @@ const router = createRouter({
                         roles: [0, 1, 2],
                     }
                 },
+                {
+                    path: '/:pathMatch(.*)*',
+                    name: 'notFound',
+                    ishide: true,
+                    component: () => import('@/views/error/404.vue'),
+                    meta: {
+                        roles: [0, 1, 2]
+                    },
+                },
             ]
         },
         {
@@ -144,7 +152,7 @@ const router = createRouter({
                 roles: [0, 1, 2]
             }
         },
-
+        
     ],
     // 路由滚动行为配置项   切换路由的时候回到顶部
     scrollBehavior() {
@@ -154,12 +162,16 @@ const router = createRouter({
     },
 })
 
+
 router.beforeEach((to,from,next)=>{
     // //验证token，只有存在token的时候，才能跳转到内容页
     let token = Session.get('token')
+    NProgress.configure({ showSpinner: false });//去掉圆圈
+    NProgress.start();
     // 这里逻辑不知道对不对
     if (to.path === '/login')
     {
+        NProgress.done()
         next()
     }
     else
@@ -170,6 +182,7 @@ router.beforeEach((to,from,next)=>{
             if (userinfo && to.meta.roles.includes(userinfo.identityId))
             {
                 next()	//放行
+                NProgress.done()
             }
             else{
                 next({path:"/404"})	//跳到404页面
@@ -177,9 +190,16 @@ router.beforeEach((to,from,next)=>{
         }
         else
         {
+            Session.clear();
             next('/login');
+            NProgress.done()
         }
     }
 })
+
+// 路由加载后
+router.afterEach(() => {
+    NProgress.done();
+});
 
 export default router

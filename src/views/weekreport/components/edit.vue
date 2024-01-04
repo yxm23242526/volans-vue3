@@ -252,7 +252,7 @@ const save = () => {
           })
           const tagsViewStore = useTagsViewStore()
           tagsViewStore.removeState(route.path, route.path)
-          tagsViewStore.gotoPage(`/myWeekreport`)
+          tagsViewStore.gotoPage(`/weekreport/myWeekreport`)
         }
         else {
           ElMessage.error('保存失败')
@@ -286,7 +286,7 @@ const onsubmit = () => {
           })
           const tagsViewStore = useTagsViewStore()
           tagsViewStore.removeState(route.path, route.path)
-          tagsViewStore.gotoPage(`/myWeekreport`)
+          tagsViewStore.gotoPage(`/weekreport/myWeekreport`)
         }
         else {
           ElMessage.error('提交失败')
@@ -306,6 +306,7 @@ watch(tableData, () => {
 
 watch(() => route, () => {
   const taskId = route.params?.id;
+  console.log(route.params)
   if (taskId) {
     inituserinfo(taskId);
     initprojectarrary();
