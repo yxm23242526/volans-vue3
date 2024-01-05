@@ -66,15 +66,15 @@ const router = createRouter({
                                 roles: [0, 1, 2],
                             }
                         },
-                        {
-                            path: '/weekreport/TESTDEMO/:id',
-                            component: () => import('@/views/TESTDEMO/index.vue'),
-                            meta: {
-                                name: "测试专用",
-                                icon: "SwitchFilled",
-                                roles: [0,1,2],
-                            }
-                        },
+                        // {
+                        //     path: '/weekreport/TESTDEMO/:id',
+                        //     component: () => import('@/views/TESTDEMO/index.vue'),
+                        //     meta: {
+                        //         name: "测试专用",
+                        //         icon: "SwitchFilled",
+                        //         roles: [0,1,2],
+                        //     }
+                        // },
                     ]
                 },
                 {

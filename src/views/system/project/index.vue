@@ -14,10 +14,14 @@ const projectProps = {
   value: 'projectId',
 }
 
-onMounted(async () => {
-  projectList.value = (await getProjectsAPI()).data
+onMounted( () => {
+  getProjectList()
 })
 
+
+const getProjectList = async () => {
+  projectList.value = (await getProjectsAPI()).data
+}
 //激活搜索框中项目
 const activeSearch = ({row}) => {
   for (let i = 0; i < activeProject.value.length; i++) {
@@ -132,7 +136,7 @@ const onAdd = (type) => {
 .layout-project-container {
   display: flex;
   flex: 1;
-
+  height: 100%;
   .layout-project-container-table {
     width: 20%;
   }
@@ -144,9 +148,10 @@ const onAdd = (type) => {
     margin-left: 25px;
     border: 1px solid var(--vl-border-sidebar-color);
     border-radius: 4px;
-
+    height: 100%;
     .layout-project-body-table {
-      flex: 1
+      flex: 1;
+      height:100%
     }
 
     .layout-project-body-button {

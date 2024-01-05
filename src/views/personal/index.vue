@@ -79,7 +79,7 @@ const formRules = {
 }
 
 //默认激活的tabpane
-const activeTabpane = ref('board')
+const activeTabpane = ref('photo')
 
 const headers = ref({
   Authorization: `Bearer ${Session.get('token')}`,
