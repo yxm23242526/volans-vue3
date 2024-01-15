@@ -1,408 +1,325 @@
 <script setup>
-import { reactive, watch, ref, computed } from 'vue';
-import { submit, getProject } from '@/apis/edit';
-import { comparedate, calcuatedate, mult, formatdate } from '@/utils/datetimeUtils';
-import { useRoute } from "vue-router";
-import { useTagsViewStore } from '@/stores/tags'
-import { ElMessage, ElMessageBox } from 'element-plus';
-import { Session } from '@/utils/storage';
-
+import {reactive, watch, ref,} from 'vue';
+import {useRoute} from "vue-router";
+import {useTagsViewStore} from '@/stores/tags'
+import {ElMessage, ElMessageBox} from 'element-plus';
+import {Session} from '@/utils/storage';
+import {calcuateDate, compareDate,getDayString, mult, formatDate} from "@/utils/datetimeUtils";
+import {getProjectsAPI} from "@/apis/project";
+import {submit} from "@/apis/report";
 const route = useRoute();
 
-//用户数据，后期从用户信息拿
-var formdata = reactive({})
 
-
-const spanarr = reactive([]);//合并单元格数据
-
-const dataarrary = reactive([]);//选择框候选值
-
-const selectvalue = ref();//选择框值
-
-const projectarrary = reactive([]);
-
-const tableData = reactive([]);//表格数据
-
-const tableHeight = computed(() => {
-  return document.body.clientHeight / 5 * 4;
+//表单对象
+const formRef = ref(null)
+//表单数据
+const formData = reactive({
+  tableData: [],
+  rules:{
+    projectId: [{ required: true, message: '请选择项目', trigger: 'change' }],
+    workContent: [{ required: true, message: '工作内容不能为空', trigger: 'change' }],
+    workTime: [{required: true, message: '错误', trigger: 'change' }],
+  },
 })
+//周报数据
+const reportData = ref([])
 
-//更新合并单元格数组
-const getspanarr = () => {
-  spanarr.splice(0, spanarr.length);
+//下拉选择插入日期
+const insertDateArray = ref([])
+//下拉选择按钮文本
+const insertDateTitle = ref()
+
+//项目数据
+const projectList = ref([])
+
+//表格跨度数组
+const spanArray = ref([])
+const initSpanArray = () => {
+  spanArray.value = []
   let temp = 0;
-  for (let index = 0; index < tableData.length; index++) {
-    if (index == 0) {
-      spanarr.push(1);
+  for (let index = 0; index < formData.tableData.length; index++) {
+    if (index === 0) {
+      spanArray.value.push(1);
       temp = 0;
     } else {
-      if (tableData[index].date == tableData[index - 1].date) {
-        spanarr.push(0);
-        spanarr[temp]++;
+      if (formData.tableData[index].date === formData.tableData[index - 1].date) {
+        spanArray.value.push(0);
+        spanArray.value[temp]++;
       } else {
         temp = index;
-        spanarr.push(1);
+        spanArray.value.push(1);
       }
     }
   }
 }
-
-const inituserinfo = (taskId) => {
-  const tempdata = Session.get('weekreport' + taskId);
-  formdata.userId = tempdata.userId;
-  formdata.taskid = taskId;
-  formdata.starttime = formatdate(tempdata.startDate);
-  formdata.endtime = formatdate(tempdata.endDate);
-  tableData.splice(0, tableData.length)
-  for (let i = 0; i < tempdata.rows.length; i++) {
-    for (let j = 0; j < tempdata.rows[i].content.length; j++) {
-      tempdata.rows[i].content[j].date = formatdate(tempdata.rows[i].content[j].date);
-      tableData.push(tempdata.rows[i].content[j]);
-    }
-  }
+const getProjectList = async () => {
+  projectList.value = (await getProjectsAPI()).data
 }
-
-const initprojectarrary = async () => {
-  projectarrary.splice(0, projectarrary.length)
-  const data = await getProject();
-  projectarrary.push(...data.data);
-}
-
-//初始化选择框数据
-const initdatearrary = (starttime, endtime) => {
-  dataarrary.splice(0, projectarrary.length)
-  var days = mult(starttime, endtime);
-  if (days > 0) {
-    for (let i = 0; i <= days; i++) {
-      var str = calcuatedate(starttime, i)
-      dataarrary.push({
-        value: str,
-        label: str,
-        disabled: false,
+//type 0：删除，1插入
+const modifyInsertDateArray = (type, startDate, endDate) => {
+  insertDateTitle.value = '插入日期'
+  //插入
+  if (type === 1) {
+    const days = mult(startDate, endDate);
+    if (days > 0) {
+      insertDateArray.value = []
+      for (let i = 0; i <= days; i++) {
+        const str = calcuateDate(startDate, i)
+        insertDateArray.value.push({
+          day: getDayString(str),
+          date: str,
+        })
+      }
+    } else {
+      const length = insertDateArray.value.length;
+      for (let i = 0; i < length; i++) {
+        if (compareDate(insertDateArray.value[i].date, startDate) === 1) {
+          insertDateArray.value.splice(i, 0, {
+            day: getDayString(startDate),
+            date: startDate,
+          })
+          return;
+        }
+      }
+      insertDateArray.value.push({
+        day: getDayString(startDate),
+        date: startDate,
       })
     }
   }
-
-}
-
-//合并单元格数据
-const objectSpanMethod = ({
-  row,
-  column,
-  rowIndex,
-  columnIndex,
-}) => {
-  if (columnIndex == 0) {
-    return {
-      rowspan: spanarr[rowIndex],
-      colspan: spanarr[rowIndex] > 0 ? 1 : 0,
+  //删除
+  else {
+    const idx = insertDateArray.value.findIndex((item) => startDate === item.date)
+    insertDateArray.value.splice(idx, 1)
+    if (insertDateArray.value.length === 0) {
+      insertDateTitle.value = '不可插入日期'
     }
   }
 }
 
-//插入行
-const handleadd = (index, row) => {
-  tableData.splice(index + 1, 0, {
-    date: row.date,
-  });
+//插入日期
+const onDropDownCommand = (date) => {
+  //删除一条数据
+  modifyInsertDateArray(0, date, date);
+  //添加一条data数据
+  for (let i = 0; i < formData.tableData.length; i++) {
+    if (compareDate(formData.tableData[i].date, date) === 1) {
+      formData.tableData.splice(i, 0, {
+        day: getDayString(date),
+        date: date,
+      })
+      initSpanArray()
+      return;
+    }
+  }
+  formData.tableData.push({
+    day: getDayString(date),
+    date: date,
+  })
+  initSpanArray()
 }
-
-//删除行
-const handledelete = (index, row) => {
-  tableData.splice(index, 1)
-}
-
-//插入新的日期
-const addrow = () => {
-  if (selectvalue.value === '') {
-    alert('请选择日期');
-  } else {
-    if (tableData.length > 0) {
-      for (let i = 0; i < tableData.length; i++) {
-        if (comparedate(selectvalue.value, tableData[i].date) < 0) {
-          tableData.splice(i, 0, {
-            date: selectvalue.value,
-          });
-          break;
-        } else if (i === tableData.length - 1) {
-          tableData.splice(i + 1, 0, {
-            date: selectvalue.value,
-          });
-          break;
-        }
-      }
-    } else {
-      tableData.push(
-        {
-          date: selectvalue.value,
-        }
-      )
+//初始化数据
+const initData = (taskId) => {
+  const tempData = Session.get(`weekreport${taskId}`)
+  reportData.value = tempData;
+  reportData.value.startDate = formatDate(tempData.startDate);
+  reportData.value.endDate = formatDate(tempData.endDate);
+  formData.tableData.splice(0, formData.tableData.length)
+  //修改插入数组
+  modifyInsertDateArray(1, reportData.value.startDate, reportData.value.endDate);
+  for (let i = 0; i < tempData.rows.length; i++) {
+    for (let j = 0; j < tempData.rows[i].content.length; j++) {
+      const _formatDate = formatDate(tempData.rows[i].content[j].date);
+      const _formatDay = getDayString(_formatDate);
+      modifyInsertDateArray(0, _formatDate, _formatDate)
+      tempData.rows[i].content[j].day = _formatDay
+      tempData.rows[i].content[j].date = _formatDate;
+      formData.tableData.push(tempData.rows[i].content[j]);
     }
   }
-}
-
-
-const checkdataarrary = () => {
-  for (let i = 0; i < dataarrary.length; i++) {
-    var temp = false;
-    for (let j = 0; j < tableData.length; j++) {
-      if (comparedate(dataarrary[i].value, tableData[j].date) === 0) {
-        selectvalue.value = '';
-        dataarrary[i].disabled = true;
-        temp = true;
-        break;
-      }
-    }
-    if (!temp) {
-      selectvalue.value = '';
-      dataarrary[i].disabled = false;
-    }
-  }
-}
-
-const checktabel = () => {
-  if (tableData.length == 0) {
-    ElMessage({
-            message: '没有数据',
-            type: 'warning',
-          })
-    return false;
-  }
-  if (!tableData[0].projectId || tableData[0].projectId <= 0) {
-    ElMessage({
-            message: '项目id为空',
-            type: 'warning',
-          })
-    return false;
-  }
-  if (!tableData[0].workContent || tableData[0].workContent === '') {
-    ElMessage({
-            message: '工作内容为空',
-            type: 'warning',
-          })
-    return false;
-  }
-  if (!tableData[0].workTime || tableData[0].workTime === '') {
-    ElMessage({
-            message: '工时为空',
-            type: 'warning',
-          })
-    return false;
-  }
-  if (tableData.length == 1) {
-    return true
-  }
-  let temp = {};
-  temp[tableData[0].projectId] = 1;
-  for (let i = 1; i < tableData.length; i++) {
-    if (!tableData[i].projectId || tableData[i].projectId <= 0) {
-      ElMessage({
-            message: '项目id为空',
-            type: 'warning',
-          })
-      return false;
-    }
-    if (!tableData[i].workContent || tableData[i].workContent === '') {
-      ElMessage({
-            message: '工作内容为空',
-            type: 'warning',
-          })
-      return false;
-    }
-    if (!tableData[i].workTime || tableData[i].workTime === '') {
-      ElMessage({
-            message: '工时为空',
-            type: 'warning',
-          })
-      return false;
-    }
-    if (tableData[i].date != tableData[i - 1].date) {
-      temp = {}
-    }
-    if (temp[tableData[i].projectId]) {
-      ElMessage({
-            message: '某天有重复项目',
-            type: 'warning',
-          })
-      return false;
-    } else {
-      temp[tableData[i].projectId] = 1;
-    }
-  }
-  return true;
-}
-
-const save = () => {
-  ElMessageBox.confirm(
-    '保存周报， 是否继续？',
-    '提示',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  )
-    .then(async () => {
-      if (checktabel()) {
-        const data = await submit(tableData, 0);
-        if (data.code === 200) {
-          ElMessage({
-            message: '保存成功',
-            type: 'success',
-          })
-          const tagsViewStore = useTagsViewStore()
-          tagsViewStore.removeState(route.path, route.path)
-          tagsViewStore.gotoPage(`/weekreport/myWeekreport`)
-        }
-        else {
-          ElMessage.error('保存失败')
-        }
-      }
-    }
-    ).catch(() => {
-      //什么都不做
-    })
+  initSpanArray()
+  getProjectList()
 }
 
 
-//操作栏弹框
-const onsubmit = () => {
-  ElMessageBox.confirm(
-    '提交周报， 是否继续？',
-    '提示',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  )
-    .then(async () => {
-      if (checktabel()) {
-        const data = await submit(tableData, 2);
-        if (data.code === 200) {
-          ElMessage({
-            message: '提交成功',
-            type: 'success',
-          })
-          const tagsViewStore = useTagsViewStore()
-          tagsViewStore.removeState(route.path, route.path)
-          tagsViewStore.gotoPage(`/weekreport/myWeekreport`)
-        }
-        else {
-          ElMessage.error('提交失败')
-        }
-      }
-    }
-    ).catch(() => {
-      //什么都不做
-    })
-}
-
-//检测表格数据更新合并单元格数组
-watch(tableData, () => {
-  getspanarr();
-  checkdataarrary();
-})
-
+//获取tagsView上的周报数据
 watch(() => route, () => {
   const taskId = route.params?.id;
-  console.log(route.params)
   if (taskId) {
-    inituserinfo(taskId);
-    initprojectarrary();
-    initdatearrary(formdata.starttime, formdata.endtime);
+    initData(taskId)
   }
+
 }, {
   deep: true,
   immediate: true
 })
+
+//合并单元格数据
+const tableSpanStragety = ({
+                            row,
+                            column,
+                            rowIndex,
+                            columnIndex,
+                          }) => {
+  if (columnIndex === 0 || columnIndex === 1) {
+    return {
+      rowspan: spanArray.value[rowIndex],
+      colspan: spanArray.value[rowIndex] > 0 ? 1 : 0,
+    }
+  }
+}
+
+//提交周报
+const onSubmit = (formRef) => {
+  if (!formRef) return;
+  formRef.validate((valid) => {
+    if (!valid) return ElMessage.warning('表格项必填未填');
+    ElMessageBox({
+      title: '提示',
+      message: '此操作将提交周报, 是否继续?',
+      showCancelButton: true,
+      beforeClose: (action, instance, done) => {
+        if (action === 'confirm') {
+          instance.confirmButtonLoading = true;
+          setTimeout( () => {
+            ElMessage({type: 'success', message: '提交成功'})
+            done();
+          }, 700)
+          // 1. 提示用户
+        } else {
+          done();
+        }
+      },
+    }).then(async () => {
+      await submit(formData.tableData, 2)
+      const tagsViewStore = useTagsViewStore()
+      tagsViewStore.removeState(route.path, route.path)
+      tagsViewStore.gotoPage(`/weekreport/myWeekreport`)
+    })
+        .catch(() => {ElMessage.error('提交失败')});
+  });
+}
+
+
+//插入项目
+const onAddProject = (index, row) => {
+  formData.tableData.splice(index + 1, 0, {
+    date: row.date,
+    day: row.day,
+    projectId: null,
+    workContent: null,
+    workTime: null,
+  });
+  initSpanArray()
+  formRef.value.clearValidate();
+}
+
+
+//删除项目
+const onRemoveProject = (index, row) => {
+  formData.tableData.splice(index, 1)
+  const idx = formData.tableData.findIndex((item) => row.date === item.date)
+  if (idx === -1){
+    modifyInsertDateArray(1, row.date, row.date)
+  }
+  initSpanArray()
+  formRef.value.clearValidate();
+}
+
 </script>
 
 <template>
   <div class="layout-padding">
-    <div class="layout-padding-view">
-      <div class="layout-pd layout-edit-wrapper">
-        <h1 class="layout-edit-wrapper-title pl15"> {{ formdata.starttime }} ~ {{ formdata.endtime }}</h1>
-        <div>
-          <el-select v-model="selectvalue" placeholder="Select">
-            <el-option v-for="item in dataarrary" :key="item.value" :label="item.label" :value="item.value"
-              :disabled="item.disabled" />
-          </el-select>
-          <el-button @click="addrow">新增日期</el-button>
-          <el-button @click="save">保存</el-button>
-          <el-button type="primary" @click="onsubmit">提交</el-button>
+    <div class="layout-padding-view layout-padding-auto layout-pd">
+      <div class="edit-header">
+        <h1 style="text-align: center; font-size: 30px">{{ reportData.startDate }} - {{ reportData.endDate }}</h1>
+        <div class="edit-wrapper">
+          <el-dropdown type="primary" trigger="click" @command="onDropDownCommand">
+            <el-button> {{ insertDateTitle }}</el-button>
+            <template #dropdown>
+              <el-dropdown-menu v-model="insertDateArray">
+                <el-dropdown-item v-for="item in insertDateArray" :key="item.day" :command="item.date">
+                  {{ item.date }}&nbsp({{ item.day }})
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+          <el-button type="primary" @click="onSubmit(formRef)">提交</el-button>
         </div>
       </div>
-
-      <el-container class="layout-edit-containter layout-pd">
-        <el-table :data="tableData" :span-method="objectSpanMethod" style="width: 100%"
-          :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }" :height="tableHeight" border>
-          <!-- <el-scrollbar height="200"> -->
-          <el-table-column prop="date" label="日期" width="100px" />
-          <el-table-column label="项目 " width="200px">
-            <template #default="scope">
-              <el-select v-model="scope.row.projectId" placeholder="Select">
-                <el-option v-for="item in projectarrary" :key="item.projectId" :label="item.projectName"
-                  :value="item.projectId" />
-              </el-select>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="工作内容">
-            <template #default="scope">
-              <el-input v-model="scope.row.workContent" :autosize="{ minRows: 2, maxRows: 8 }" type="textarea"
-                placeholder="工作内容" resize="none" />
-            </template>
-          </el-table-column>
-          <el-table-column label="工时" width="100px">
-            <template #default="scope">
-              <el-input-number v-model="scope.row.workTime" :controls="false" style="width: 50px" />
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="180px">
-            <template #default="scope">
-              <el-button text type="primary" @click="handleadd(scope.$index, scope.row)">添加项目</el-button>
-              <el-button text type="danger" @click="handledelete(scope.$index, scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-          <!-- </el-scrollbar> -->
-        </el-table>
-      </el-container>
-
+      <div class="edit-container">
+        <el-form ref="formRef" class="edit-body" :model="formData" :rules="formData.rules">
+          <el-table :data="formData.tableData"
+                    :span-method="tableSpanStragety"
+                    border
+                    style="width: 100%;"
+                    >
+            <el-table-column prop="day" width="100"/>
+            <el-table-column prop="date" label="日期" width="120"/>
+            <el-table-column label="项目 " width="240">
+              <template #default="scope">
+                <el-form-item :prop="`tableData.${scope.$index}.projectId`" :rules="formData.rules.projectId">
+                  <el-select v-model="scope.row.projectId" placeholder="请选择项目" filterable>
+                    <el-option v-for="item in projectList" :key="item.projectId" :label="item.projectName"
+                               :value="item.projectId" />
+                  </el-select>
+                </el-form-item>
+              </template>
+            </el-table-column>
+            <el-table-column label="工作内容">
+              <template #default="scope">
+                <el-form-item :prop="`tableData.${scope.$index}.workContent`" :rules="formData.rules.workContent">
+                  <el-input v-model="scope.row.workContent"  type="textarea"
+                            placeholder="请填写工作内容" autosize/>
+                </el-form-item>
+              </template>
+            </el-table-column>
+            <el-table-column label="工时" width="80px">
+              <template #default="scope">
+                <el-form-item :prop="`tableData.${scope.$index}.workTime`" :rules="formData.rules.workTime">
+                  <el-input v-model="scope.row.workTime" type="textarea" autosize/>
+                </el-form-item>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="120px">
+              <template #default="scope">
+                <el-button text type="primary" size="small" @click="onAddProject(scope.$index, scope.row)">添加行
+                </el-button>
+                <el-button text type="danger" size="small" @click="onRemoveProject(scope.$index, scope.row)">删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.layout-edit-wrapper {
+.edit-wrapper {
+  text-align: right;
+  margin: 10px;
+
+  > * {
+    padding-right: 10px;
+  }
+}
+.edit-header{
+  height: 100px;
+}
+.edit-container{
+  width: 100%;
+  height: calc(100% - 100px);
   display: flex;
-  justify-content: space-between;
-
-  &-title {
-    font-size: 28px;
+  flex-direction: column;
+  .edit-body{
+    width: 100%;
+    height: inherit;
+    display: flex;
+    flex:1;
+    flex-direction: column;
   }
 }
 
-.layout-edit-containter {
-  :deep(.el-input__wrapper) {
-    box-shadow: unset !important;
-  }
-
-  :deep(.el-textarea__inner) {
-    box-shadow: unset !important;
-
-    &:hover {
-      background-color: var(--el-color-primary-light-8);
-    }
-
-    &:focus {
-      background-color: var(--el-color-primary-light-8);
-    }
-  }
-
-  :deep(.el-table__cell) {
-    padding: 0 0 !important;
-  }
-
-}
 </style>

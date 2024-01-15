@@ -11,7 +11,8 @@ import { Session } from '@/utils/storage';
 
 const request = axios.create({
     // baseURL: 'http://127.0.0.1:4523/m1/3562468-0-default',
-    baseURL: 'http://192.168.0.100:10001',
+    // baseURL: 'http://192.168.0.100:10001',
+    baseURL: 'http://localhost:10001',
     timeout: 5000
 })
 // axios拦截器
@@ -28,11 +29,21 @@ request.interceptors.request.use( config => {
 
 //axios响应式拦截器
 request.interceptors.response.use( res => res.data, e => {
-    // console.log(e)
-    //统一错误提示
-    ElMessage({
-        type: 'warning', message: 'ERROR'//e.response.data.message
-    })
+    if (e.response.status === 401)
+    {
+        Session.clear();
+        router.push('/login');
+        ElMessage({
+            type: 'warning', message: '身份信息过期，请重新登陆'//e.response.data.message
+        })
+    }
+    else
+    {
+        //统一错误提示
+        ElMessage({
+            type: 'warning', message: 'ERROR'//e.response.data.message
+        })
+    }
     return Promise.reject(e)
 })
 export default request

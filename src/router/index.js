@@ -66,15 +66,6 @@ const router = createRouter({
                                 roles: [0, 1, 2],
                             }
                         },
-                        // {
-                        //     path: '/weekreport/TESTDEMO/:id',
-                        //     component: () => import('@/views/TESTDEMO/index.vue'),
-                        //     meta: {
-                        //         name: "测试专用",
-                        //         icon: "SwitchFilled",
-                        //         roles: [0,1,2],
-                        //     }
-                        // },
                     ]
                 },
                 {
@@ -123,15 +114,15 @@ const router = createRouter({
                         roles:[0, 1, 2],
                     }
                 },
-                {
-                    path: '/domain',
-                    component: () => import('@/views/domain/index.vue'),
-                    meta: {
-                        name: "功能域",
-                        icon: "MagicStick",
-                        roles: [0, 1, 2],
-                    }
-                },
+                // {
+                //     path: '/domain',
+                //     component: () => import('@/views/domain/index.vue'),
+                //     meta: {
+                //         name: "功能域",
+                //         icon: "MagicStick",
+                //         roles: [0, 1, 2],
+                //     }
+                // },
                 {
                     path: '/:pathMatch(.*)*',
                     name: 'notFound',
@@ -142,6 +133,15 @@ const router = createRouter({
                     },
                 },
             ]
+        },
+        {
+            path: '/testdemo',
+            name: 'test',
+            hide: true,
+            component: () => import('@/views/testdemo/index.vue'),
+            meta: {
+                roles: [0, 1, 2]
+            }
         },
         {
             path: '/login',
@@ -169,7 +169,7 @@ router.beforeEach((to,from,next)=>{
     NProgress.configure({ showSpinner: false });//去掉圆圈
     NProgress.start();
     // 这里逻辑不知道对不对
-    if (to.path === '/login')
+    if (to.path === '/login' || to.path === '/TESTDEMO')
     {
         NProgress.done()
         next()

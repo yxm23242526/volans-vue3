@@ -36,6 +36,15 @@ export const exportResult = (params) => {
     })
 }
 
+
+export const exportUserResult = (params) => {
+    return request({
+        url: '/weekreport/exportUser/' + params,
+        method: 'POST',
+    })
+}
+
+
 export const query = (params) => {
     return request({
         url: '/weekreport/export/query',
@@ -47,6 +56,19 @@ export const query = (params) => {
 export const revokeWeekreport = (taskId) => {
     return request({
         url: '/weekreport/revokeWeekreport/' + taskId,
-        method: 'post',
+        method: 'POST',
+    })
+}
+
+
+/**
+ * 提交周报
+ * @returns
+ */
+export const submit = (data) => {
+    return request({
+        url: '/weekreport/submit',
+        method: 'POST',
+        data
     })
 }

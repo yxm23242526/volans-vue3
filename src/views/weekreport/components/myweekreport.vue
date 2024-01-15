@@ -18,6 +18,7 @@
             <div v-if="scope.row.status === 2">
               <el-button text type="primary" size="small" @click="onPreview(scope.$index)">查看</el-button>
               <el-button text type="primary" size="small" @click="onPopMessage(scope.row.taskId)">撤回</el-button>
+              <el-button text type="success" size="small" @click="onExport(scope.row.taskId)">导出</el-button>
             </div>
             <div v-else>
               <el-button text type="primary" size="small" @click="onPreview(scope.$index)">查看</el-button>
@@ -48,11 +49,11 @@
 
 
 import { ref, onMounted, computed } from 'vue';
-import { getWeekreportList, revokeWeekreport } from '@/apis/report';
+import { exportUserResult, getWeekreportList, revokeWeekreport} from '@/apis/report';
 import { Session } from '@/utils/storage';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { getMonthandDay } from '@/utils/datetimeUtils'
-import WeekReportPrview from '@/views/weekreport/common/reportpreview.vue'
+import WeekReportPrview from '@/views/weekreport/components/reportpreview.vue'
 const userId = Session.get('userInfo').userId
 
 //true：全部展示  false：按月展示
@@ -115,6 +116,20 @@ const onPopMessage = (taskId) => {
     })
 }
 
+//导出周报到本地
+const onExport = async (taskId) => {
+  let url = (await exportUserResult(taskId)).data
+  let fileName = url.split('/').pop();
+  fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        link.click();
+      });
+}
 
 //预览对话盒对象
 const previewObj = ref(null)

@@ -27,7 +27,7 @@ export const useTagsViewStore = defineStore('tagsView', () => {
         //  代表有这个路由就不添加了
         const index = tagsviewState.value.findIndex((state) => item.path === state.path)
         if (index === -1) {
-            if( item.name === 'edit') {
+            if( item.meta.name === '编辑周报') {
                 const taskId = item.params.id;
                 const res = Session.get('weekreport' + taskId);
                 const title = res.name;
