@@ -18,7 +18,7 @@ const formData = reactive({
   rules:{
     projectId: [{ required: true, message: '请选择项目', trigger: 'change' }],
     workContent: [{ required: true, message: '工作内容不能为空', trigger: 'change' }],
-    workTime: [{required: true, message: '错误', trigger: 'change' }],
+    workTime: [{type: 'number', required: true, message: '错误', trigger: 'change' }],
   },
 })
 //周报数据
@@ -182,7 +182,7 @@ const onSubmit = (formRef) => {
         if (action === 'confirm') {
           instance.confirmButtonLoading = true;
           setTimeout( () => {
-            ElMessage({type: 'success', message: '提交成功'})
+            // ElMessage({type: 'success', message: '提交成功'})
             done();
           }, 700)
           // 1. 提示用户
@@ -191,12 +191,18 @@ const onSubmit = (formRef) => {
         }
       },
     }).then(async () => {
-      await submit(formData.tableData, 2)
+      const data = JSON.parse(JSON.stringify(formData.tableData));
+      data.forEach((item) => {
+        delete item.day;
+      })
+      await submit(data)
       const tagsViewStore = useTagsViewStore()
       tagsViewStore.removeState(route.path, route.path)
       tagsViewStore.gotoPage(`/weekreport/myWeekreport`)
     })
-        .catch(() => {ElMessage.error('提交失败')});
+        .catch(() => {
+          // ElMessage.error('提交失败')
+        });
   });
 }
 
@@ -277,7 +283,7 @@ const onRemoveProject = (index, row) => {
             <el-table-column label="工时" width="80px">
               <template #default="scope">
                 <el-form-item :prop="`tableData.${scope.$index}.workTime`" :rules="formData.rules.workTime">
-                  <el-input v-model="scope.row.workTime" type="textarea" autosize/>
+                  <el-input v-model.number="scope.row.workTime" type="textarea" autosize/>
                 </el-form-item>
               </template>
             </el-table-column>

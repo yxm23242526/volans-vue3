@@ -44,10 +44,11 @@
 </template>
 
 <script setup>
-import {ref, computed, onMounted} from 'vue'
+import {ref, computed, onMounted, reactive} from 'vue'
+import {getProjectsAPI} from "@/apis/project";
 
 const isVisible = ref(false)
-const reportData = ref({
+const reportData = reactive({
   startDate: {
     type: Date,
   },
@@ -68,18 +69,24 @@ const reportData = ref({
   },
 })
 
-const openDialog = (previewData) => {
-  reportData.value.startDate = previewData.startDate;
-  reportData.value.endDate = previewData.endDate;
-  reportData.value.userId = previewData.userId;
-  reportData.value.reportName = previewData.reportName;
-  reportData.value.rows = previewData.rows;
+const openDialog = async (previewData) => {
+  reportData.startDate = previewData.startDate;
+  reportData.endDate = previewData.endDate;
+  reportData.userId = previewData.userId;
+  reportData.reportName = previewData.reportName;
+  reportData.rows = previewData.rows;
   isVisible.value = true;
   //每次打开要初始化一下
-  for (let i = 0; i < reportData.value.rows.length; i++)
-  {
+  for (let i = 0; i < reportData.rows.length; i++) {
     expandArray.value[i] = false;
   }
+  //TODO 复杂度较高，待优化
+  const projectList = (await getProjectsAPI()).data
+  reportData.rows.forEach((row) => {
+    row.content.forEach((content) => {
+      content.projectId = projectList.find((project) => project.projectId === content.projectId).projectName
+    })
+  })
 }
 
 defineExpose({

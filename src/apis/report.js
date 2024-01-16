@@ -65,10 +65,10 @@ export const revokeWeekreport = (taskId) => {
  * 提交周报
  * @returns
  */
-export const submit = (data) => {
+export const submit = (params) => {
     return request({
         url: '/weekreport/submit',
         method: 'POST',
-        data
+        data: params
     })
 }
