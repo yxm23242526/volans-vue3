@@ -179,7 +179,13 @@ router.beforeEach((to,from,next)=>{
         if (token)
         {
             let userinfo = Session.get('userInfo')
-            if (userinfo && to.meta.roles.includes(userinfo.identityId))
+            if (userinfo === null)
+            {
+                Session.clear();
+                next('/login');
+                NProgress.done()
+            }
+            else if (userinfo && to.meta.roles.includes(userinfo.identityId))
             {
                 next()	//放行
                 NProgress.done()
