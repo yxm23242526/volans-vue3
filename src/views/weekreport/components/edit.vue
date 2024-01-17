@@ -238,7 +238,7 @@ const onRemoveProject = (index, row) => {
   <div class="layout-padding">
     <div class="layout-padding-view layout-padding-auto layout-pd">
       <div class="edit-header">
-        <h1 style="text-align: center; font-size: 30px">{{ reportData.startDate }} - {{ reportData.endDate }}</h1>
+        <div class="edit-header-time">{{ reportData.startDate }} - {{ reportData.endDate }}</div>
         <div class="edit-wrapper">
           <el-dropdown type="primary" trigger="click" @command="onDropDownCommand">
             <el-button> {{ insertDateTitle }}</el-button>
@@ -257,7 +257,8 @@ const onRemoveProject = (index, row) => {
         <el-form ref="formRef" class="edit-body" :model="formData" :rules="formData.rules">
           <el-table :data="formData.tableData"
                     :span-method="tableSpanStragety"
-                    border
+                    :header-cell-style="{color:'#409EFF'}"
+                    :header-row-style="{border:'1px solid black'}"
                     style="width: 100%;"
                     >
             <el-table-column prop="day" width="100"/>
@@ -312,11 +313,24 @@ const onRemoveProject = (index, row) => {
   }
 }
 .edit-header{
-  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  .edit-header-time{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    font-size: 20px;
+  }
+  .edit-wrapper{
+    display: flex;
+    text-align: center;
+    align-items: center;
+  }
 }
 .edit-container{
   width: 100%;
-  height: calc(100% - 100px);
+  height: calc(100% - 60px);
   display: flex;
   flex-direction: column;
   .edit-body{

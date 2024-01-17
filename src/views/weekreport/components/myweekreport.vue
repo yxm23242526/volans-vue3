@@ -1,6 +1,6 @@
 <template>
   <div class="layout-padding">
-    <div class="layout-padding-view layout-padding-auto">
+    <div class="layout-padding-view layout-padding-auto layout-pd">
       <el-table :data="weekReportData" style="width: 100%" >
         <el-table-column prop="year" label="年份" width="150" />
         <el-table-column prop="name" label="期间" />
