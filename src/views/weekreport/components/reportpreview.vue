@@ -29,8 +29,9 @@
             </div>
           </template>
           <el-row  v-for="dayItem in reportData.rows">
-            <el-col :span="4">{{dayItem.curDate}}</el-col>
-            <el-col :span="20">
+            <el-col :span="4" v-if="dayItem.content[0].workContent !== null">{{dayItem.curDate}}
+            </el-col>
+            <el-col :span="20" v-if="dayItem.content[0].workContent !== null">
               <el-row v-for="item in dayItem.content">
                 <el-col :span="10"> 【{{item.projectId}}】 </el-col>
                 <el-col :span="10"> {{item.workContent}} </el-col>
@@ -38,6 +39,7 @@
               </el-row>
             </el-col>
           </el-row>
+          <div v-if="reportData.rows[0].content[0].status === 1"> 无内容</div>
         </el-descriptions-item>
       </el-descriptions>
     </el-scrollbar>
@@ -87,6 +89,7 @@ const openDialog = async (previewData) => {
   })
 }
 
+const hasContent = ref(false)
 defineExpose({
   openDialog
 })

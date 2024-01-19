@@ -90,7 +90,10 @@ const modifyInsertDateArray = (type, startDate, endDate) => {
   //删除
   else {
     const idx = insertDateArray.value.findIndex((item) => startDate === item.date)
-    insertDateArray.value.splice(idx, 1)
+    if (idx !== -1)
+    {
+      insertDateArray.value.splice(idx, 1)
+    }
     if (insertDateArray.value.length === 0) {
       insertDateTitle.value = '不可插入日期'
     }
