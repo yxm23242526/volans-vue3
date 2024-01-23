@@ -12,7 +12,8 @@ const state = reactive({
     model: '1',
     projectId: [],
     userId: [],
-    date: [],
+    startDate: '',
+    endDate: '',
   },
   button: {
     isExpand: true,
@@ -64,6 +65,29 @@ const onExpand = () => {
   state.button.isExpand = !state.button.isExpand
   state.button.title = state.button.isExpand === true ? '收起' : '展开';
 }
+
+const disabledDate = (type, time) => {
+  var date = new Date(time)
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().length > 1 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1);
+  const day = date.getDate().toString().length > 1 ? date.getDate() : '0' + date.getDate();
+  time = `${year}-${month}-${day}`
+  if (type === 1)
+  {
+    if (state.formData.endDate !== "")
+    {
+      return time > state.formData.endDate
+    }
+  }
+  else
+  {
+    if (state.formData.startDate !== "")
+    {
+      return time < state.formData.startDate
+    }
+  }
+  return false;
+}
 </script>
 
 <template>
@@ -105,15 +129,18 @@ const onExpand = () => {
           </el-form-item>
           <el-form-item label="起始时间:">
             <div style="width: 500px">
-              <el-date-picker
-                  v-model="state.formData.date"
-                  type="daterange"
-                  range-separator="To"
-                  start-placeholder="Start Date"
-                  end-placeholder="End Date"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%;"
-              />
+              <el-date-picker v-model="state.formData.startDate"
+                              type="date"
+                              :disabled-date="(time) => disabledDate(1, time)"
+                              value-format="YYYY-MM-DD"
+                              placeholder="选择开始时间">
+              </el-date-picker>
+            <el-date-picker v-model="state.formData.endDate"
+                            type="date"
+                            :disabled-date="(time) => disabledDate(2, time)"
+                            value-format="YYYY-MM-DD"
+                            placeholder="选择结束时间">
+            </el-date-picker>
             </div>
           </el-form-item>
           <el-form-item>

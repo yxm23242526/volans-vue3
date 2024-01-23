@@ -44,6 +44,8 @@ onMounted(() => {
 })
 
 const onComment = (addCommentInfo) => {
+  console.log(new Date())
+  console.log(new Date().toLocaleString())
   if (addCommentInfo.commentContent === '') {
     ElMessage.error('输入内容不能为空')
   } else {

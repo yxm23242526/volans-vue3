@@ -1,57 +1,62 @@
 <script setup>
 
-import {onMounted, ref} from "vue";
-import {getAllUserList} from "@/apis/role";
-import search from "@/layout/navBars/topbars/search.vue";
+import {defineComponent, onMounted, ref} from "vue";
+import {getAllActiveUserList, deleteUser} from "@/apis/role";
+import {ElMessage, ElMessageBox} from "element-plus";
+import UserInfoDialog from "@/views/system/role/dialog.vue"
 
 let userList = ref([])
 let detailsStatus = ref(false);
 let userInfo = ref()
 let editStatus = ref(true);
 let searchContent = ref()
+let openType = ref()
 
 const userProps = {
   label: 'userName',
   value: 'userId',
 }
 
-onMounted(async () => {
-  userList.value = (await getAllUserList()).data;
+defineComponent({
+  components: {
+    UserInfoDialog
+  }
 })
 
-function showDetails(row) {
-  detailsStatus.value = true;
-  userInfo.value = JSON.parse(JSON.stringify(row));
-  if (editStatus)
-  {
-    closeEdit();
-  }
+onMounted(async () => {
+  await refreshUserList();
+})
+
+async function refreshUserList() {
+  userList.value = (await getAllActiveUserList()).data;
 }
 
-function closeDetails() {
-  detailsStatus.value = false;
+function editUser(row) {
+  openType.value.onOpenDialog('edit', row);
 }
 
-function openEdit() {
-  var divElement = document.getElementsByClassName("layout-role-details-body")[0];
-  divElement.classList.remove("layout-role-details-body");
-  divElement.classList.add("layout-role-details-body-edit");
-  editStatus.value = false;
+function addUser() {
+  openType.value.onOpenDialog('add', {});
 }
 
-function closeEdit() {
-  var divElement = document.getElementsByClassName("layout-role-details-body-edit")[0];
-  divElement.classList.remove("layout-role-details-body-edit");
-  divElement.classList.add("layout-role-details-body");
-  editStatus.value = true;
-}
-
-function filter() {
-  userList.value.filter((item) => {
-    if (item.userName.indexOf(val) > -1) {
-      return item;
-    }
-  })
+function removeUser(userId) {
+  ElMessageBox.confirm(
+      `确定删除用户吗？`,
+      '删除',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  )
+      .then(async () => {
+        await deleteUser(userId)
+        ElMessage({
+          type: 'success',
+          message: '删除成功',
+        })
+        await refreshUserList();
+      })
 }
 
 </script>
@@ -59,67 +64,39 @@ function filter() {
 <template>
   <div class="layout-padding">
     <div class="layout-role">
-      <div class="layout-role-filter">
-        <el-select-v2
-            v-model="searchContent"
-            filterable
-            :options="userList"
-            :props="userProps"
-            :reserve-keyword="false"
-            placeholder="输入搜索"
-            multiple
-            clearable
-            style="width: 100%"
-            @change = "filter"
-        />
-        <div>
-          <el-menu>
-            <el-menu-item index="1">1111</el-menu-item>
-          </el-menu>
-        </div>
-      </div>
+      <!--      <div class="layout-role-filter">-->
+      <!--        <el-select-v2-->
+      <!--            v-model="searchContent"-->
+      <!--            filterable-->
+      <!--            :options="userList"-->
+      <!--            :props="userProps"-->
+      <!--            :reserve-keyword="false"-->
+      <!--            placeholder="输入搜索"-->
+      <!--            multiple-->
+      <!--            clearable-->
+      <!--            style="width: 100%"-->
+      <!--            @change="filter"-->
+      <!--        />-->
+      <!--      </div>-->
       <div class="layout-role-data">
-          <el-table :data="userList" stripe height="100%" width="100%" @row-click="showDetails">
-            <el-table-column prop="userId" label="工号"/>
+        <div class="layout-role-data-table">
+          <el-table :data="userList" stripe height="100%" width="100%">
+            <el-table-column prop="userId" label="工号" width="100%"/>
             <el-table-column prop="userName" label="姓名"/>
-            <el-table-column prop="departmentId" label="部门"/>
             <el-table-column prop="phone" label="手机号"/>
-            <el-table-column prop="status" label="状态"/>
             <el-table-column label="操作">
-              <el-button type="primary" @click="">离职</el-button>
-              <el-button type="primary" @click="">删除</el-button>
+              <template #default="scope">
+                <el-button type="primary" size="small" @click="editUser(scope.row)">编辑</el-button>
+                <el-button type="danger" size="small" @click="removeUser(scope.row.userId)">删除</el-button>
+              </template>
             </el-table-column>
           </el-table>
+        </div>
+        <div class="layout-role-data-button">
+          <el-button type="primary" @click="addUser">添加用户</el-button>
+        </div>
       </div>
-      <div v-show="detailsStatus" class="layout-role-details">
-        <el-card class="layout-role-details-body" v-if="userInfo">
-          <template #header>
-            <div class="layout-role-details-body-header">
-              <el-avatar :size="70" :src="userInfo.image"/>
-              <el-input v-model="userInfo.userName" />
-              <el-input v-model="userInfo.nickName" />
-              <el-input v-model="userInfo.signature" />
-            </div>
-          </template>
-          <el-form :model="userInfo">
-            <el-form-item label="手机号:">
-              <el-input v-model="userInfo.phone" />
-            </el-form-item>
-            <el-form-item label="部门:">
-              <el-input v-model="userInfo.departmentId" />
-            </el-form-item>
-
-          </el-form>
-          <template #footer>
-            <div v-if="editStatus">
-              <el-button @click="openEdit" type="primary">编辑</el-button>
-            </div>
-            <div v-else>
-              <el-button @click="closeEdit" type="primary">保存</el-button>
-            </div>
-          </template>
-        </el-card>
-      </div>
+      <UserInfoDialog ref="openType" @onUpdate="refreshUserList"/>
     </div>
   </div>
 </template>
@@ -132,56 +109,29 @@ function filter() {
   height: 100%;
 
   .layout-role-filter {
-    width: 15%;
+    flex: 1;
     height: 100%;
-    background: red;
     display: flex;
     flex-direction: row;
     border-radius: 5px;
   }
 
   .layout-role-data {
-    width: 60%;
+    width: 100%;
+    flex-direction: column;
     height: 100%;
     margin-left: 10px;
     margin-right: 10px;
     border-radius: 5px;
-  }
 
-  .layout-role-details {
-    width: 23%;
-    height: 100%;
-    border-radius: 5px;
-
-    .layout-role-details-body {
+    .layout-role-data-table {
+      height: 95%;
       width: 100%;
-      height: 100%;
-      border-radius: 5px;
-      :deep(.el-input__wrapper) {
-        box-shadow: unset !important;
-      }
-
-      .layout-role-details-body-header {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        font-size: 20px;
-        font-family: 黑体,serif;
-      }
     }
 
-    .layout-role-details-body-edit {
-      width: 100%;
-      height: 100%;
-      border-radius: 5px;
-
-      .layout-role-details-body-header {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        font-size: 20px;
-        font-family: 黑体,serif;
-      }
+    .layout-role-data-button {
+      height: 5%;
+      padding: 5px;
     }
   }
 }

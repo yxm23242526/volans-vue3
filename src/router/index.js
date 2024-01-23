@@ -58,6 +58,15 @@ const router = createRouter({
                             },
                         },
                         {
+                            path: '/weekreport/task',
+                            component: () => import('@/views/weekreport/components/taskManager.vue'),
+                            meta: {
+                                name: "任务管理",
+                                icon: "Notification",
+                                roles: [1, 2],
+                            }
+                        },
+                        {
                             path: '/weekreport/myWeekreport',
                             component: () => import('@/views/weekreport/components/myweekreport.vue'),
                             meta: {

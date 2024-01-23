@@ -72,3 +72,33 @@ export const submit = (params) => {
         data: params
     })
 }
+
+export const getTaskList = () => {
+    return request({
+        url: '/task/list',
+    })
+}
+
+export const deleteTask = (taskId) => {
+    return  request({
+        url: '/task/deleteTask/' + taskId,
+        method: 'DELETE',
+    })
+}
+
+export const addTask = (date) => {
+    return  request({
+        url: '/task/addTask',
+        method: 'POST',
+        data: date
+    })
+}
+
+export const editTask = (date) => {
+    console.log(date)
+    return  request({
+        url: '/task/editTask',
+        method: 'POST',
+        data: date
+    })
+}
