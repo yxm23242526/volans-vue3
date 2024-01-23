@@ -152,12 +152,12 @@ const disabledDate = (type, time) => {
       </div>
       <div class="layout-body-form" :style="state.button.isExpand ? `height: calc(100% - 280px)` : `height: calc(100% - 40px)`">
           <el-table :data="results" v-if="state.formData.model === 1">
-            <el-table-column fixed prop="number" label="序号"/>
+            <el-table-column fixed type="index" label="序号" width="100px" />
             <el-table-column fixed prop="projectName" label="项目名称"/>
             <el-table-column prop="workTime" label="总工时"/>
           </el-table>
           <el-table :data="results" v-else>
-            <el-table-column fixed prop="number" label="序号"/>
+            <el-table-column fixed type="index" label="序号" width="100px" />
             <el-table-column fixed prop="projectName" label="项目名称"/>
             <el-table-column prop="date" label="日期"/>
             <el-table-column prop="userName" label="员工"/>
