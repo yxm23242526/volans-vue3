@@ -58,7 +58,7 @@ const onRemove = () => {
     for (let i = 0; i < mutipleSelection.value.length; i++) {
       ids.push(mutipleSelection.value[i].projectId)
     }
-    await removeProjectAPI(ids);
+    const result = await removeProjectAPI(ids);
     //加点延迟，不然直接跳出来了
     setTimeout(() => {
       ElMessage({

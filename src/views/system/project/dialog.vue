@@ -58,8 +58,14 @@ const onSubmit = () => {
         cancelButtonText: '取消',
       },
   ).then(async () => {
-    state.dialog.title === '编辑项目' ?
-        await updateProjectAPI(state.projectData) : await addProjectAPI(state.projectData)
+    if (state.dialog.title === '编辑项目')
+    {
+      await updateProjectAPI(state.projectData)
+    }
+    else
+    {
+      await addProjectAPI(state.projectData)
+    }
     setTimeout(() => {
       ElMessage({
         type: 'success',
@@ -67,10 +73,9 @@ const onSubmit = () => {
       })
     }, 1000)
     //重新获取数据
-
+    emit('onUpdate');
   }).catch(() => {})
   state.dialog.isShow = false;
-  emit('onUpdate');
 }
 
 defineExpose({
