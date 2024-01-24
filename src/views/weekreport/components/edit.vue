@@ -7,6 +7,8 @@ import {Session} from '@/utils/storage';
 import {calcuateDate, compareDate,getDayString, mult, formatDate} from "@/utils/datetimeUtils";
 import {getProjectsAPI} from "@/apis/project";
 import {submit} from "@/apis/report";
+import {verifyNumberIntegerAndFloat} from "@/utils/validate";
+
 const route = useRoute();
 
 
@@ -18,7 +20,7 @@ const formData = reactive({
   rules:{
     projectId: [{ required: true, message: '请选择项目', trigger: 'change' }],
     workContent: [{ required: true, message: '工作内容不能为空', trigger: 'change' }],
-    workTime: [{type: 'number', required: true, message: '错误', trigger: 'change' }],
+    workTime: [{required: true, message: '错误', trigger: 'change' }],
   },
 })
 //周报数据
@@ -235,6 +237,10 @@ const onRemoveProject = (index, row) => {
   formRef.value.clearValidate();
 }
 
+
+const onVerifyWorktime  = (row, value) => {
+  row.workTime = verifyNumberIntegerAndFloat(value)
+}
 </script>
 
 <template>
@@ -287,7 +293,7 @@ const onRemoveProject = (index, row) => {
             <el-table-column label="工时" width="80px">
               <template #default="scope">
                 <el-form-item :prop="`tableData.${scope.$index}.workTime`" :rules="formData.rules.workTime">
-                  <el-input v-model.number="scope.row.workTime" type="textarea" autosize/>
+                  <el-input v-model="scope.row.workTime" type="textarea" autosize @input="onVerifyWorktime(scope.row, $event)"/>
                 </el-form-item>
               </template>
             </el-table-column>
