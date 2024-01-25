@@ -27,9 +27,10 @@ export const useTagsViewStore = defineStore('tagsView', () => {
         //  代表有这个路由就不添加了
         const index = tagsviewState.value.findIndex((state) => item.path === state.path)
         if (index === -1) {
-            if( item.meta.name === '编辑周报') {
+            if( item.name === 'edit') {
                 const taskId = item.params.id;
-                const res = Session.get('weekreport' + taskId);
+                const userId = item.params.user;
+                const res = Session.get('weekreport' + userId + taskId);
                 const title = res.name;
                 tagsviewState.value.push({
                     path: item.path,
@@ -39,7 +40,7 @@ export const useTagsViewStore = defineStore('tagsView', () => {
             else {
                 tagsviewState.value.push({
                     path: item.path,
-                    title: item.meta.name,
+                    title: item.meta.title,
                 })
             }
         }

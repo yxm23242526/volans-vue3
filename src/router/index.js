@@ -16,61 +16,67 @@ const router = createRouter({
             component: () => import('@/layout/index.vue'),
             redirect: '/home',
             meta: {
-                name: "首页",
+                title: "首页",
                 icon: "House",
                 roles: [0, 1, 2],
             },
             children: [
                 {
                     path: '/home',
+                    name: 'home',
                     component: () => import('@/layout/home/index.vue'),
                     meta: {
-                        name: "首页",
+                        title: "首页",
                         icon: "House",
                         roles: [0, 1, 2],
                     }
                 }, 
                 {
                     path: '/weekreport',
+                    name: 'weekreport',
                     meta: {
-                        name: "周报管理",
+                        title: "周报管理",
                         icon: "Notification",
                         roles: [0, 1, 2],
                     },
                     children: [
                         {
-                            path: '/weekreport/edit/:id',
+                            path: '/weekreport/edit/:user/:id',
+                            name: 'edit',
                             ishide: true,
                             component: () => import('@/views/weekreport/components/edit.vue'),
                             meta: {
-                                name: "编辑周报",
+                                title: "编辑周报",
                                 icon: "Edit",
                                 roles: [0, 1, 2],
                             },
                         },
                         {
                             path: '/weekreport/myWeekreport',
+                            name:'myweekreport',
                             component: () => import('@/views/weekreport/myweekreport.vue'),
                             meta: {
-                                name: "我的周报",
+                                title: "我的周报",
                                 icon: "UserFilled",
                                 roles: [0, 1, 2],
                             }
                         },
                         {
                             path: '/weekreport/calculate',
+                            name:'calculate',
                             component: () => import('@/views/weekreport/calculate.vue'),
                             meta: {
-                                name: "统计周报",
+                                title: "统计周报",
                                 icon: "Histogram",
                                 roles: [1, 2],
                             },
                         },
                         {
                             path: '/weekreport/query',
+                            name: 'query',
                             component: () => import('@/views/weekreport/query.vue'),
                             meta: {
-                                name: "查询和修改",
+                                title: "查询和修改",
                                 icon: "Monitor",
                                 roles: [1, 2],
                             },
@@ -79,26 +85,29 @@ const router = createRouter({
                 },
                 {
                     path: '/system',
+                    name:'system',
                     meta: {
-                        name: "系统管理",
+                        title: "系统管理",
                         icon: "Menu",
                         roles:[1, 2],
                     },
                     children: [
                         {
                             path: '/system/project',
+                            name:'project',
                             component: () => import('@/views/system/project/index.vue'),
                             meta: {
-                                name: "项目管理",
+                                title: "项目管理",
                                 icon: "List",
                                 roles: [1, 2],
                             }
                         },
                         {
                             path: '/system/role',
+                            name: 'role',
                             component: () => import('@/views/system/role/index.vue'),
                             meta: {
-                                name: "角色管理",
+                                title: "角色管理",
                                 icon: "UserFilled",
                                 roles: [1, 2],
                             }
@@ -107,27 +116,30 @@ const router = createRouter({
                 },
                 {
                     path: '/weekreport/task',
+                    name: 'task',
                     component: () => import('@/views/task/taskManager.vue'),
                     meta: {
-                        name: "任务管理",
+                        title: "任务管理",
                         icon: "Document",
                         roles: [1, 2],
                     }
                 },
                 {
                     path: '/comment',
+                    name: 'comment',
                     component: () => import('@/views/comment/index.vue'),
                     meta: {
-                        name: "意见板",
+                        title: "意见板",
                         icon: "ChatLineRound",
                         roles:[0, 1, 2],
                     }
                 },
                 {
                     path: '/personal',
+                    name: 'personal',
                     component: () => import('@/views/personal/index.vue'),
                     meta: {
-                        name: "个人中心",
+                        title: "个人中心",
                         icon: "User",
                         roles:[0, 1, 2],
                     }

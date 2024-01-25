@@ -19,7 +19,7 @@
               周报时间
             </div>
           </template>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ reportData.startDate }}&nbsp;~&nbsp;{{ reportData.endDate }}
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ reportData.date}}
         </el-descriptions-item>
         <el-descriptions-item span="2">
           <template #label>
@@ -52,11 +52,8 @@ import {getProjectsAPI} from "@/apis/project";
 
 const isVisible = ref(false)
 const reportData = reactive({
-  startDate: {
-    type: Date,
-  },
-  endDate: {
-    type: Date,
+  date: {
+    type: String,
   },
   userId: {
     type: Number,
@@ -74,10 +71,9 @@ const reportData = reactive({
 
 const openDialog = async (previewData) => {
   const data = JSON.parse(JSON.stringify(previewData));
-  reportData.startDate = data.startDate;
-  reportData.endDate = data.endDate;
+  reportData.date = data.date;
   reportData.userId = data.userId;
-  reportData.reportName = data.reportName;
+  reportData.reportName = data.name;
   reportData.rows = data.rows;
   isVisible.value = true;
   //TODO 复杂度较高，待优化
@@ -89,7 +85,6 @@ const openDialog = async (previewData) => {
   })
 }
 
-const hasContent = ref(false)
 defineExpose({
   openDialog
 })

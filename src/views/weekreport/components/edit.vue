@@ -124,9 +124,10 @@ const onDropDownCommand = (date) => {
   initSpanArray()
 }
 //初始化数据
-const initData = (taskId) => {
-  const tempData = Session.get(`weekreport${taskId}`)
+const initData = (userId, taskId) => {
+  const tempData = Session.get(`weekreport${userId}${taskId}`)
   reportData.value = tempData;
+  reportData.value.date = tempData.date;
   reportData.value.startDate = formatDate(tempData.startDate);
   reportData.value.endDate = formatDate(tempData.endDate);
   formData.tableData.splice(0, formData.tableData.length)
@@ -149,9 +150,10 @@ const initData = (taskId) => {
 
 //获取tagsView上的周报数据
 watch(() => route, () => {
+  const userId = route.params?.user;
   const taskId = route.params?.id;
-  if (taskId) {
-    initData(taskId)
+  if (taskId && userId) {
+    initData(userId, taskId)
   }
 
 }, {
@@ -200,7 +202,7 @@ const onSubmit = (formRef) => {
       data.forEach((item) => {
         delete item.day;
       })
-      await submit(data)
+      await submit({data, userId: -1})
       const tagsViewStore = useTagsViewStore()
       tagsViewStore.removeState(route.path, route.path)
       tagsViewStore.gotoPage(`/weekreport/myWeekreport`)
@@ -247,7 +249,7 @@ const onVerifyWorktime  = (row, value) => {
   <div class="layout-padding">
     <div class="layout-padding-view layout-padding-auto layout-pd">
       <div class="edit-header">
-        <div class="edit-header-time">{{ reportData.startDate }} - {{ reportData.endDate }}</div>
+        <div class="edit-header-time">{{ reportData.date }}</div>
         <div class="edit-wrapper">
           <el-dropdown type="primary" trigger="click" @command="onDropDownCommand">
             <el-button> {{ insertDateTitle }}</el-button>

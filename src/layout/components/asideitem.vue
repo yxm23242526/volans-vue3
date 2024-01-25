@@ -8,7 +8,7 @@
         <el-sub-menu v-if="item.children && item.children.length > 0 && item.meta.roles.includes(level) " :index="item.path">
             <template #title>
                 <Icon :name="item.meta.icon"/>
-                {{ item.meta.name }}
+                {{ item.meta.title }}
             </template>
             <asideitem :chil="item.children" />
         </el-sub-menu>
@@ -16,7 +16,7 @@
             <template v-if="!item.ishide && item.meta.roles.includes(level)">
                 <el-menu-item :index="item.path">
                         <Icon :name="item.meta.icon"/>
-                        {{ item.meta.name }}
+                        {{ item.meta.title }}
                 </el-menu-item>
             </template>
         </template>

@@ -1,4 +1,5 @@
 <script setup>
+
 </script>
 
 <template>
@@ -8,7 +9,11 @@
                     wrap-class="layout-main-scroll"
                     view-class="layout-main-scroll">
         <div class="layout-parent">
-          <RouterView class="w100"/>
+          <router-view v-slot="{ Component }">
+            <keep-alive exclude="edit">
+                <component :is="Component"  class="w100"/>
+            </keep-alive>
+          </router-view>
         </div>
       </el-scrollbar>
     </el-main>

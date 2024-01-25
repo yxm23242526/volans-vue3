@@ -59,9 +59,9 @@ export const query = (params) => {
  * @param taskId
  * @returns {*}
  */
-export const revokeWeekreport = (taskId) => {
+export const revokeWeekreport = ({taskId, userId}) => {
     return request({
-        url: '/weekreport/revokeWeekreport/' + taskId,
+        url: '/weekreport/revokeWeekreport/' + taskId + '/' + userId,
         method: 'POST',
     })
 }
@@ -70,10 +70,23 @@ export const revokeWeekreport = (taskId) => {
  * 提交周报
  * @returns
  */
-export const submit = (params) => {
+export const submit = ({weekreport, userId}) => {
     return request({
-        url: '/weekreport/submit',
+        url: '/weekreport/submit/' + userId,
         method: 'POST',
-        data: params
+        data: weekreport
+    })
+}
+
+/**
+ * 根据指定周ID和指定用户得到周报数据
+ * @params 用户 users
+ * @params 时间 taskIds
+ */
+export const getSpecifiedReports = (data) => {
+    return request({
+        url: '/weekreport/getSpecifiedReports',
+        method: 'POST',
+        data
     })
 }

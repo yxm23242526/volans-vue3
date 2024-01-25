@@ -72,7 +72,7 @@ const setCollapseStyle = computed( () => {
           <el-sub-menu v-if="item.children && item.children.length > 0 && item.meta.roles.includes(level)" :index="item.path">
             <template #title>
               <Icon :name="item.meta.icon"/>
-              <span> {{ item.meta.name }} </span>
+              <span> {{ item.meta.title }} </span>
             </template>
             <Asideitem :chil="item.children"/>
           </el-sub-menu>
@@ -80,7 +80,7 @@ const setCollapseStyle = computed( () => {
           <template v-else-if = "item.meta.roles.includes(level) && !item.ishide">
             <el-menu-item :index="item.path">
               <Icon :name="item.meta.icon"/>
-              <span> {{ item.meta.name }} </span>
+              <span> {{ item.meta.title }} </span>
             </el-menu-item>
           </template>
         </template>

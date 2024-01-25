@@ -1,9 +1,9 @@
 <template>
   <div class="layout-padding">
     <div class="layout-padding-view layout-padding-auto layout-pd">
-      <el-table :data="weekReportData" style="width: 100%" >
-        <el-table-column prop="year" label="年份" width="150" />
-        <el-table-column prop="name" label="期间" />
+      <el-table :data="weekReportData" style="width: 100%">
+        <el-table-column prop="year" label="年份" width="150"/>
+        <el-table-column prop="name" label="期间"/>
         <el-table-column prop="status" label="提交状态">
           <template #default="scope">
             <el-tag type="success" v-if="scope.row.status === 2" round>已提交</el-tag>
@@ -26,13 +26,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="observer" label="最近查看人"  width="180"/>
+        <el-table-column prop="observer" label="最近查看人" width="180"/>
       </el-table>
-      <WeekReportPrview ref="previewObj" :reportName="previewData.reportName" :isshow="previewData.isshow"/>
+      <WeekReportPreview ref="previewObj"/>
       <!-- 分页组件 -->
       <el-row class="mt15 ml15" v-if="isExpand">
         <el-pagination :page-size="pageParams.pagesize" :current-page="pageParams.page" :total="pageParams.total"
-          @current-change="changePage" layout="total, prev, pager, next">
+                       @current-change="changePage" layout="total, prev, pager, next">
         </el-pagination>
       </el-row>
       <el-row class="mt15 ml15" v-else>
@@ -48,12 +48,14 @@
 <script setup>
 
 
-import { ref, onMounted, computed } from 'vue';
-import { exportUserResult, getWeekreportList, revokeWeekreport} from '@/apis/report';
-import { Session } from '@/utils/storage';
-import { ElMessage, ElMessageBox } from 'element-plus';
-import { getMonthandDay } from '@/utils/datetimeUtils'
-import WeekReportPrview from '@/views/weekreport/components/reportpreview.vue'
+import {ref, onMounted, computed} from 'vue';
+import {exportUserResult, getWeekreportList, revokeWeekreport} from '@/apis/report';
+import {Session} from '@/utils/storage';
+import {ElMessage, ElMessageBox} from 'element-plus';
+import {formatDate, getMonthandDay} from '@/utils/datetimeUtils'
+import WeekReportPreview from '@/views/weekreport/components/reportpreview.vue'
+import {useRouter} from "vue-router";
+const router = useRouter()
 const userId = Session.get('userInfo').userId
 
 //true：全部展示  false：按月展示
@@ -64,12 +66,12 @@ const pageParams = ref({
   pagesize: 12, // 每页多少条
   total: 0
 })
-const previewData = {}
+
 const weekReportData = ref([])
 
 //获取周报数据
 const getList = async () => {
-  const { data } = await getWeekreportList({userId});
+  const {data} = await getWeekreportList({userId});
   //这里之后要变成total
   pageParams.value.total = data.length
   weekReportData.value = data;
@@ -80,6 +82,7 @@ const getList = async () => {
     weekReportData.value[i].edDate = edDate
     weekReportData.value[i].year = stDate.getFullYear();
     weekReportData.value[i].name = getMonthandDay(stDate) + '~' + getMonthandDay(edDate);
+    weekReportData.value[i].date = formatDate(weekReportData.value[i].startDate) + ' ~ ' + formatDate(weekReportData.value[i].endDate);
     weekReportData.value[i].observer = "-";
   }
   //修改数据格式
@@ -100,20 +103,20 @@ const changePage = (newPage) => {
 //操作栏弹框
 const onPopMessage = (taskId) => {
   ElMessageBox.confirm(
-    '撤回已提交周报， 是否继续？',
-    '提示',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
+      '撤回已提交周报， 是否继续？',
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
   )
-    .then(async () => {
-      await revokeWeekreport({taskId, userId: -1})
-      await getList()
-    }).catch(() => {
-      //什么都不做
-    })
+      .then(async () => {
+        await revokeWeekreport({taskId, userId: -1})
+        await getList()
+      }).catch(() => {
+    //什么都不做
+  })
 }
 
 //导出周报到本地
@@ -133,23 +136,23 @@ const onExport = async (taskId) => {
 
 //预览对话盒对象
 const previewObj = ref(null)
+//预览对象
+const previewData = {}
 //打开查看窗口
 const onPreview = (rowIndex) => {
-  previewData.startDate = weekReportData.value[rowIndex].startDate
-  previewData.endDate = weekReportData.value[rowIndex].endDate
+  previewData.date = weekReportData.value[rowIndex].startDate + ' ~ ' + weekReportData.value[rowIndex].endDate
   previewData.reportName = weekReportData.value[rowIndex].name;
-  previewData.userId = pageParams.value.userId;
+  previewData.userId =  weekReportData.value[rowIndex].userId;
   previewData.rows = weekReportData.value[rowIndex].rows;
   previewObj.value.openDialog(previewData)
 }
 
-import { useRouter } from "vue-router";
-const router = useRouter()
 //打开编辑窗口
 const onEdit = (rowIndex) => {
-  const id = weekReportData.value[rowIndex].taskId
-  Session.set(`weekreport${id}`,weekReportData.value[rowIndex])
-  router.push({path: `/weekreport/edit/${id}`})
+  const taskId = weekReportData.value[rowIndex].taskId
+  const userId = weekReportData.value[rowIndex].userId
+  Session.set(`weekreport${userId}${taskId}`, weekReportData.value[rowIndex])
+  router.push({path: `/weekreport/edit/${userId}/${taskId}`})
 }
 </script>
 

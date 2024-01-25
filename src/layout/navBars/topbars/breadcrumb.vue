@@ -47,7 +47,7 @@ const setLocalThemeConfig = () => {
 
     <el-breadcrumb class="layout-navbars-breadcrumb" separator="/">
       <el-breadcrumb-item v-for="item in levelList" :key="item.path" :to="item.path">
-        {{ item.meta.name }}
+        {{ item.meta.title }}
       </el-breadcrumb-item>
     </el-breadcrumb>
   </div>
