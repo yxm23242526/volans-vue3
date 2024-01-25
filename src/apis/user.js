@@ -22,7 +22,6 @@ export const loginAPI = ({userId, password}) => {
     })
 }
 
-
 /**
  * 修改用户个人信息
  * @returns
@@ -36,13 +35,21 @@ export const updateInfoAPI = (data) => {
 }
 
 
+/**
+ * 刷新用户个人信息的API
+ * @returns {*}
+ */
 export const refreshUserInfoAPI = () => {
     return request({
         url: '/user/refreshUserInfo',
     })
 }
 
-
+/**
+ * 上传用户头像的API
+ * @param data
+ * @returns {*}
+ */
 export const uploadImageAPI = (data) => {
     return request({
         url: '/user/img',

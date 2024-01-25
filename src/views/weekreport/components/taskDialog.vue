@@ -2,7 +2,7 @@
 
 import {computed, reactive, ref} from 'vue'
 import {ElMessage, ElMessageBox} from "element-plus";
-import {addTask, editTask} from "@/apis/report";
+import {addTask, editTask} from "@/apis/task";
 
 const emit = defineEmits(['onUpdate'])
 

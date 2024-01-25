@@ -1,7 +1,7 @@
 <script setup>
 
 import {onMounted, ref} from 'vue'
-import {getTaskList, deleteTask} from "@/apis/report";
+import {getTaskList, deleteTask} from "@/apis/task";
 import {ElMessage, ElMessageBox} from "element-plus";
 import taskDialog from "@/views/weekreport/components/taskDialog.vue";
 

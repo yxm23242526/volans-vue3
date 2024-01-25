@@ -8,7 +8,7 @@
 import request from '@/utils/request'
 
 /**
- * @description
+ * @description 获取评论信息的API
  * @returns
  */
 export const getAllCommentsAPI = () => {
@@ -17,6 +17,12 @@ export const getAllCommentsAPI = () => {
         method: 'GET',
     })
 }
+
+/**
+ * @description 提交评论的API
+ * @param data
+ * @returns {*}
+ */
 export const insertCommentAPI = (data) => {
     return request({
         url: '/comment/addComment',
