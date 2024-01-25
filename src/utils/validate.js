@@ -29,7 +29,7 @@ export function verifyNumberIntegerAndFloat(value) {
     v = v.replace(/^\./g, '');
     // 小数只能出现1位
     v = v.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.');
-    // 小数点后面保留2位
+    // 小数点后面保留1位
     v = v.replace(/^(\-)*(\d+)\.(\d).*$/, '$1$2.$3');
     // 返回结果
     return v;

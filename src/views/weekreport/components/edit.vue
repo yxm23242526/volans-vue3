@@ -290,7 +290,7 @@ const onVerifyWorktime  = (row, value) => {
                 </el-form-item>
               </template>
             </el-table-column>
-            <el-table-column label="工时" width="80px">
+            <el-table-column label="工时" width="100px">
               <template #default="scope">
                 <el-form-item :prop="`tableData.${scope.$index}.workTime`" :rules="formData.rules.workTime">
                   <el-input v-model="scope.row.workTime" type="textarea" autosize @input="onVerifyWorktime(scope.row, $event)"/>

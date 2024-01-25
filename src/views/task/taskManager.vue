@@ -3,7 +3,7 @@
 import {onMounted, ref} from 'vue'
 import {getTaskList, deleteTask} from "@/apis/report";
 import {ElMessage, ElMessageBox} from "element-plus";
-import taskDialog from "@/views/weekreport/components/taskDialog.vue";
+import taskDialog from "@/views/task/taskDialog.vue";
 
 let taskList = ref()
 const dialogView = ref()

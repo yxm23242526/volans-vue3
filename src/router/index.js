@@ -50,7 +50,7 @@ const router = createRouter({
                         },
                         {
                             path: '/weekreport/myWeekreport',
-                            component: () => import('@/views/weekreport/components/myweekreport.vue'),
+                            component: () => import('@/views/weekreport/myweekreport.vue'),
                             meta: {
                                 name: "我的周报",
                                 icon: "UserFilled",
@@ -59,7 +59,7 @@ const router = createRouter({
                         },
                         {
                             path: '/weekreport/calculate',
-                            component: () => import('@/views/weekreport/components/calculate.vue'),
+                            component: () => import('@/views/weekreport/calculate.vue'),
                             meta: {
                                 name: "统计周报",
                                 icon: "Histogram",
@@ -67,13 +67,13 @@ const router = createRouter({
                             },
                         },
                         {
-                            path: '/weekreport/task',
-                            component: () => import('@/views/weekreport/components/taskManager.vue'),
+                            path: '/weekreport/query',
+                            component: () => import('@/views/weekreport/query.vue'),
                             meta: {
-                                name: "任务管理",
-                                icon: "Notification",
+                                name: "查询和修改",
+                                icon: "Monitor",
                                 roles: [1, 2],
-                            }
+                            },
                         },
                     ]
                 },
@@ -104,6 +104,15 @@ const router = createRouter({
                             }
                         },
                     ]
+                },
+                {
+                    path: '/weekreport/task',
+                    component: () => import('@/views/task/taskManager.vue'),
+                    meta: {
+                        name: "任务管理",
+                        icon: "Document",
+                        roles: [1, 2],
+                    }
                 },
                 {
                     path: '/comment',

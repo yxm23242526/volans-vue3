@@ -109,7 +109,7 @@ const onPopMessage = (taskId) => {
     }
   )
     .then(async () => {
-      await revokeWeekreport(taskId);
+      await revokeWeekreport({taskId, userId: -1})
       await getList()
     }).catch(() => {
       //什么都不做
