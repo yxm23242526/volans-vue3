@@ -67,10 +67,9 @@ const onSubmit = () => {
       })
     }, 1000)
     //重新获取数据
-
+    emit('onUpdate');
   }).catch(() => {})
   state.dialog.isShow = false;
-  emit('onUpdate');
 }
 
 defineExpose({
