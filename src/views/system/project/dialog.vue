@@ -58,24 +58,26 @@ const onSubmit = () => {
         cancelButtonText: '取消',
       },
   ).then(async () => {
-    if (state.dialog.title === '编辑项目')
-    {
-      await updateProjectAPI(state.projectData)
+    let res = {}
+    if (state.dialog.title === '编辑项目') {
+      res = await updateProjectAPI(state.projectData);
     }
-    else
-    {
-      await addProjectAPI(state.projectData)
+    else {
+      res = await addProjectAPI(state.projectData)
     }
-    setTimeout(() => {
-      ElMessage({
-        type: 'success',
-        message: state.dialog.title === '编辑项目' ?'已修改项目' : '已新增项目',
-      })
-    }, 1000)
+    if (res.code === 200){
+      setTimeout(() => {
+        ElMessage({
+          type: 'success',
+          message: state.dialog.title === '编辑项目' ?'已修改项目' : '已新增项目',
+        })
+      }, 1000)
+      emit('onUpdate');
+    }
     //重新获取数据
-    emit('onUpdate');
   }).catch(() => {})
   state.dialog.isShow = false;
+
 }
 
 defineExpose({

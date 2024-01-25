@@ -49,6 +49,15 @@ const router = createRouter({
                             },
                         },
                         {
+                            path: '/weekreport/myWeekreport',
+                            component: () => import('@/views/weekreport/components/myweekreport.vue'),
+                            meta: {
+                                name: "我的周报",
+                                icon: "UserFilled",
+                                roles: [0, 1, 2],
+                            }
+                        },
+                        {
                             path: '/weekreport/calculate',
                             component: () => import('@/views/weekreport/components/calculate.vue'),
                             meta: {
@@ -66,15 +75,6 @@ const router = createRouter({
                                 roles: [1, 2],
                             }
                         },
-                        {
-                            path: '/weekreport/myWeekreport',
-                            component: () => import('@/views/weekreport/components/myweekreport.vue'),
-                            meta: {
-                                name: "我的周报",
-                                icon: "UserFilled",
-                                roles: [0, 1, 2],
-                            }
-                        },
                     ]
                 },
                 {
@@ -86,20 +86,20 @@ const router = createRouter({
                     },
                     children: [
                         {
-                            path: '/system/role',
-                            component: () => import('@/views/system/role/index.vue'),
-                            meta: {
-                                name: "角色管理",
-                                icon: "UserFilled",
-                                roles: [1, 2],
-                            }
-                        },
-                        {
                             path: '/system/project',
                             component: () => import('@/views/system/project/index.vue'),
                             meta: {
                                 name: "项目管理",
                                 icon: "List",
+                                roles: [1, 2],
+                            }
+                        },
+                        {
+                            path: '/system/role',
+                            component: () => import('@/views/system/role/index.vue'),
+                            meta: {
+                                name: "角色管理",
+                                icon: "UserFilled",
                                 roles: [1, 2],
                             }
                         },

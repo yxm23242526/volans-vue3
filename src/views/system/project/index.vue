@@ -58,16 +58,18 @@ const onRemove = () => {
     for (let i = 0; i < mutipleSelection.value.length; i++) {
       ids.push(mutipleSelection.value[i].projectId)
     }
-    const result = await removeProjectAPI(ids);
-    //加点延迟，不然直接跳出来了
-    setTimeout(() => {
-      ElMessage({
-        type: 'success',
-        message: '已删除选中项目',
-      })
-    }, 1000)
-    //重新获取数据
-    await getProjectList()
+    const res = await removeProjectAPI(ids);
+    if (res.code === 200){
+      //加点延迟，不然直接跳出来了
+      setTimeout(() => {
+        ElMessage({
+          type: 'success',
+          message: '已删除选中项目',
+        })
+      }, 1000)
+      //重新获取数据
+      await getProjectList()
+    }
   }).catch((action) => {
   })
 }
