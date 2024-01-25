@@ -1,7 +1,8 @@
 <script setup>
 import {ref, reactive, onMounted, onBeforeMount} from 'vue'
-import {getUserList, exportResult, query} from "@/apis/report";
+import {exportResult, query} from "@/apis/report";
 import {getProjectsAPI} from "@/apis/project";
+import {getUserList} from "@/apis/role";
 
 let projectList = ref('')
 let userList = ref('')

@@ -16,18 +16,11 @@ export const getWeekreportList = (params) => {
     })
 }
 
-export const getUserList = () => {
-    return request({
-        url: '/user/getUserList',
-    })
-}
-
-export const getFieldList = () => {
-    return request({
-        url: '/weekreport/fieldList',
-    })
-}
-
+/**
+ * 导出当前查询结果的API
+ * @param params
+ * @returns {*}
+ */
 export const exportResult = (params) => {
     return request({
         url: '/weekreport/export',
@@ -36,7 +29,11 @@ export const exportResult = (params) => {
     })
 }
 
-
+/**
+ * 导出用户个人周报的API
+ * @param params
+ * @returns {*}
+ */
 export const exportUserResult = (params) => {
     return request({
         url: '/weekreport/exportUser/' + params,
@@ -44,7 +41,11 @@ export const exportUserResult = (params) => {
     })
 }
 
-
+/**
+ * 统计周报按条件查询的API
+ * @param params
+ * @returns {*}
+ */
 export const query = (params) => {
     return request({
         url: '/weekreport/export/query',
@@ -53,13 +54,17 @@ export const query = (params) => {
     })
 }
 
+/**
+ * 撤回周报的API
+ * @param taskId
+ * @returns {*}
+ */
 export const revokeWeekreport = (taskId) => {
     return request({
         url: '/weekreport/revokeWeekreport/' + taskId,
         method: 'POST',
     })
 }
-
 
 /**
  * 提交周报
@@ -70,35 +75,5 @@ export const submit = (params) => {
         url: '/weekreport/submit',
         method: 'POST',
         data: params
-    })
-}
-
-export const getTaskList = () => {
-    return request({
-        url: '/task/list',
-    })
-}
-
-export const deleteTask = (taskId) => {
-    return  request({
-        url: '/task/deleteTask/' + taskId,
-        method: 'DELETE',
-    })
-}
-
-export const addTask = (date) => {
-    return  request({
-        url: '/task/addTask',
-        method: 'POST',
-        data: date
-    })
-}
-
-export const editTask = (date) => {
-    console.log(date)
-    return  request({
-        url: '/task/editTask',
-        method: 'POST',
-        data: date
     })
 }

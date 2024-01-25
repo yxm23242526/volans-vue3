@@ -2,7 +2,7 @@
 import {reactive, ref} from "vue";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {addProjectAPI, updateProjectAPI} from "@/apis/project";
-import {getUserList} from "@/apis/report";
+import {getUserList} from "@/apis/role";
 
 const state = reactive({
   projectData: {
