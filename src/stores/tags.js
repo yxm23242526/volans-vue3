@@ -27,7 +27,7 @@ export const useTagsViewStore = defineStore('tagsView', () => {
         //  代表有这个路由就不添加了
         const index = tagsviewState.value.findIndex((state) => item.path === state.path)
         if (index === -1) {
-            if( item.name === 'edit') {
+            if (item.name === 'edit') {
                 const taskId = item.params.id;
                 const userId = item.params.user;
                 const res = Session.get('weekreport' + userId + taskId);
@@ -36,8 +36,7 @@ export const useTagsViewStore = defineStore('tagsView', () => {
                     path: item.path,
                     title: title,
                 })
-            }
-            else {
+            } else {
                 tagsviewState.value.push({
                     path: item.path,
                     title: item.meta.title,
@@ -54,7 +53,7 @@ export const useTagsViewStore = defineStore('tagsView', () => {
             return;
         }
         const index = tagsviewState.value.findIndex((state) => removedPath === state.path)
-        if (index != -1) {
+        if (index !== -1) {
             tagsviewState.value.splice(index, 1)
             if (removedPath === activePath) {
                 const newPath = index > 0 ? tagsviewState.value[index - 1].path : '';
@@ -69,6 +68,21 @@ export const useTagsViewStore = defineStore('tagsView', () => {
         router.push({path: newPath})
     }
     
+    //删除并前往指定页面，如果没有则去往首页
+    const removeAndGotoPage = (removedPath, gotoPath) => {
+        const index = tagsviewState.value.findIndex((state) => removedPath === state.path)
+        if (index !== -1) {
+            tagsviewState.value.splice(index, 1)
+            const goIndex = tagsviewState.value.findIndex((state) => gotoPath === state.path)
+            if (goIndex !== -1) {
+                gotoPage(gotoPath)
+            }
+            else {
+                gotoPage('/home')
+            }
+        }
+        Session.set('tagsView', tagsviewState.value)
+    }
     
     const clearState = () => {
         tagsviewState.value = [];
@@ -80,5 +94,6 @@ export const useTagsViewStore = defineStore('tagsView', () => {
         removeState,
         gotoPage,
         clearState,
+        removeAndGotoPage,
     }
 })

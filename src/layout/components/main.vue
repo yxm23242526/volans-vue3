@@ -10,7 +10,7 @@
                     view-class="layout-main-scroll">
         <div class="layout-parent">
           <router-view v-slot="{ Component }">
-            <keep-alive exclude="edit">
+            <keep-alive include="query">
                 <component :is="Component"  class="w100"/>
             </keep-alive>
           </router-view>

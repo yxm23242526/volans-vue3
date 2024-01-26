@@ -97,6 +97,7 @@ const onRollback = (rowIndex) => {
 const onEdit = (rowIndex) => {
   const taskId = state.weekReportData[rowIndex].taskId
   const userId = state.weekReportData[rowIndex].userId
+  state.weekReportData[rowIndex].editState = "other"
   Session.set(`weekreport${userId}${taskId}`, state.weekReportData[rowIndex])
   router.push({path: `/weekreport/edit/${userId}/${taskId}`})
 }

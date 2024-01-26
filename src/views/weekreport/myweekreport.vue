@@ -151,6 +151,7 @@ const onPreview = (rowIndex) => {
 const onEdit = (rowIndex) => {
   const taskId = weekReportData.value[rowIndex].taskId
   const userId = weekReportData.value[rowIndex].userId
+  weekReportData.value[rowIndex].editState = "me"
   Session.set(`weekreport${userId}${taskId}`, weekReportData.value[rowIndex])
   router.push({path: `/weekreport/edit/${userId}/${taskId}`})
 }

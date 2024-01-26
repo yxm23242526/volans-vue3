@@ -10,7 +10,7 @@ import {submit} from "@/apis/report";
 import {verifyNumberIntegerAndFloat} from "@/utils/validate";
 
 const route = useRoute();
-
+const tagsViewStore = useTagsViewStore()
 
 //表单对象
 const formRef = ref(null)
@@ -123,9 +123,20 @@ const onDropDownCommand = (date) => {
   })
   initSpanArray()
 }
+const weekreportState = reactive(
+    {
+      managerUserId: '',
+      managerTaskId: '',
+      editState: '',
+    }
+)
 //初始化数据
 const initData = (userId, taskId) => {
   const tempData = Session.get(`weekreport${userId}${taskId}`)
+  weekreportState.managerUserId = userId
+  weekreportState.managerTaskId = taskId
+  weekreportState.editState = tempData.editState
+  console.log("init" + weekreportState.editState)
   reportData.value = tempData;
   reportData.value.date = tempData.date;
   reportData.value.startDate = formatDate(tempData.startDate);
@@ -202,10 +213,15 @@ const onSubmit = (formRef) => {
       data.forEach((item) => {
         delete item.day;
       })
-      await submit({data, userId: -1})
-      const tagsViewStore = useTagsViewStore()
-      tagsViewStore.removeState(route.path, route.path)
-      tagsViewStore.gotoPage(`/weekreport/myWeekreport`)
+      if (weekreportState.editState === "me"){
+        await submit(data, -1)
+        tagsViewStore.removeAndGotoPage(route.path, `/weekreport/myWeekreport`);
+      }
+      else {
+        await submit(data, weekreportState.managerUserId)
+        tagsViewStore.removeAndGotoPage(route.path, `/weekreport/query`);
+      }
+      Session.remove(`weekreport${weekreportState.managerUserId}${weekreportState.managerTaskId}`)
     })
         .catch(() => {
           // ElMessage.error('提交失败')

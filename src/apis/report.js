@@ -70,7 +70,7 @@ export const revokeWeekreport = ({taskId, userId}) => {
  * 提交周报
  * @returns
  */
-export const submit = ({weekreport, userId}) => {
+export const submit = (weekreport, userId) => {
     return request({
         url: '/weekreport/submit/' + userId,
         method: 'POST',
