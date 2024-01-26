@@ -1,5 +1,7 @@
 <script setup>
+import {inject} from "vue";
 
+const version = inject('version')
 </script>
 
 <template>
@@ -11,7 +13,7 @@
       </div>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>版本:volans.1.0.1</el-dropdown-item>
+          <el-dropdown-item>版本:{{ version }}</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>

@@ -144,6 +144,16 @@ const router = createRouter({
                         roles:[0, 1, 2],
                     }
                 },
+                {
+                    path: '/updateLog',
+                    name: 'updateLog',
+                    component: () => import('@/views/updatelog/index.vue'),
+                    meta: {
+                        title: '更新日志',
+                        icon: "Promotion",
+                        roles:[0, 1, 2],
+                    }
+                },
                 // {
                 //     path: '/domain',
                 //     component: () => import('@/views/domain/index.vue'),

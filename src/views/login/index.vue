@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import {ref, reactive, onMounted, onUnmounted} from 'vue'
 import { validateAccount, validatePassword } from '@/utils/validate'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
@@ -76,6 +76,21 @@ setInterval(() => {
     let b = Math.floor(Math.random() * 100);
     sectionbg.value = "rgba(" + r + "," + g + "," + b + ")";
 }, 2000);
+
+
+onMounted( () => {
+  window.addEventListener("keydown", enterdown)
+})
+
+const enterdown = (e) => {
+  if (e.keyCode === 13){
+    doLogin()
+  }
+}
+
+onUnmounted( () => {
+  window.removeEventListener("keydown", enterdown, false)
+})
 </script>
 
 <template>
@@ -115,7 +130,7 @@ setInterval(() => {
                                 </el-input>
                             </el-form-item>
                             <el-form-item>
-                                <el-button class="subBtn" type="primary" @click="doLogin"> 登录 </el-button>
+                                <el-button @keyup.enter="enterdown" class="subBtn" type="primary" @click="doLogin"> 登录 </el-button>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -124,12 +139,7 @@ setInterval(() => {
 
         </section>
         <footer class="login-footer">
-            <div class="container">
-                <p>
-                    <a href="">加入我们！</a>
-                    <a href="">帮帮我们！</a>
-                </p>
-            </div>
+
         </footer>
     </div>
 </template>

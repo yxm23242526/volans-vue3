@@ -116,6 +116,7 @@ const onEdit = (rowIndex) => {
             style="width: 300px;"
             multiple
             filterable
+            :reserve-keyword="false"
             clearable>
         </el-select-v2>
         </span>
@@ -128,6 +129,7 @@ const onEdit = (rowIndex) => {
               style="width: 300px;"
               multiple
               filterable
+              :reserve-keyword="false"
               clearable>
         </el-select-v2>
         </span>

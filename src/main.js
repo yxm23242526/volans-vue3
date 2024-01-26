@@ -23,3 +23,5 @@ app.use(ElementPlus, {
     locale: zhCn,
 })
 app.use(pinia).use(componentPlugin).use(router).mount('#app')
+
+app.provide('version', 'volans.1.0.2')
