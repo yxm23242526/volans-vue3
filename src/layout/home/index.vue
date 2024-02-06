@@ -2,6 +2,7 @@
 	<div class="notice-bar-container layout-pd">
 		<el-card shadow="hover" header="更新公告">
         <div> 1. 新增：支持“回车”登录</div>
+        <div> 2. 新增：提交周报时显示总工时</div>
 
 		</el-card>
 

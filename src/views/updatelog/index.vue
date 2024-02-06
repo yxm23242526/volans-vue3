@@ -10,7 +10,9 @@
             <el-collapse-item title="2024/02/01 更新日志" name="3">
               <div> volans.1.0.2</div>
               <div> 1. 新增：支持“回车”登录</div>
+              <div> 2. 新增：提交周报时显示总工时</div>
               <div> 1. fix：查询周报时输入员工保留关键字的问题</div>
+
             </el-collapse-item>
             <el-collapse-item title="2024/01/26 更新日志" name="2">
               <div> volans.1.0.1</div>

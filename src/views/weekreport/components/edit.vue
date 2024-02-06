@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, watch, ref,} from 'vue';
+import {reactive, watch, ref, computed,} from 'vue';
 import {useRoute} from "vue-router";
 import {useTagsViewStore} from '@/stores/tags'
 import {ElMessage, ElMessageBox} from 'element-plus';
@@ -187,6 +187,14 @@ const tableSpanStragety = ({
   }
 }
 
+//总工时
+const totalTime =  computed(()  => {
+  let sum = 0;
+  formData.tableData.forEach(element => {
+    sum += Number(element.workTime);
+  })
+  return sum;
+})
 //提交周报
 const onSubmit = (formRef) => {
   if (!formRef) return;
@@ -194,7 +202,7 @@ const onSubmit = (formRef) => {
     if (!valid) return ElMessage.warning('表格项必填未填');
     ElMessageBox({
       title: '提示',
-      message: '此操作将提交周报, 是否继续?',
+      message: `已填写共${totalTime.value}小时，继续此操作将提交周报，是否确定?`,
       showCancelButton: true,
       beforeClose: (action, instance, done) => {
         if (action === 'confirm') {

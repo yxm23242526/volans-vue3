@@ -57,7 +57,7 @@ const drawer = ref(false)
             <el-avatar :size="50" :src="getPhotoUrl"/>
           </div>
           <div class="drawer-header-info ml10">
-            <span class="font18 mt3 mb3"> {{ userInfo.userName }}</span>
+            <span   class="font18 mt3 mb3"> {{ userInfo.userName }}</span>
             <span style="color:var(--vl-color-drawer-color);"> {{ userInfo.userId }}</span>
           </div>
         </div>
@@ -69,7 +69,7 @@ const drawer = ref(false)
         </div>
         <div class="drawer-item">
           <Icon name="Setting"/>
-          <span>设置</span>
+          <span>主题切换</span>
         </div>
       </div>
     </el-drawer>

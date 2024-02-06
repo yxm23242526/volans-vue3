@@ -135,7 +135,7 @@ const onEdit = (rowIndex) => {
         </span>
         <el-button type="primary" @click="onQuery">查询</el-button>
       </div>
-      <el-table :data="state.weekReportData" style="width: 100%">
+      <el-table :data="state.weekReportData" style="width: 100%" class="layout-pd">
         <el-table-column prop="date" label="期间"/>
         <el-table-column prop="userName" label="员工"/>
         <el-table-column prop="action" label="操作">
