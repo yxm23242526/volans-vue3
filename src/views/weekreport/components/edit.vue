@@ -339,6 +339,10 @@ const onVerifyWorktime  = (row, value) => {
 </template>
 
 <style lang="scss" scoped>
+
+.el-table{
+  --el-table-border-color: #409EFF;
+}
 .edit-wrapper {
   text-align: right;
   margin: 10px;
