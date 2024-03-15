@@ -33,8 +33,9 @@
             </el-col>
             <el-col :span="20" v-if="dayItem.content[0].workContent !== null">
               <el-row v-for="item in dayItem.content">
-                <el-col :span="10"> 【{{item.projectId}}】 </el-col>
-                <el-col :span="10"> {{item.workContent}} </el-col>
+                <el-col :span="6"> 【{{item.projectId}}】 </el-col>
+                <el-col :span="12"> {{item.workContent}} </el-col>
+                <el-col :span="2"> </el-col>
                 <el-col :span="4"> {{item.workTime}} </el-col>
               </el-row>
             </el-col>
@@ -49,6 +50,7 @@
 <script setup>
 import {ref, computed, onMounted, reactive} from 'vue'
 import {getProjectsAPI} from "@/apis/project";
+import {trimFloat} from "@/utils/validate";
 
 const isVisible = ref(false)
 const reportData = reactive({
@@ -75,12 +77,14 @@ const openDialog = async (previewData) => {
   reportData.userId = data.userId;
   reportData.reportName = data.name;
   reportData.rows = data.rows;
+
   isVisible.value = true;
   //TODO 复杂度较高，待优化
   const projectList = (await getProjectsAPI()).data
   reportData.rows.forEach((row) => {
     row.content.forEach((content) => {
       content.projectId = projectList.find((project) => project.projectId === content.projectId)?.projectName
+      content.workTime = trimFloat(content.workTime, 1);
     })
   })
 }

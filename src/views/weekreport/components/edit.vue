@@ -7,7 +7,7 @@ import {Session} from '@/utils/storage';
 import {calcuateDate, compareDate,getDayString, mult, formatDate} from "@/utils/datetimeUtils";
 import {getProjectsAPI} from "@/apis/project";
 import {submit} from "@/apis/report";
-import {verifyNumberIntegerAndFloat} from "@/utils/validate";
+import {trimFloat, verifyNumberIntegerAndFloat} from "@/utils/validate";
 
 const route = useRoute();
 const tagsViewStore = useTagsViewStore()
@@ -151,6 +151,7 @@ const initData = (userId, taskId) => {
       modifyInsertDateArray(0, _formatDate, _formatDate)
       tempData.rows[i].content[j].day = _formatDay
       tempData.rows[i].content[j].date = _formatDate;
+      tempData.rows[i].content[j].workTime = trimFloat(tempData.rows[i].content[j].workTime, 1)
       formData.tableData.push(tempData.rows[i].content[j]);
     }
   }

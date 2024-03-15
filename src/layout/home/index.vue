@@ -1,15 +1,9 @@
 <template>
 	<div class="notice-bar-container layout-pd">
 		<el-card shadow="hover" header="更新公告">
-        <div> 1. 新增：支持“回车”登录</div>
-        <div> 2. 新增：提交周报时显示总工时</div>
-
+        <div> 1. 新增：优化了预览时的间距和工时小数点问题</div>
 		</el-card>
 
-    <el-card shadow="hover" header="fixbug" class="mt15">
-      <div> 1. fix：查询周报时输入员工保留关键字的问题</div>
-
-    </el-card>
 
 		<el-card shadow="hover" header="专业团队" class="mt15">
       <NoticeBar :scrollable="true" background="#ecf5ff"

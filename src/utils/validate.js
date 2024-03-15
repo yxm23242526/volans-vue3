@@ -33,5 +33,31 @@ export function verifyNumberIntegerAndFloat(value) {
     v = v.replace(/^(\-)*(\d+)\.(\d).*$/, '$1$2.$3');
     // 返回结果
     return v;
-
 }
+
+
+/**
+ * 去除小数点后的0
+ * @param value
+ * @returns {*}
+ */
+export function trimFloat(num, precision = 0) {
+    // 首先确保输入的是数字
+    num = parseFloat(num);
+    
+    // 如果是NaN，则直接返回
+    if (isNaN(num)) {
+        return num;
+    }
+    
+    // 使用toFixed方法处理精度，然后去掉末尾的0
+    let formattedNum = num.toFixed(precision).replace(/0+$/, '');
+    // 对于小数点后全是0的情况（如1.000），toFixed方法会返回整数，这里需要特殊处理一下
+    if (formattedNum.indexOf('.') === formattedNum.length - 1) {
+        formattedNum = formattedNum.slice(0, -1);
+    }
+    
+    // 返回结果
+    return parseFloat(formattedNum);
+}
+
