@@ -31,7 +31,8 @@
       <WeekReportPreview ref="previewObj"/>
       <!-- 分页组件 -->
       <el-row class="mt15 ml15" v-if="isExpand">
-        <el-pagination :page-size="pageParams.pagesize" :current-page="pageParams.page" :total="pageParams.total"
+        <el-pagination :page-size="pageParams.pagesize"
+                       v-model:current-page="pageParams.page" :total="pageParams.total"
                        @current-change="changePage" layout="total, prev, pager, next">
         </el-pagination>
       </el-row>
@@ -68,35 +69,46 @@ const pageParams = ref({
 })
 
 const weekReportData = ref([])
-
+//保留一份原始数据
+let rawData = []
 //获取周报数据
-const getList = async () => {
-  const {data} = await getWeekreportList({userId});
-  //这里之后要变成total
-  pageParams.value.total = data.length
-  weekReportData.value = data;
-  for (let i = 0; i < data.length; i++) {
-    let stDate = new Date(weekReportData.value[i].startDate)
-    weekReportData.value[i].stDate = stDate
-    let edDate = new Date(weekReportData.value[i].endDate)
-    weekReportData.value[i].edDate = edDate
-    weekReportData.value[i].year = stDate.getFullYear();
-    weekReportData.value[i].name = getMonthandDay(stDate) + '~' + getMonthandDay(edDate);
-    weekReportData.value[i].date = formatDate(weekReportData.value[i].startDate) + ' ~ ' + formatDate(weekReportData.value[i].endDate);
-    weekReportData.value[i].observer = "-";
-  }
-  //修改数据格式
+const getList = (index) => {
+  //复制一份
+  weekReportData.value = JSON.parse(JSON.stringify(rawData))
+  //剔除 [index * 10, (index + 1) * 10]之外的
+  weekReportData.value = weekReportData.value.splice(index * 10, Math.min(pageParams.value.total,(index + 1) * 10))
 }
-onMounted(() => {
+
+const init = async () => {
+  const {data} = await getWeekreportList({userId});
+  pageParams.value.total = data.length
+  rawData = data;
+  //修改数据格式
+  for (let i = 0; i < data.length; i++) {
+    let stDate = new Date(rawData[i].startDate)
+    rawData[i].stDate = stDate
+    let edDate = new Date(rawData[i].endDate)
+    rawData[i].edDate = edDate
+    rawData[i].year = stDate.getFullYear();
+    rawData[i].name = getMonthandDay(stDate) + '~' + getMonthandDay(edDate);
+    rawData[i].date = formatDate(rawData[i].startDate) + ' ~ ' + formatDate(rawData[i].endDate);
+    rawData[i].observer = "-";
+  }
+}
+
+
+onMounted(async () => {
+  //初始化数据
+  await init()
   //created时获取默认数据  TODOBUG 这个数据目前显示有延迟问题
-  getList();
+  getList(0);
 })
 
 
 //分页更改页码
 const changePage = (newPage) => {
   pageParams.page = newPage
-  getList();
+  getList(newPage - 1);
 }
 
 
@@ -113,7 +125,8 @@ const onPopMessage = (taskId) => {
   )
       .then(async () => {
         await revokeWeekreport({taskId, userId: -1})
-        await getList()
+        await init()
+        getList(pageParams.value.page - 1)
       }).catch(() => {
     //什么都不做
   })
