@@ -7,6 +7,11 @@
     <div class="layout-padding-auto layout-padding-view">
         <el-card>
           <el-collapse accordion>
+            <el-collapse-item title="2024/04/12 更新日志" name="5">
+              <div> volans.1.0.4</div>
+              <div> 1. fix：分页失效问题</div>
+
+            </el-collapse-item>
             <el-collapse-item title="2024/03/15 更新日志" name="4">
               <div> volans.1.0.3</div>
               <div> 1. 优化：跳转周报预览时效果</div>
