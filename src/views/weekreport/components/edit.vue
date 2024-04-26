@@ -136,7 +136,6 @@ const initData = (userId, taskId) => {
   weekreportState.managerUserId = userId
   weekreportState.managerTaskId = taskId
   weekreportState.editState = tempData.editState
-  console.log("init" + weekreportState.editState)
   reportData.value = tempData;
   reportData.value.date = tempData.date;
   reportData.value.startDate = formatDate(tempData.startDate);
@@ -151,7 +150,10 @@ const initData = (userId, taskId) => {
       modifyInsertDateArray(0, _formatDate, _formatDate)
       tempData.rows[i].content[j].day = _formatDay
       tempData.rows[i].content[j].date = _formatDate;
-      tempData.rows[i].content[j].workTime = trimFloat(tempData.rows[i].content[j].workTime, 1)
+      const time = tempData.rows[i].content[j].workTime
+      if (!Number.isNaN(time) && time !== null  && time !== undefined){
+        tempData.rows[i].content[j].workTime = trimFloat(tempData.rows[i].content[j].workTime, 1)
+      }
       formData.tableData.push(tempData.rows[i].content[j]);
     }
   }
@@ -342,7 +344,7 @@ const onVerifyWorktime  = (row, value) => {
 <style lang="scss" scoped>
 
 .el-table{
-  --el-table-border-color: #409EFF;
+  --el-table-border-color: var(--el-border-color-dark);
 }
 .edit-wrapper {
   text-align: right;

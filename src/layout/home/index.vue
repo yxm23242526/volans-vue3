@@ -1,7 +1,7 @@
 <template>
 	<div class="notice-bar-container layout-pd">
 		<el-card shadow="hover" header="更新公告">
-        <div> 1. 新增：优化了预览时的间距和工时小数点问题</div>
+        <div> 1. fix：我的周报分页功能</div>
 		</el-card>
 
 
