@@ -44,7 +44,7 @@ export function verifyNumberIntegerAndFloat(value) {
 export function trimFloat(num, precision = 0) {
     // 首先确保输入的是数字
     num = parseFloat(num);
-    
+
     // 如果是NaN，则直接返回
     if (isNaN(num)) {
         return num;

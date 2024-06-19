@@ -35,7 +35,7 @@ const router = createRouter({
                     path: '/weekreport',
                     name: 'weekreport',
                     meta: {
-                        title: "周报管理",
+                        title: "周报",
                         icon: "Notification",
                         roles: [0, 1, 2],
                     },
@@ -97,7 +97,7 @@ const router = createRouter({
                             name:'project',
                             component: () => import('@/views/system/project/index.vue'),
                             meta: {
-                                title: "项目管理",
+                                title: "项目",
                                 icon: "List",
                                 roles: [1, 2],
                             }
@@ -107,7 +107,7 @@ const router = createRouter({
                             name: 'role',
                             component: () => import('@/views/system/role/index.vue'),
                             meta: {
-                                title: "角色管理",
+                                title: "角色",
                                 icon: "UserFilled",
                                 roles: [1, 2],
                             }
@@ -124,13 +124,23 @@ const router = createRouter({
                         roles: [1, 2],
                     }
                 },
+                // {
+                //     path: '/comment',
+                //     name: 'comment',
+                //     component: () => import('@/views/comment/index.vue'),
+                //     meta: {
+                //         title: "意见板",
+                //         icon: "ChatLineRound",
+                //         roles:[0, 1, 2],
+                //     }
+                // },
                 {
-                    path: '/comment',
-                    name: 'comment',
-                    component: () => import('@/views/comment/index.vue'),
+                    path: '/mdUpload',
+                    name: 'mdUpload',
+                    component: () => import('@/views/mdupload/index.vue'),
                     meta: {
-                        title: "意见板",
-                        icon: "ChatLineRound",
+                        title: "markDown图片上传",
+                        icon: "UploadFilled",
                         roles:[0, 1, 2],
                     }
                 },
@@ -150,7 +160,7 @@ const router = createRouter({
                     component: () => import('@/views/updatelog/index.vue'),
                     meta: {
                         title: '更新日志',
-                        icon: "Promotion",
+                        icon: "Pro",
                         roles:[0, 1, 2],
                     }
                 },
